@@ -31,6 +31,11 @@ USEMODULE += xtimer
 
 USEPKG += ucglib
 
+
+# DHT sensor
+USEMODULE += dht
+USEMODULE += fmt
+
 FEATURES_REQUIRED += periph_gpio periph_spi
 USEMODULE += analog_util
 
@@ -58,7 +63,6 @@ IPV6_PREFIX ?= fe80:2::/64
 
 # MQTT
 ###
-
 
 
 CFLAGS += -DSERVER_ADDR='"$(SERVER_ADDR)"'
