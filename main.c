@@ -50,7 +50,7 @@ int main(void){
 
     xtimer_ticks32_t last = xtimer_now();
     int mq2_sample = 0;
-    int ppm = 0;
+    int ppm = 0;  // parts per million
     
     // Red led initialization
     gpio_t pin_out = GPIO_PIN(PORT_B, 5);
@@ -62,7 +62,7 @@ int main(void){
 	
     /* Sampling values from the MQ-2 sensor*/
     while (1) {
-		printf("ciao\n");
+	
         mq2_sample = adc_sample(ADC_IN_USE, ADC_RES);
         ppm = adc_util_map(mq2_sample, ADC_RES, 10, 100);
 
@@ -73,34 +73,34 @@ int main(void){
             printf("ADC_LINE(%u): raw value: %i, ppm: %i\n", ADC_IN_USE, mq2_sample, ppm);
         }
 		
-		/*printf("Set pin to HIGH\n");
-		gpio_set(pin_out);
+	/*printf("Set pin to HIGH\n");
+	gpio_set(pin_out);
 	
-		xtimer_sleep(2);
+	xtimer_sleep(2);
 
-		printf("Set pin to LOW\n");
-		gpio_clear(pin_out);
+	printf("Set pin to LOW\n");
+	gpio_clear(pin_out);
 
-		xtimer_sleep(2);*/
+	xtimer_sleep(2);*/
         
         /* Retrieval of data by DHT sensor */
-		/*int16_t temp, hum;
-		if (dht_read(&dev, &temp, &hum) != DHT_OK) {
-			printf("Error reading values\n");
-		}*/
+	/*int16_t temp, hum;
+	if (dht_read(&dev, &temp, &hum) != DHT_OK) {
+		printf("Error reading values\n");
+	}*/
 
-		/* Formatting the temperature into a string*/
-		/*char temp_s[10];
-		size_t n = fmt_s16_dfp(temp_s, temp, -1);
-		temp_s[n] = '\0';
+	/* Formatting the temperature into a string*/
+	/*char temp_s[10];
+	size_t n = fmt_s16_dfp(temp_s, temp, -1);
+	temp_s[n] = '\0';
 		
-	    // Converting the temp string into an integer
-	    int temp_int = atoi(temp_s);
+	// Converting the temp string into an integer
+	int temp_int = atoi(temp_s);
 	  
-		printf("temperature: %d°C\n", temp_int);*/
+	printf("temperature: %d°C\n", temp_int);*/
 		
 		
-		/* [TODO] HERE THERE WILL BE SOME PREPROCESSING STUFF WITH RETRIEVED TEMPERATURE AND PPM... */
+	/* [TODO] HERE THERE WILL BE SOME PREPROCESSING STUFF WITH RETRIEVED TEMPERATURE AND PPM... */
 
         xtimer_periodic_wakeup(&last, DELAY);
     }
