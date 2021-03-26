@@ -16,10 +16,14 @@
 #define ADC_IN_USE                  ADC_LINE(0)
 #define ADC_RES                     ADC_RES_10BIT
 
-#define DELAY                       (500LU * US_PER_MS) /* 500 ms */
+#define DELAY                       2
 
+#define TEMP_THRESHOLD_MIN          24
+#define TEMP_THRESHOLD_MAX          26
 
-void initializeLeds(gpio_t* red_led, gpio_t* green_led, gpio_t* yellow_led){
+#define PPM_THRESHOLD               37
+
+void initializeLeds(gpio_t* red_led, gpio_t* green_led, gpio_t* yellow_led, gpio_t* blue_led){
 	// Led red initialization
 	*red_led = GPIO_PIN(PORT_B, 5);  // PIN D4
 		
@@ -43,7 +47,7 @@ void initializeLeds(gpio_t* red_led, gpio_t* green_led, gpio_t* yellow_led){
 	}
 	
 	// Yellow red initialization
-	*yellow_led = GPIO_PIN(PORT_A, 9); // PIN D8
+	*yellow_led = GPIO_PIN(PORT_A, 9); // PIN D9
 		
 	if (gpio_init(*yellow_led, GPIO_OUT)) {
 		printf("Error to initialize GPIO_PIN(%d %d)\n", PORT_A, 9);
@@ -51,6 +55,17 @@ void initializeLeds(gpio_t* red_led, gpio_t* green_led, gpio_t* yellow_led){
 	}
 	else{
 		printf("Yellow led ready!\n");
+	}
+	
+	// Blue red initialization
+	*blue_led = GPIO_PIN(PORT_B, 6); // PIN D10
+		
+	if (gpio_init(*blue_led, GPIO_OUT)) {
+		printf("Error to initialize GPIO_PIN(%d %d)\n", PORT_B, 6);
+		exit(EXIT_FAILURE);
+	}
+	else{
+		printf("Blue led ready!\n");
 	}
 }
 
@@ -152,9 +167,9 @@ int main(void){
     printf("\n");
     
     // Initializing leds
-	gpio_t red_led, green_led, yellow_led;
+	gpio_t red_led, green_led, yellow_led, blue_led;
 	
-	initializeLeds(&red_led, &green_led, &yellow_led);
+	initializeLeds(&red_led, &green_led, &yellow_led, &blue_led);
 	xtimer_sleep(2);
 	printf("\n");
 	
@@ -172,20 +187,69 @@ int main(void){
 	initializeDHT(&params, &dev);
 	xtimer_sleep(2);
 	printf("\n");
-    
-    xtimer_ticks32_t last = xtimer_now();
 	
+	// Periodical sampling
     while (1) {
+		
+		// Reading ppm values by MQ-2 sensor
 		int ppm = readPpmByMQ2();
 		printf("ppm: %d\n", ppm);
         
+        
+        // Reading temperature values by DHT-22 sensor
         int temperature = readTemperatureByDHT(&dev);
 	  
 		printf("temperature: %d°C\n", temperature);
 		
-		/* [TODO] HERE THERE WILL BE SOME PREPROCESSING STUFF WITH RETRIEVED TEMPERATURE AND PPM... */
-
-        xtimer_periodic_wakeup(&last, DELAY);
+		// Preprocessing data
+		
+		if(ppm > PPM_THRESHOLD){
+			printf("[GAS/SMOKE] WARNING!!!\n");
+			
+			led_ON(blue_led);
+			buzzer_ON(buzzer);
+		}
+		
+		else if(ppm <= PPM_THRESHOLD){
+			printf("[GAS/SMOKE] ALL OK!\n");
+			
+			led_OFF(blue_led);
+			buzzer_OFF(buzzer);
+		}
+		
+		if (temperature > TEMP_THRESHOLD_MAX){
+			printf("[TEMPERATURE] WARNING!!\n");
+			
+			led_OFF(green_led);
+			led_OFF(yellow_led);
+			
+			led_ON(red_led);
+			//buzzer_ON(buzzer);
+		}
+		
+		else if (temperature > TEMP_THRESHOLD_MIN && temperature <= TEMP_THRESHOLD_MAX){
+			printf("[TEMPERATURE] BE CAREFUL TO THE TEMPERATURE!\n");
+			
+			led_OFF(green_led);
+			led_OFF(red_led);
+			buzzer_OFF(buzzer);
+			
+			led_ON(yellow_led);
+		}
+		
+		else if(temperature <= TEMP_THRESHOLD_MIN){
+			printf("[TEMPERATURE] ALL OK!\n");
+			
+			led_OFF(red_led);
+			led_OFF(yellow_led);
+			buzzer_OFF(buzzer);
+			
+			led_ON(green_led);
+		}
+		
+		xtimer_sleep(DELAY);
+		buzzer_OFF(buzzer);
+		printf("\n");
     }
     
     return 0;
