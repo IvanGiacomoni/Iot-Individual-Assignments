@@ -94,9 +94,39 @@ void initializeDHT(dht_params_t* params, dht_t* dev){
 	}
 }
 
+int read_ppm(void){
+	
+	int mq2_sample = adc_sample(ADC_IN_USE, ADC_RES);
+    int ppm = adc_util_map(mq2_sample, ADC_RES, 10, 100);
+
+    if (mq2_sample < 0) {
+        printf("ADC_LINE(%u): selected resolution not applicable\n", ADC_IN_USE);
+        return -1;
+    }
+    
+    return ppm;
+}
+
+void led_ON(gpio_t led){
+	gpio_set(led);
+}
+
+void led_OFF(gpio_t led){
+	gpio_clear(led);
+}
+
+void buzzer_ON(gpio_t buzzer){
+	gpio_set(buzzer);
+}
+
+void buzzer_OFF(gpio_t buzzer){
+	gpio_clear(buzzer);
+}
+
 int main(void){
     
     printf("\nStarting the application...\n");
+	xtimer_sleep(2);
 
     /* Initializing the ADC line */
     initializeADCLine();
@@ -117,74 +147,19 @@ int main(void){
     xtimer_sleep(2);
 	printf("\n");
 	
-    // Initialization of DHT_22 parameters and module
+    // Initializing DHT_22 parameters and module
     dht_params_t params;
     dht_t dev;
 
 	initializeDHT(&params, &dev);
 	xtimer_sleep(2);
 	printf("\n");
-	
-	// Red led
-	printf("Set red_led to HIGH\n");
-	gpio_set(red_led);
-	
-	xtimer_sleep(2);
-
-	printf("Set red_led to LOW\n");
-	gpio_clear(red_led);
-
-	xtimer_sleep(2);
-	
-	// Green led
-	printf("Set green_led to HIGH\n");
-	gpio_set(green_led);
-	
-	xtimer_sleep(2);
-
-	printf("Set green_led to LOW\n");
-	gpio_clear(green_led);
-
-	xtimer_sleep(2);
-	
-	// Yellow led
-	printf("Set yellow_led to HIGH\n");
-	gpio_set(yellow_led);
-	
-	xtimer_sleep(2);
-
-	printf("Set yellow_led to LOW\n");
-	gpio_clear(yellow_led);
-
-	xtimer_sleep(2);
-	
-	// Buzzer
-	printf("Set buzzer to HIGH\n");
-	gpio_set(buzzer);
-	
-	xtimer_sleep(2);
-
-	printf("Set buzzer to LOW\n");
-	gpio_clear(buzzer);
-
-	xtimer_sleep(2);
-
+    
     xtimer_ticks32_t last = xtimer_now();
-    int mq2_sample = 0;
-    int ppm = 0;
 	
-    /* Sampling values from the MQ-2 sensor*/
     while (1) {
-		printf("ciao\n");
-        mq2_sample = adc_sample(ADC_IN_USE, ADC_RES);
-        ppm = adc_util_map(mq2_sample, ADC_RES, 10, 100);
-
-        if (mq2_sample < 0) {
-            printf("ADC_LINE(%u): selected resolution not applicable\n", ADC_IN_USE);
-        }
-        else {
-            printf("ADC_LINE(%u): raw value: %i, ppm: %i\n", ADC_IN_USE, mq2_sample, ppm);
-        }
+		int ppm = read_ppm();
+		printf("ppm: %d\n", ppm);
         
         /* Retrieval of data by DHT sensor */
 		int16_t temp, hum;
