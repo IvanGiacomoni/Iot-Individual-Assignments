@@ -54,6 +54,18 @@ void initializeLeds(gpio_t* red_led, gpio_t* green_led, gpio_t* yellow_led){
 	}
 }
 
+void initializeBuzzer(gpio_t* buzzer){
+	*buzzer = GPIO_PIN(PORT_C, 7);  // PIN D9
+		
+	if (gpio_init(*buzzer, GPIO_OUT)) {
+		printf("Error to initialize GPIO_PIN(%d %d)\n", PORT_C, 7);
+		exit(EXIT_FAILURE);
+	}
+	else{
+		printf("Buzzer ready!\n");
+	}
+}
+
 void initializeADCLine(void){
 	if (adc_init(ADC_IN_USE) < 0) {
         printf("Initialization of ADC_LINE(%u) failed\n", ADC_IN_USE);
@@ -97,23 +109,65 @@ int main(void){
 	initializeLeds(&red_led, &green_led, &yellow_led);
 	xtimer_sleep(2);
 	printf("\n");
-    
+	
+	// Initializing the buzzer
+	gpio_t buzzer;
+	
+	initializeBuzzer(&buzzer);
+    xtimer_sleep(2);
+	printf("\n");
+	
     // Initialization of DHT_22 parameters and module
     dht_params_t params;
     dht_t dev;
 
-    initializeDHT(&params, &dev);
-    xtimer_sleep(2);
-    printf("\n");
+	initializeDHT(&params, &dev);
+	xtimer_sleep(2);
+	printf("\n");
 	
-    // Red led
-    printf("Set red_led to HIGH\n");
-    gpio_set(red_led);
-    xtimer_sleep(2);
+	// Red led
+	printf("Set red_led to HIGH\n");
+	gpio_set(red_led);
 	
-    printf("Set red_led to LOW\n");
-    gpio_clear(red_led);
-    xtimer_sleep(2);
+	xtimer_sleep(2);
+
+	printf("Set red_led to LOW\n");
+	gpio_clear(red_led);
+
+	xtimer_sleep(2);
+	
+	// Green led
+	printf("Set green_led to HIGH\n");
+	gpio_set(green_led);
+	
+	xtimer_sleep(2);
+
+	printf("Set green_led to LOW\n");
+	gpio_clear(green_led);
+
+	xtimer_sleep(2);
+	
+	// Yellow led
+	printf("Set yellow_led to HIGH\n");
+	gpio_set(yellow_led);
+	
+	xtimer_sleep(2);
+
+	printf("Set yellow_led to LOW\n");
+	gpio_clear(yellow_led);
+
+	xtimer_sleep(2);
+	
+	// Buzzer
+	printf("Set buzzer to HIGH\n");
+	gpio_set(buzzer);
+	
+	xtimer_sleep(2);
+
+	printf("Set buzzer to LOW\n");
+	gpio_clear(buzzer);
+
+	xtimer_sleep(2);
 
     xtimer_ticks32_t last = xtimer_now();
     int mq2_sample = 0;
@@ -131,16 +185,6 @@ int main(void){
         else {
             printf("ADC_LINE(%u): raw value: %i, ppm: %i\n", ADC_IN_USE, mq2_sample, ppm);
         }
-		
-		/*printf("Set pin to HIGH\n");
-		gpio_set(pin_out);
-	
-		xtimer_sleep(2);
-
-		printf("Set pin to LOW\n");
-		gpio_clear(pin_out);
-
-		xtimer_sleep(2);*/
         
         /* Retrieval of data by DHT sensor */
 		int16_t temp, hum;
