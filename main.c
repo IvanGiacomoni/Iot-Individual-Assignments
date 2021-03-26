@@ -13,10 +13,25 @@
 #include "dht.h"
 #include "dht_params.h"
 
-#define ADC_IN_USE                  ADC_LINE(5)
+#define ADC_IN_USE                  ADC_LINE(0)
 #define ADC_RES                     ADC_RES_10BIT
 
-#define DELAY                       (200LU * US_PER_MS) /* 500 ms */
+#define DELAY                       (500LU * US_PER_MS) /* 500 ms */
+
+
+void initializeLeds(gpio_t* red_led){
+	// Led red initialization
+	*red_led = GPIO_PIN(PORT_B, 5);
+		
+	if (gpio_init(*red_led, GPIO_OUT)) {
+		printf("Error to initialize GPIO_PIN(%d %d)\n", PORT_B, 5);
+		exit(EXIT_FAILURE);
+	}
+	else{
+		printf("Red led ready!\n");
+	}
+}
+
 
 int main(void){
     
@@ -47,22 +62,31 @@ int main(void){
 		printf("Failed to connect to DHT sensor\n");
 		return 1;
 	}
+	
+	// Initializing leds
+	gpio_t red_led;
+	
+	printf("\n");
+	initializeLeds(&red_led);
+	xtimer_sleep(3);
+	
+	printf("Set pin to HIGH\n");
+	gpio_set(red_led);
+	
+	xtimer_sleep(2);
+
+	printf("Set pin to LOW\n");
+	gpio_clear(red_led);
+
+	xtimer_sleep(2);
 
     xtimer_ticks32_t last = xtimer_now();
     int mq2_sample = 0;
-    int ppm = 0;  // parts per million
-    
-    // Red led initialization
-    gpio_t pin_out = GPIO_PIN(PORT_B, 5);
-		
-	if (gpio_init(pin_out, GPIO_OUT)) {
-		printf("Error to initialize GPIO_PIN(%d %d)\n", PORT_B, 5);
-		return -1;
-	}
+    int ppm = 0;
 	
     /* Sampling values from the MQ-2 sensor*/
     while (1) {
-	
+		printf("ciao\n");
         mq2_sample = adc_sample(ADC_IN_USE, ADC_RES);
         ppm = adc_util_map(mq2_sample, ADC_RES, 10, 100);
 
@@ -73,41 +97,40 @@ int main(void){
             printf("ADC_LINE(%u): raw value: %i, ppm: %i\n", ADC_IN_USE, mq2_sample, ppm);
         }
 		
-	/*printf("Set pin to HIGH\n");
-	gpio_set(pin_out);
+		/*printf("Set pin to HIGH\n");
+		gpio_set(pin_out);
 	
-	xtimer_sleep(2);
+		xtimer_sleep(2);
 
-	printf("Set pin to LOW\n");
-	gpio_clear(pin_out);
+		printf("Set pin to LOW\n");
+		gpio_clear(pin_out);
 
-	xtimer_sleep(2);*/
+		xtimer_sleep(2);*/
         
         /* Retrieval of data by DHT sensor */
-	/*int16_t temp, hum;
-	if (dht_read(&dev, &temp, &hum) != DHT_OK) {
-		printf("Error reading values\n");
-	}*/
+		int16_t temp, hum;
+		if (dht_read(&dev, &temp, &hum) != DHT_OK) {
+			printf("Error reading values\n");
+		}
 
-	/* Formatting the temperature into a string*/
-	/*char temp_s[10];
-	size_t n = fmt_s16_dfp(temp_s, temp, -1);
-	temp_s[n] = '\0';
+		/*Formatting the temperature into a string*/
+		char temp_s[10];
+		size_t n = fmt_s16_dfp(temp_s, temp, -1);
+		temp_s[n] = '\0';
 		
-	// Converting the temp string into an integer
-	int temp_int = atoi(temp_s);
+	    // Converting the temp string into an integer
+	    int temp_int = atoi(temp_s);
 	  
-	printf("temperature: %d°C\n", temp_int);*/
+		printf("temperature: %d°C\n", temp_int);
 		
 		
-	/* [TODO] HERE THERE WILL BE SOME PREPROCESSING STUFF WITH RETRIEVED TEMPERATURE AND PPM... */
+		/* [TODO] HERE THERE WILL BE SOME PREPROCESSING STUFF WITH RETRIEVED TEMPERATURE AND PPM... */
 
         xtimer_periodic_wakeup(&last, DELAY);
     }
     
     return 0;
 }
-
 
 
 
