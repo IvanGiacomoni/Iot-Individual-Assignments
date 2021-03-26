@@ -94,7 +94,7 @@ void initializeDHT(dht_params_t* params, dht_t* dev){
 	}
 }
 
-int read_ppm(void){
+int readPpmByMQ2(void){
 	
 	int mq2_sample = adc_sample(ADC_IN_USE, ADC_RES);
     int ppm = adc_util_map(mq2_sample, ADC_RES, 10, 100);
@@ -105,6 +105,24 @@ int read_ppm(void){
     }
     
     return ppm;
+}
+
+int readTemperatureByDHT(dht_t* dev){
+	int16_t temp, hum;
+	if (dht_read(dev, &temp, &hum) != DHT_OK) {
+		printf("Error reading values\n");
+		return -1;
+	}
+
+	// Formatting the temperature into a string
+	char temp_s[10];
+	size_t n = fmt_s16_dfp(temp_s, temp, -1);
+	temp_s[n] = '\0';
+		
+	// Converting the temp string into an integer
+	int temp_int = atoi(temp_s);
+	
+	return temp_int;
 }
 
 void led_ON(gpio_t led){
@@ -158,25 +176,12 @@ int main(void){
     xtimer_ticks32_t last = xtimer_now();
 	
     while (1) {
-		int ppm = read_ppm();
+		int ppm = readPpmByMQ2();
 		printf("ppm: %d\n", ppm);
         
-        /* Retrieval of data by DHT sensor */
-		int16_t temp, hum;
-		if (dht_read(&dev, &temp, &hum) != DHT_OK) {
-			printf("Error reading values\n");
-		}
-
-		/*Formatting the temperature into a string*/
-		char temp_s[10];
-		size_t n = fmt_s16_dfp(temp_s, temp, -1);
-		temp_s[n] = '\0';
-		
-	    // Converting the temp string into an integer
-	    int temp_int = atoi(temp_s);
+        int temperature = readTemperatureByDHT(&dev);
 	  
-		printf("temperature: %d°C\n", temp_int);
-		
+		printf("temperature: %d°C\n", temperature);
 		
 		/* [TODO] HERE THERE WILL BE SOME PREPROCESSING STUFF WITH RETRIEVED TEMPERATURE AND PPM... */
 
