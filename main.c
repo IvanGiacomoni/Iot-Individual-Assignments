@@ -19,9 +19,9 @@
 #define DELAY                       (500LU * US_PER_MS) /* 500 ms */
 
 
-void initializeLeds(gpio_t* red_led){
+void initializeLeds(gpio_t* red_led, gpio_t* green_led, gpio_t* yellow_led){
 	// Led red initialization
-	*red_led = GPIO_PIN(PORT_B, 5);
+	*red_led = GPIO_PIN(PORT_B, 5);  // PIN D4
 		
 	if (gpio_init(*red_led, GPIO_OUT)) {
 		printf("Error to initialize GPIO_PIN(%d %d)\n", PORT_B, 5);
@@ -29,6 +29,28 @@ void initializeLeds(gpio_t* red_led){
 	}
 	else{
 		printf("Red led ready!\n");
+	}
+	
+	// Green red initialization
+	*green_led = GPIO_PIN(PORT_A, 8); // PIN D7
+		
+	if (gpio_init(*green_led, GPIO_OUT)) {
+		printf("Error to initialize GPIO_PIN(%d %d)\n", PORT_A, 8);
+		exit(EXIT_FAILURE);
+	}
+	else{
+		printf("Green led ready!\n");
+	}
+	
+	// Yellw red initialization
+	*yellow_led = GPIO_PIN(PORT_A, 9); // PIN D8
+		
+	if (gpio_init(*yellow_led, GPIO_OUT)) {
+		printf("Error to initialize GPIO_PIN(%d %d)\n", PORT_A, 9);
+		exit(EXIT_FAILURE);
+	}
+	else{
+		printf("Yellow led ready!\n");
 	}
 }
 
@@ -64,19 +86,42 @@ int main(void){
 	}
 	
 	// Initializing leds
-	gpio_t red_led;
+	gpio_t red_led, green_led, yellow_led;
 	
 	printf("\n");
-	initializeLeds(&red_led);
+	initializeLeds(&red_led, &green_led, &yellow_led);
 	xtimer_sleep(3);
 	
-	printf("Set pin to HIGH\n");
+	// Red led
+	printf("Set red_led to HIGH\n");
 	gpio_set(red_led);
 	
 	xtimer_sleep(2);
 
-	printf("Set pin to LOW\n");
+	printf("Set red_led to LOW\n");
 	gpio_clear(red_led);
+
+	xtimer_sleep(2);
+	
+	// Green led
+	printf("Set green_led to HIGH\n");
+	gpio_set(green_led);
+	
+	xtimer_sleep(2);
+
+	printf("Set green_led to LOW\n");
+	gpio_clear(green_led);
+
+	xtimer_sleep(2);
+	
+	// Yellow led
+	printf("Set yellow_led to HIGH\n");
+	gpio_set(yellow_led);
+	
+	xtimer_sleep(2);
+
+	printf("Set yellow_led to LOW\n");
+	gpio_clear(yellow_led);
 
 	xtimer_sleep(2);
 
