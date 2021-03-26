@@ -42,7 +42,7 @@ void initializeLeds(gpio_t* red_led, gpio_t* green_led, gpio_t* yellow_led){
 		printf("Green led ready!\n");
 	}
 	
-	// Yellw red initialization
+	// Yellow red initialization
 	*yellow_led = GPIO_PIN(PORT_A, 9); // PIN D8
 		
 	if (gpio_init(*yellow_led, GPIO_OUT)) {
@@ -54,76 +54,66 @@ void initializeLeds(gpio_t* red_led, gpio_t* green_led, gpio_t* yellow_led){
 	}
 }
 
+void initializeADCLine(void){
+	if (adc_init(ADC_IN_USE) < 0) {
+        printf("Initialization of ADC_LINE(%u) failed\n", ADC_IN_USE);
+        exit(EXIT_FAILURE);
+    }
+    else {
+        printf("Successfully initialized ADC_LINE(%u)\n", ADC_IN_USE);
+    }
+}
+
+void initializeDHT(dht_params_t* params, dht_t* dev){
+	
+	// Initializing DHT_22 parameters
+	params -> pin = GPIO_PIN(PORT_A, 10);
+	params -> type = DHT22;
+	params -> in_mode = DHT_PARAM_PULL;
+	
+	// Initializating DHT_22 module
+	if (dht_init(dev, params) == DHT_OK) {
+		printf("DHT sensor connected\n");
+	}
+	
+	else {
+		printf("Failed to connect to DHT sensor\n");
+		exit(EXIT_FAILURE);
+	}
+}
 
 int main(void){
     
     printf("\nStarting the application...\n");
 
-    /* initialize the ADC line */
-    if (adc_init(ADC_IN_USE) < 0) {
-        printf("Initialization of ADC_LINE(%u) failed\n", ADC_IN_USE);
-        return 1;
-    }
-    else {
-        printf("Successfully initialized ADC_LINE(%u)\n", ADC_IN_USE);
-    }
+    /* Initializing the ADC line */
+    initializeADCLine();
+    xtimer_sleep(2);
+    printf("\n");
     
-    // Initialization of DHT_22 parameters
-    dht_params_t my_params;
-	my_params.pin = GPIO_PIN(PORT_A, 10);
-	my_params.type = DHT22;
-	my_params.in_mode = DHT_PARAM_PULL;
-	
-	// Initialization of DHT_22 module
-	dht_t dev;
-
-	if (dht_init(&dev, &my_params) == DHT_OK) {
-		printf("DHT sensor connected\n");
-	}
-	else {
-		printf("Failed to connect to DHT sensor\n");
-		return 1;
-	}
-	
-	// Initializing leds
+    // Initializing leds
 	gpio_t red_led, green_led, yellow_led;
 	
-	printf("\n");
 	initializeLeds(&red_led, &green_led, &yellow_led);
-	xtimer_sleep(3);
-	
-	// Red led
-	printf("Set red_led to HIGH\n");
-	gpio_set(red_led);
-	
 	xtimer_sleep(2);
+	printf("\n");
+    
+    // Initialization of DHT_22 parameters and module
+    dht_params_t params;
+    dht_t dev;
 
-	printf("Set red_led to LOW\n");
-	gpio_clear(red_led);
-
-	xtimer_sleep(2);
+    initializeDHT(&params, &dev);
+    xtimer_sleep(2);
+    printf("\n");
 	
-	// Green led
-	printf("Set green_led to HIGH\n");
-	gpio_set(green_led);
+    // Red led
+    printf("Set red_led to HIGH\n");
+    gpio_set(red_led);
+    xtimer_sleep(2);
 	
-	xtimer_sleep(2);
-
-	printf("Set green_led to LOW\n");
-	gpio_clear(green_led);
-
-	xtimer_sleep(2);
-	
-	// Yellow led
-	printf("Set yellow_led to HIGH\n");
-	gpio_set(yellow_led);
-	
-	xtimer_sleep(2);
-
-	printf("Set yellow_led to LOW\n");
-	gpio_clear(yellow_led);
-
-	xtimer_sleep(2);
+    printf("Set red_led to LOW\n");
+    gpio_clear(red_led);
+    xtimer_sleep(2);
 
     xtimer_ticks32_t last = xtimer_now();
     int mq2_sample = 0;
