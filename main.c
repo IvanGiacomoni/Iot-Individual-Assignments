@@ -18,12 +18,14 @@
 
 #define DELAY                       2
 
-#define TEMP_THRESHOLD_MIN          22
+#define TEMP_THRESHOLD_MIN          23
 #define TEMP_THRESHOLD_MAX          24
 
 #define PPM_THRESHOLD               48
 
-void initializeLeds(gpio_t* red_led, gpio_t* green_led, gpio_t* yellow_led, gpio_t* blue_led){
+void initializeLeds(gpio_t* red_led, gpio_t* green_led, gpio_t* yellow_led,
+    gpio_t* blue_led, gpio_t* white_led){
+	
 	// Red led initialization
 	*red_led = GPIO_PIN(PORT_B, 5);  // PIN D4
 		
@@ -67,17 +69,41 @@ void initializeLeds(gpio_t* red_led, gpio_t* green_led, gpio_t* yellow_led, gpio
 	else{
 		printf("Blue led ready!\n");
 	}
+	
+	// White led initialization
+	*white_led = GPIO_PIN(PORT_A, 6); // PIN D12
+		
+	if (gpio_init(*white_led, GPIO_OUT)) {
+		printf("Error to initialize GPIO_PIN(%d %d)\n", PORT_A, 6);
+		exit(EXIT_FAILURE);
+	}
+	else{
+		printf("White led ready!\n");
+	}
 }
 
-void initializeBuzzer(gpio_t* buzzer){
-	*buzzer = GPIO_PIN(PORT_C, 7);  // PIN D9
+void initializeBuzzers(gpio_t* gas_smoke_buzzer, gpio_t* temp_buzzer){
+	
+	// Gas/Smoke buzzer initialization
+	*gas_smoke_buzzer = GPIO_PIN(PORT_C, 7);  // PIN D9
 		
-	if (gpio_init(*buzzer, GPIO_OUT)) {
+	if (gpio_init(*gas_smoke_buzzer, GPIO_OUT)) {
 		printf("Error to initialize GPIO_PIN(%d %d)\n", PORT_C, 7);
 		exit(EXIT_FAILURE);
 	}
 	else{
-		printf("Buzzer ready!\n");
+		printf("Gas/Smoke buzzer ready!\n");
+	}
+	
+	// Temperature buzzer initialization
+	*temp_buzzer = GPIO_PIN(PORT_A, 5);  // PIN D13
+		
+	if (gpio_init(*temp_buzzer, GPIO_OUT)) {
+		printf("Error to initialize GPIO_PIN(%d %d)\n", PORT_A, 5);
+		exit(EXIT_FAILURE);
+	}
+	else{
+		printf("Temperature buzzer ready!\n");
 	}
 }
 
@@ -163,21 +189,21 @@ int main(void){
 
     /* Initializing the ADC line */
     initializeADCLine();
-    xtimer_sleep(2);
+    xtimer_sleep(DELAY);
     printf("\n");
     
     // Initializing leds
-	gpio_t red_led, green_led, yellow_led, blue_led;
+	gpio_t red_led, green_led, yellow_led, blue_led, white_led;
 	
-	initializeLeds(&red_led, &green_led, &yellow_led, &blue_led);
-	xtimer_sleep(2);
+	initializeLeds(&red_led, &green_led, &yellow_led, &blue_led, &white_led);
+	xtimer_sleep(DELAY);
 	printf("\n");
 	
-	// Initializing the buzzer
-	gpio_t buzzer;
+	// Initializing buzzers
+	gpio_t gas_smoke_buzzer, temp_buzzer;
 	
-	initializeBuzzer(&buzzer);
-    xtimer_sleep(2);
+	initializeBuzzers(&gas_smoke_buzzer, &temp_buzzer);
+    xtimer_sleep(DELAY);
 	printf("\n");
 	
     // Initializing DHT_22 parameters and module
@@ -185,7 +211,7 @@ int main(void){
     dht_t dev;
 
 	initializeDHT(&params, &dev);
-	xtimer_sleep(2);
+	xtimer_sleep(DELAY);
 	printf("\n");
 	
 	// Periodical sampling
@@ -207,12 +233,13 @@ int main(void){
 			printf("[GAS/SMOKE] WARNING!!!\n");
 			
 			led_ON(blue_led);
-			buzzer_ON(buzzer);
+			led_OFF(white_led);
+			//buzzer_ON(gas_smoke_buzzer);
 		}
 		
 		else if(ppm <= PPM_THRESHOLD){
 			printf("[GAS/SMOKE] ALL OK!\n");
-			
+			led_ON(white_led);
 			led_OFF(blue_led);
 		}
 		
@@ -223,6 +250,7 @@ int main(void){
 			led_OFF(yellow_led);
 			
 			led_ON(red_led);
+			//buzzer_ON(temp_buzzer);
 		}
 		
 		else if (temperature > TEMP_THRESHOLD_MIN && temperature <= TEMP_THRESHOLD_MAX){
@@ -244,7 +272,8 @@ int main(void){
 		}
 		
 		xtimer_sleep(DELAY);
-		buzzer_OFF(buzzer);
+		buzzer_OFF(gas_smoke_buzzer);
+		buzzer_OFF(temp_buzzer);
 		printf("\n");
     }
     
