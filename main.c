@@ -18,13 +18,13 @@
 
 #define DELAY                       2
 
-#define TEMP_THRESHOLD_MIN          24
-#define TEMP_THRESHOLD_MAX          26
+#define TEMP_THRESHOLD_MIN          22
+#define TEMP_THRESHOLD_MAX          24
 
-#define PPM_THRESHOLD               37
+#define PPM_THRESHOLD               48
 
 void initializeLeds(gpio_t* red_led, gpio_t* green_led, gpio_t* yellow_led, gpio_t* blue_led){
-	// Led red initialization
+	// Red led initialization
 	*red_led = GPIO_PIN(PORT_B, 5);  // PIN D4
 		
 	if (gpio_init(*red_led, GPIO_OUT)) {
@@ -35,7 +35,7 @@ void initializeLeds(gpio_t* red_led, gpio_t* green_led, gpio_t* yellow_led, gpio
 		printf("Red led ready!\n");
 	}
 	
-	// Green red initialization
+	// Green led initialization
 	*green_led = GPIO_PIN(PORT_A, 8); // PIN D7
 		
 	if (gpio_init(*green_led, GPIO_OUT)) {
@@ -46,7 +46,7 @@ void initializeLeds(gpio_t* red_led, gpio_t* green_led, gpio_t* yellow_led, gpio
 		printf("Green led ready!\n");
 	}
 	
-	// Yellow red initialization
+	// Yellow led initialization
 	*yellow_led = GPIO_PIN(PORT_A, 9); // PIN D9
 		
 	if (gpio_init(*yellow_led, GPIO_OUT)) {
@@ -57,7 +57,7 @@ void initializeLeds(gpio_t* red_led, gpio_t* green_led, gpio_t* yellow_led, gpio
 		printf("Yellow led ready!\n");
 	}
 	
-	// Blue red initialization
+	// Blue led initialization
 	*blue_led = GPIO_PIN(PORT_B, 6); // PIN D10
 		
 	if (gpio_init(*blue_led, GPIO_OUT)) {
@@ -214,7 +214,6 @@ int main(void){
 			printf("[GAS/SMOKE] ALL OK!\n");
 			
 			led_OFF(blue_led);
-			buzzer_OFF(buzzer);
 		}
 		
 		if (temperature > TEMP_THRESHOLD_MAX){
@@ -224,7 +223,6 @@ int main(void){
 			led_OFF(yellow_led);
 			
 			led_ON(red_led);
-			//buzzer_ON(buzzer);
 		}
 		
 		else if (temperature > TEMP_THRESHOLD_MIN && temperature <= TEMP_THRESHOLD_MAX){
@@ -232,7 +230,6 @@ int main(void){
 			
 			led_OFF(green_led);
 			led_OFF(red_led);
-			buzzer_OFF(buzzer);
 			
 			led_ON(yellow_led);
 		}
@@ -242,7 +239,6 @@ int main(void){
 			
 			led_OFF(red_led);
 			led_OFF(yellow_led);
-			buzzer_OFF(buzzer);
 			
 			led_ON(green_led);
 		}
