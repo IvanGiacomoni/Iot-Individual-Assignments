@@ -23,6 +23,102 @@
 
 #define PPM_THRESHOLD               48
 
+#define EMCUTE_PRIO         (THREAD_PRIORITY_MAIN - 1)
+
+#define NUMOFSUBS           (1U)
+#define TOPIC_MAXLEN        (64U)
+
+#ifndef EMCUTE_ID
+#define EMCUTE_ID           ("MY_ID")
+#endif
+
+static char stack[THREAD_STACKSIZE_DEFAULT];
+
+static emcute_sub_t subscriptions[NUMOFSUBS];
+static char topics[NUMOFSUBS][TOPIC_MAXLEN];
+
+static void *emcute_thread(void *arg){
+    (void)arg;
+    emcute_run(CONFIG_EMCUTE_DEFAULT_PORT, EMCUTE_ID);
+    return NULL;    /* should never be reached */
+}
+
+static void on_pub(const emcute_topic_t *topic, void *data, size_t len){
+    char *in = (char *)data;
+
+    printf("### got publication for topic '%s' [%i] ###\n", topic->name, (int)topic->id);
+    for (size_t i = 0; i < len; i++) {
+        printf("%c", in[i]);
+    }
+    puts("");
+}
+
+/**
+ * Setup the EMCUTE, open a connection to the MQTT-S broker,
+ * subscribe to the default topic and publish a message.
+ */
+int setup_mqtt(void){
+    
+    /* initialize our subscription buffers */
+    memset(subscriptions, 0, (NUMOFSUBS * sizeof(emcute_sub_t)));
+    printf("prima della thread create\n");
+    
+    printf("sizeof(stack) = %d\n",sizeof(stack));
+    printf("sizeof(stack) = %d\n", THREAD_STACKSIZE_DEFAULT);
+
+    /* start the emcute thread */
+    thread_create(stack, sizeof(stack), EMCUTE_PRIO, 0,
+                  emcute_thread, NULL, "emcute");
+    printf("dopo la thread create\n");
+
+    // connect to MQTT-SN broker
+    printf("Connecting to MQTT-SN broker %s port %d.\n",
+           SERVER_ADDR, SERVER_PORT);
+
+    sock_udp_ep_t gw = { .family = AF_INET6, .port = SERVER_PORT };
+    char *topic = MQTT_TOPIC;
+    char *message = "connected";
+    size_t len = strlen(message);
+
+    /* parse address */
+    if (ipv6_addr_from_str((ipv6_addr_t *)&gw.addr.ipv6, SERVER_ADDR) == NULL) {
+        printf("error parsing IPv6 address\n");
+        return 1;
+    }
+
+    if (emcute_con(&gw, true, topic, message, len, 0) != EMCUTE_OK) {
+        printf("error: unable to connect to [%s]:%i\n", SERVER_ADDR,
+               (int)gw.port);
+        return 1;
+    }
+
+    printf("Successfully connected to gateway at [%s]:%i\n",
+           SERVER_ADDR, (int)gw.port);
+
+    /* setup subscription to topic*/
+    unsigned flags = EMCUTE_QOS_0;
+    subscriptions[0].cb = on_pub;
+    strcpy(topics[0], MQTT_TOPIC);
+    subscriptions[0].topic.name = MQTT_TOPIC;
+
+    if (emcute_sub(&subscriptions[0], flags) != EMCUTE_OK) {
+        printf("error: unable to subscribe to %s\n", MQTT_TOPIC);
+        return 1;
+    }
+
+    printf("Now subscribed to %s\n", MQTT_TOPIC);
+
+    return 1;
+}
+
+void publishDataForAws(char* data){
+	
+	if(emcute_pub(&subscriptions[0].topic, data, strlen(data), EMCUTE_QOS_0) != EMCUTE_OK){
+		printf("error: unable to publish to %s\n", MQTT_TOPIC);
+		exit(EXIT_FAILURE);
+	} 	
+}
+
 void initializeLeds(gpio_t* red_led, gpio_t* green_led, gpio_t* yellow_led,
     gpio_t* blue_led, gpio_t* white_led){
 	
@@ -214,6 +310,12 @@ int main(void){
 	xtimer_sleep(DELAY);
 	printf("\n");
 	
+	// setup MQTT-SN connection
+    printf("Setting up MQTT-SN.\n");
+    setup_mqtt();
+    xtimer_sleep(DELAY);
+	printf("\n");
+	
 	// Periodical sampling
     while (1) {
 		
@@ -226,6 +328,10 @@ int main(void){
         int temperature = readTemperatureByDHT(&dev);
 	  
 		printf("temperature: %d°C\n", temperature);
+		
+		char* data = "test message for now";
+        
+        publishDataForAws(data);
 		
 		// Preprocessing data
 		
