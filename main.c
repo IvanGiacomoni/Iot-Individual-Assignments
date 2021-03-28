@@ -37,6 +37,8 @@ static char stack[THREAD_STACKSIZE_DEFAULT];
 static emcute_sub_t subscriptions[NUMOFSUBS];
 static char topics[NUMOFSUBS][TOPIC_MAXLEN];
 
+static char stackProva[THREAD_STACKSIZE_DEFAULT];
+
 static void *emcute_thread(void *arg){
     (void)arg;
     emcute_run(CONFIG_EMCUTE_DEFAULT_PORT, EMCUTE_ID);
@@ -61,7 +63,6 @@ int setup_mqtt(void){
     
     /* initialize our subscription buffers */
     memset(subscriptions, 0, (NUMOFSUBS * sizeof(emcute_sub_t)));
-    printf("prima della thread create\n");
     
     printf("sizeof(stack) = %d\n",sizeof(stack));
     printf("sizeof(stack) = %d\n", THREAD_STACKSIZE_DEFAULT);
@@ -69,8 +70,7 @@ int setup_mqtt(void){
     /* start the emcute thread */
     thread_create(stack, sizeof(stack), EMCUTE_PRIO, 0,
                   emcute_thread, NULL, "emcute");
-    printf("dopo la thread create\n");
-
+                  
     // connect to MQTT-SN broker
     printf("Connecting to MQTT-SN broker %s port %d.\n",
            SERVER_ADDR, SERVER_PORT);
@@ -278,9 +278,26 @@ void buzzer_OFF(gpio_t buzzer){
 	gpio_clear(buzzer);
 }
 
+static void* threadProva(void *arg){
+    int a = (int)arg;
+    printf("Ciao sono il thread %d e ho in input %d\n", thread_getpid(), a);
+    
+    return NULL;    
+}
+
 int main(void){
     
     printf("\nStarting the application...\n");
+	xtimer_sleep(2);
+	
+	printf("Ora creo il thread di prova...\n");
+	xtimer_sleep(2);
+	
+	int a = 4;
+	
+	thread_create(stackProva, sizeof(stackProva), EMCUTE_PRIO, 0, threadProva, (void*)a, "threadProva");
+	xtimer_sleep(2);
+	printf("Il thread è stato creato e ha parlato!\n");
 	xtimer_sleep(2);
 
     /* Initializing the ADC line */
@@ -329,10 +346,6 @@ int main(void){
 	  
 		printf("temperature: %d°C\n", temperature);
 		
-		char* data = "test message for now";
-        
-        publishDataForAws(data);
-		
 		// Preprocessing data
 		
 		if(ppm > PPM_THRESHOLD){
@@ -376,6 +389,21 @@ int main(void){
 			
 			led_ON(green_led);
 		}
+		
+		// Formatting all data into a string for mqtt publishing
+		char temp_s[5], ppm_s[5];
+		sprintf(temp_s, "%d", temperature);
+		sprintf(ppm_s, "%d", ppm);
+		
+		char data[32] = "{ ";
+        strcat(data, "\"temperature\": ");
+        strcat(data, temp_s);
+        strcat(data, ", \"ppm\": ");
+        strcat(data, ppm_s);
+        strcat(data, " }");
+        
+        publishDataForAws(data);
+		
 		
 		xtimer_sleep(DELAY);
 		buzzer_OFF(gas_smoke_buzzer);
