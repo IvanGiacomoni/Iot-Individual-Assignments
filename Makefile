@@ -31,6 +31,12 @@ USEMODULE += xtimer
 
 USEPKG += ucglib
 
+# Allow for env-var-based override of the nodes name (EMCUTE_ID)
+
+ifneq (,$(EMCUTE_ID))
+CFLAGS += -DEMCUTE_ID=\"$(EMCUTE_ID)\"
+endif
+
 
 # DHT sensor
 USEMODULE += dht
@@ -40,11 +46,6 @@ FEATURES_REQUIRED += periph_gpio periph_spi
 USEMODULE += analog_util
 
 FEATURES_REQUIRED += periph_adc
-
-# Allow for env-var-based override of the nodes name (EMCUTE_ID)
-ifneq (,$(EMCUTE_ID))
-  CFLAGS += -DEMCUTE_ID=\"$(EMCUTE_ID)\"
-endif
 
 # include UHCP client
 USE_DHCPV6 ?= 0
@@ -61,9 +62,10 @@ QUIET ?= 1
 TAP ?= tap0
 IPV6_PREFIX ?= fe80:2::/64
 
-# MQTT
-###
-
+# The Broker address, port and the default MQTT topic to subscribe.
+SERVER_ADDR = fe80::1
+SERVER_PORT = 1885
+MQTT_TOPIC = send_data_to_aws
 
 CFLAGS += -DSERVER_ADDR='"$(SERVER_ADDR)"'
 CFLAGS += -DSERVER_PORT=$(SERVER_PORT)
