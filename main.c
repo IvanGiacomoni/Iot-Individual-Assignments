@@ -17,7 +17,7 @@
 #define ADC_RES                     ADC_RES_10BIT
 
 #define GAS_SMOKE_DELAY             2
-#define TEMP_DELAY                  2
+#define TEMP_DELAY                  10
 
 #define TEMP_THRESHOLD_MIN          23
 #define TEMP_THRESHOLD_MAX          24
@@ -471,6 +471,7 @@ int main(void){
 	
 	printf("Creating thread for sampling temperature...\n");
 	
+	// Setting arguments for temperature thread
 	struct threadTempArgs* threadTemperatureArgs = (struct threadTempArgs*)malloc(sizeof(struct threadTempArgs));
 	threadTemperatureArgs->red_led = red_led;
 	threadTemperatureArgs->yellow_led = yellow_led;
@@ -478,21 +479,25 @@ int main(void){
 	threadTemperatureArgs->temp_buzzer = temp_buzzer;
 	threadTemperatureArgs->dev = dev;
 	
+	// Creating temperature thread 
 	thread_create(stackThreadTemp, sizeof(stackThreadTemp), THREAD_PRIORITY_MAIN - 1, 0, 
 		threadTemp, (void*)threadTemperatureArgs, "Thread temperature");
 	printf("Temperature thread created...\n");
 	
 	printf("Creating thread for sampling ppm...\n");
 	
+	// Setting arguments for gas/smoke thread
 	struct threadGasSmokeArgs* threadPpmArgs = (struct threadGasSmokeArgs*)malloc(sizeof(struct threadGasSmokeArgs));
 	threadPpmArgs->blue_led = blue_led;
 	threadPpmArgs->white_led = white_led;
 	threadPpmArgs->gas_smoke_buzzer = gas_smoke_buzzer;
 	
+	// Creating gas/smoke thread 
 	thread_create(stackThreadGasSmoke, sizeof(stackThreadGasSmoke), THREAD_PRIORITY_MAIN - 1, 0, 
 		threadGasSmoke, (void*)threadPpmArgs, "Thread gas/smoke");
 	printf("Gas/smoke thread created...\n");
     
+    // Protecting threads
     while(1){};
     
     return 0;
