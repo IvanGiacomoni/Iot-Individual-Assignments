@@ -37,8 +37,6 @@ static char stack[THREAD_STACKSIZE_DEFAULT];
 static emcute_sub_t subscriptions[NUMOFSUBS];
 static char topics[NUMOFSUBS][TOPIC_MAXLEN];
 
-static char stackProva[THREAD_STACKSIZE_DEFAULT];
-
 static void *emcute_thread(void *arg){
     (void)arg;
     emcute_run(CONFIG_EMCUTE_DEFAULT_PORT, EMCUTE_ID);
@@ -63,9 +61,6 @@ int setup_mqtt(void){
     
     /* initialize our subscription buffers */
     memset(subscriptions, 0, (NUMOFSUBS * sizeof(emcute_sub_t)));
-    
-    printf("sizeof(stack) = %d\n",sizeof(stack));
-    printf("sizeof(stack) = %d\n", THREAD_STACKSIZE_DEFAULT);
 
     /* start the emcute thread */
     thread_create(stack, sizeof(stack), EMCUTE_PRIO, 0,
@@ -94,19 +89,6 @@ int setup_mqtt(void){
 
     printf("Successfully connected to gateway at [%s]:%i\n",
            SERVER_ADDR, (int)gw.port);
-
-    /* setup subscription to topic*/
-    unsigned flags = EMCUTE_QOS_0;
-    subscriptions[0].cb = on_pub;
-    strcpy(topics[0], MQTT_TOPIC);
-    subscriptions[0].topic.name = MQTT_TOPIC;
-
-    if (emcute_sub(&subscriptions[0], flags) != EMCUTE_OK) {
-        printf("error: unable to subscribe to %s\n", MQTT_TOPIC);
-        return 1;
-    }
-
-    printf("Now subscribed to %s\n", MQTT_TOPIC);
 
     return 1;
 }
@@ -278,89 +260,46 @@ void buzzer_OFF(gpio_t buzzer){
 	gpio_clear(buzzer);
 }
 
-static void* threadProva(void *arg){
-    int a = (int)arg;
-    printf("Ciao sono il thread %d e ho in input %d\n", thread_getpid(), a);
-    
-    return NULL;    
-}
+static char stackThreadTemp[THREAD_STACKSIZE_DEFAULT];
+static char stackThreadGasSmoke[THREAD_STACKSIZE_DEFAULT];
 
-int main(void){
-    
-    printf("\nStarting the application...\n");
-	xtimer_sleep(2);
+struct threadTempArgs {
+	gpio_t red_led;
+	gpio_t green_led;
+	gpio_t yellow_led;
 	
-	printf("Ora creo il thread di prova...\n");
-	xtimer_sleep(2);
+	gpio_t temp_buzzer;
 	
-	int a = 4;
-	
-	thread_create(stackProva, sizeof(stackProva), EMCUTE_PRIO, 0, threadProva, (void*)a, "threadProva");
-	xtimer_sleep(2);
-	printf("Il thread è stato creato e ha parlato!\n");
-	xtimer_sleep(2);
+	dht_t dev;
+};
 
-    /* Initializing the ADC line */
-    initializeADCLine();
-    xtimer_sleep(DELAY);
-    printf("\n");
-    
-    // Initializing leds
-	gpio_t red_led, green_led, yellow_led, blue_led, white_led;
+struct threadGasSmokeArgs {
+	gpio_t white_led;
+	gpio_t blue_led;
 	
-	initializeLeds(&red_led, &green_led, &yellow_led, &blue_led, &white_led);
-	xtimer_sleep(DELAY);
-	printf("\n");
-	
-	// Initializing buzzers
-	gpio_t gas_smoke_buzzer, temp_buzzer;
-	
-	initializeBuzzers(&gas_smoke_buzzer, &temp_buzzer);
-    xtimer_sleep(DELAY);
-	printf("\n");
-	
-    // Initializing DHT_22 parameters and module
-    dht_params_t params;
-    dht_t dev;
+	gpio_t gas_smoke_buzzer;
+};
 
-	initializeDHT(&params, &dev);
-	xtimer_sleep(DELAY);
-	printf("\n");
-	
-	// setup MQTT-SN connection
-    printf("Setting up MQTT-SN.\n");
-    setup_mqtt();
-    xtimer_sleep(DELAY);
-	printf("\n");
-	
-	// Periodical sampling
-    while (1) {
+static void* threadTemp(void *arg){
+    printf("I'm temperature thread with pid %d\n", thread_getpid());
+    
+    struct threadTempArgs* args = (struct threadTempArgs*) arg;
+    
+    gpio_t red_led = args->red_led;
+    gpio_t green_led = args->green_led;
+    gpio_t yellow_led = args->yellow_led;
+    gpio_t temp_buzzer = args->temp_buzzer;
+    dht_t dev = args->dev;
+    
+    // Periodic sampling of temperature
+    while(1){
 		
-		// Reading ppm values by MQ-2 sensor
-		int ppm = readPpmByMQ2();
-		printf("ppm: %d\n", ppm);
-        
-        
-        // Reading temperature values by DHT-22 sensor
+		// Reading temperature values by DHT-22 sensor
         int temperature = readTemperatureByDHT(&dev);
 	  
 		printf("temperature: %d°C\n", temperature);
 		
 		// Preprocessing data
-		
-		if(ppm > PPM_THRESHOLD){
-			printf("[GAS/SMOKE] WARNING!!!\n");
-			
-			led_ON(blue_led);
-			led_OFF(white_led);
-			//buzzer_ON(gas_smoke_buzzer);
-		}
-		
-		else if(ppm <= PPM_THRESHOLD){
-			printf("[GAS/SMOKE] ALL OK!\n");
-			led_ON(white_led);
-			led_OFF(blue_led);
-		}
 		
 		if (temperature > TEMP_THRESHOLD_MAX){
 			printf("[TEMPERATURE] WARNING!!\n");
@@ -391,25 +330,152 @@ int main(void){
 		}
 		
 		// Formatting all data into a string for mqtt publishing
-		char temp_s[5], ppm_s[5];
+		char temp_s[5];
 		sprintf(temp_s, "%d", temperature);
-		sprintf(ppm_s, "%d", ppm);
 		
 		char data[32] = "{ ";
         strcat(data, "\"temperature\": ");
         strcat(data, temp_s);
-        strcat(data, ", \"ppm\": ");
-        strcat(data, ppm_s);
         strcat(data, " }");
         
         publishDataForAws(data);
 		
 		
 		xtimer_sleep(DELAY);
-		buzzer_OFF(gas_smoke_buzzer);
 		buzzer_OFF(temp_buzzer);
 		printf("\n");
+		
+	}
+    
+    return NULL;    
+}
+
+static void* threadGasSmoke(void *arg){
+    printf("I'm gas/smoke thread with pid %d\n", thread_getpid());
+    
+    struct threadGasSmokeArgs* args = (struct threadGasSmokeArgs*) arg;
+    
+    gpio_t blue_led = args->blue_led;
+    gpio_t white_led = args->white_led;
+    gpio_t gas_smoke_buzzer = args->gas_smoke_buzzer;
+    
+    // Periodical sampling of ppm
+    while(1){
+		
+		// Reading ppm values by MQ-2 sensor
+		int ppm = readPpmByMQ2();
+		printf("ppm: %d\n", ppm);
+		
+		// Preprocessing data
+		if(ppm > PPM_THRESHOLD){
+			printf("[GAS/SMOKE] WARNING!!!\n");
+			
+			led_ON(blue_led);
+			led_OFF(white_led);
+			//buzzer_ON(gas_smoke_buzzer);
+		}
+		
+		else if(ppm <= PPM_THRESHOLD){
+			printf("[GAS/SMOKE] ALL OK!\n");
+			led_ON(white_led);
+			led_OFF(blue_led);
+		}
+		
+		// Formatting data into a string for mqtt publishing
+		char ppm_s[5];
+		sprintf(ppm_s, "%d", ppm);
+		
+		char data[32] = "{ ";
+        strcat(data, "\"ppm\": ");
+        strcat(data, ppm_s);
+        strcat(data, " }");
+        
+        publishDataForAws(data);
+		
+		xtimer_sleep(DELAY);
+		buzzer_OFF(gas_smoke_buzzer);
+		printf("\n");
+		
+	}
+    
+    return NULL;    
+}
+
+int main(void){
+    
+    printf("\nStarting the application...\n");
+	xtimer_sleep(1);
+
+    /* Initializing the ADC line */
+    initializeADCLine();
+    xtimer_sleep(1);
+    printf("\n");
+    
+    // Initializing leds
+	gpio_t red_led, green_led, yellow_led, blue_led, white_led;
+	
+	initializeLeds(&red_led, &green_led, &yellow_led, &blue_led, &white_led);
+	xtimer_sleep(1);
+	printf("\n");
+	
+	// Initializing buzzers
+	gpio_t gas_smoke_buzzer, temp_buzzer;
+	
+	initializeBuzzers(&gas_smoke_buzzer, &temp_buzzer);
+    xtimer_sleep(1);
+	printf("\n");
+	
+    // Initializing DHT_22 parameters and module
+    dht_params_t params;
+    dht_t dev;
+
+	initializeDHT(&params, &dev);
+	xtimer_sleep(1);
+	printf("\n");
+	
+	// setup MQTT-SN connection
+    printf("Setting up MQTT-SN.\n");
+    setup_mqtt();
+    /* setup subscription to topic*/
+    unsigned flags = EMCUTE_QOS_0;
+    subscriptions[0].cb = on_pub;
+    strcpy(topics[0], MQTT_TOPIC);
+    subscriptions[0].topic.name = MQTT_TOPIC;
+
+    if (emcute_sub(&subscriptions[0], flags) != EMCUTE_OK) {
+        printf("error: unable to subscribe to %s\n", MQTT_TOPIC);
+        return 1;
     }
+
+    printf("Now subscribed to %s\n", MQTT_TOPIC);
+    xtimer_sleep(1);
+	printf("\n");
+	
+	printf("Creating thread for sampling temperature...\n");
+	
+	struct threadTempArgs* threadTemperatureArgs = (struct threadTempArgs*)malloc(sizeof(struct threadTempArgs));
+	threadTemperatureArgs->red_led = red_led;
+	threadTemperatureArgs->yellow_led = yellow_led;
+	threadTemperatureArgs->green_led = green_led;
+	threadTemperatureArgs->temp_buzzer = temp_buzzer;
+	threadTemperatureArgs->dev = dev;
+	
+	thread_create(stackThreadTemp, sizeof(stackThreadTemp), THREAD_PRIORITY_MAIN - 1, 0, 
+		threadTemp, (void*)threadTemperatureArgs, "Thread temperature");
+	printf("Temperature thread created...\n");
+	
+	printf("Creating thread for sampling ppm...\n");
+	
+	struct threadGasSmokeArgs* threadPpmArgs = (struct threadGasSmokeArgs*)malloc(sizeof(struct threadGasSmokeArgs));
+	threadPpmArgs->blue_led = blue_led;
+	threadPpmArgs->white_led = white_led;
+	threadPpmArgs->gas_smoke_buzzer = gas_smoke_buzzer;
+	
+	thread_create(stackThreadGasSmoke, sizeof(stackThreadGasSmoke), THREAD_PRIORITY_MAIN - 1, 0, 
+		threadGasSmoke, (void*)threadPpmArgs, "Thread gas/smoke");
+	printf("Gas/smoke thread created...\n");
+    
+    while(1){};
     
     return 0;
 }
