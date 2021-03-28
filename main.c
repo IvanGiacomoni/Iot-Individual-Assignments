@@ -16,7 +16,8 @@
 #define ADC_IN_USE                  ADC_LINE(0)
 #define ADC_RES                     ADC_RES_10BIT
 
-#define DELAY                       2
+#define GAS_SMOKE_DELAY             2
+#define TEMP_DELAY                  2
 
 #define TEMP_THRESHOLD_MIN          23
 #define TEMP_THRESHOLD_MAX          24
@@ -25,7 +26,7 @@
 
 #define EMCUTE_PRIO         (THREAD_PRIORITY_MAIN - 1)
 
-#define NUMOFSUBS           (1U)
+#define NUMOFSUBS           (2U)
 #define TOPIC_MAXLEN        (64U)
 
 #ifndef EMCUTE_ID
@@ -71,7 +72,7 @@ int setup_mqtt(void){
            SERVER_ADDR, SERVER_PORT);
 
     sock_udp_ep_t gw = { .family = AF_INET6, .port = SERVER_PORT };
-    char *topic = MQTT_TOPIC;
+    char *topic = MQTT_TOPIC_TEMP;
     char *message = "connected";
     size_t len = strlen(message);
 
@@ -93,10 +94,10 @@ int setup_mqtt(void){
     return 1;
 }
 
-void publishDataForAws(char* data){
+void publishDataForAws(char* data, emcute_topic_t* topic){
 	
-	if(emcute_pub(&subscriptions[0].topic, data, strlen(data), EMCUTE_QOS_0) != EMCUTE_OK){
-		printf("error: unable to publish to %s\n", MQTT_TOPIC);
+	if(emcute_pub(topic, data, strlen(data), EMCUTE_QOS_0) != EMCUTE_OK){
+		printf("error: unable to publish to %s\n", topic->name); // DA CAMBIARE!!!!
 		exit(EXIT_FAILURE);
 	} 	
 }
@@ -338,10 +339,11 @@ static void* threadTemp(void *arg){
         strcat(data, temp_s);
         strcat(data, " }");
         
-        publishDataForAws(data);
+        // Publishing temperature data to MQTT_TOPIC_TEMP
+        publishDataForAws(data, &subscriptions[0].topic);
 		
 		
-		xtimer_sleep(DELAY);
+		xtimer_sleep(TEMP_DELAY);
 		buzzer_OFF(temp_buzzer);
 		printf("\n");
 		
@@ -390,9 +392,10 @@ static void* threadGasSmoke(void *arg){
         strcat(data, ppm_s);
         strcat(data, " }");
         
-        publishDataForAws(data);
+        // Publishing temperature data to MQTT_TOPIC_GAS_SMOKE
+        publishDataForAws(data, &subscriptions[1].topic);
 		
-		xtimer_sleep(DELAY);
+		xtimer_sleep(GAS_SMOKE_DELAY);
 		buzzer_OFF(gas_smoke_buzzer);
 		printf("\n");
 		
@@ -436,18 +439,33 @@ int main(void){
 	// setup MQTT-SN connection
     printf("Setting up MQTT-SN.\n");
     setup_mqtt();
-    /* setup subscription to topic*/
+    
+    // Setup subscription to MQTT_TOPIC_TEMP
     unsigned flags = EMCUTE_QOS_0;
     subscriptions[0].cb = on_pub;
-    strcpy(topics[0], MQTT_TOPIC);
-    subscriptions[0].topic.name = MQTT_TOPIC;
+    strcpy(topics[0], MQTT_TOPIC_TEMP);
+    subscriptions[0].topic.name = MQTT_TOPIC_TEMP;
 
     if (emcute_sub(&subscriptions[0], flags) != EMCUTE_OK) {
-        printf("error: unable to subscribe to %s\n", MQTT_TOPIC);
+        printf("error: unable to subscribe to %s\n", MQTT_TOPIC_TEMP);
         return 1;
     }
 
-    printf("Now subscribed to %s\n", MQTT_TOPIC);
+    printf("Now subscribed to %s\n", MQTT_TOPIC_TEMP);
+    xtimer_sleep(1);
+	printf("\n");
+	
+	// Setup subscription to MQTT_TOPIC_GAS_SMOKE
+	subscriptions[1].cb = on_pub;
+    strcpy(topics[1], MQTT_TOPIC_GAS_SMOKE);
+    subscriptions[1].topic.name = MQTT_TOPIC_GAS_SMOKE;
+
+    if (emcute_sub(&subscriptions[1], flags) != EMCUTE_OK) {
+        printf("error: unable to subscribe to %s\n", MQTT_TOPIC_GAS_SMOKE);
+        return 1;
+    }
+
+    printf("Now subscribed to %s\n", MQTT_TOPIC_GAS_SMOKE);
     xtimer_sleep(1);
 	printf("\n");
 	
