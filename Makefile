@@ -62,14 +62,16 @@ QUIET ?= 1
 TAP ?= tap0
 IPV6_PREFIX ?= fe80:2::/64
 
-# The Broker address, port and the default MQTT topic to subscribe.
+# The Broker address, port and topics.
 SERVER_ADDR = fe80::1
 SERVER_PORT = 1885
-MQTT_TOPIC = send_data_to_aws
+MQTT_TOPIC_TEMP = send_temp_data_to_aws
+MQTT_TOPIC_GAS_SMOKE = send_gas_smoke_data_to_aws
 
 CFLAGS += -DSERVER_ADDR='"$(SERVER_ADDR)"'
 CFLAGS += -DSERVER_PORT=$(SERVER_PORT)
-CFLAGS += -DMQTT_TOPIC='"$(MQTT_TOPIC)"'
+CFLAGS += -DMQTT_TOPIC_TEMP='"$(MQTT_TOPIC_TEMP)"'
+CFLAGS += -DMQTT_TOPIC_GAS_SMOKE='"$(MQTT_TOPIC_GAS_SMOKE)"'
 
 ETHOS_BAUDRATE ?= 115200
 include $(CURDIR)/Makefile.ethos.conf
