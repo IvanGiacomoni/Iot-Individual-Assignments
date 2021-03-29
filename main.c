@@ -22,7 +22,7 @@
 #define TEMP_THRESHOLD_MIN          23
 #define TEMP_THRESHOLD_MAX          24
 
-#define PPM_THRESHOLD               48
+#define PPM_THRESHOLD               60
 
 #define EMCUTE_PRIO         (THREAD_PRIORITY_MAIN - 1)
 
@@ -292,6 +292,8 @@ static void* threadTemp(void *arg){
     gpio_t temp_buzzer = args->temp_buzzer;
     dht_t dev = args->dev;
     
+    char* temperature_state = "";
+    
     // Periodic sampling of temperature
     while(1){
 		
@@ -304,6 +306,7 @@ static void* threadTemp(void *arg){
 		
 		if (temperature > TEMP_THRESHOLD_MAX){
 			printf("[TEMPERATURE] WARNING!!\n");
+			temperature_state = "WARNING!";
 			
 			led_OFF(green_led);
 			led_OFF(yellow_led);
@@ -314,6 +317,7 @@ static void* threadTemp(void *arg){
 		
 		else if (temperature > TEMP_THRESHOLD_MIN && temperature <= TEMP_THRESHOLD_MAX){
 			printf("[TEMPERATURE] BE CAREFUL TO THE TEMPERATURE!\n");
+			temperature_state = "GROWING!";
 			
 			led_OFF(green_led);
 			led_OFF(red_led);
@@ -323,6 +327,7 @@ static void* threadTemp(void *arg){
 		
 		else if(temperature <= TEMP_THRESHOLD_MIN){
 			printf("[TEMPERATURE] ALL OK!\n");
+			temperature_state = "ALL OK!";
 			
 			led_OFF(red_led);
 			led_OFF(yellow_led);
@@ -334,9 +339,12 @@ static void* threadTemp(void *arg){
 		char temp_s[5];
 		sprintf(temp_s, "%d", temperature);
 		
-		char data[32] = "{ ";
+		char data[64] = "{ ";
         strcat(data, "\"temperature\": ");
         strcat(data, temp_s);
+        strcat(data, ", \"temperature_state\": \"");
+        strcat(data, temperature_state);
+        strcat(data, "\"");
         strcat(data, " }");
         
         // Publishing temperature data to MQTT_TOPIC_TEMP
@@ -361,6 +369,8 @@ static void* threadGasSmoke(void *arg){
     gpio_t white_led = args->white_led;
     gpio_t gas_smoke_buzzer = args->gas_smoke_buzzer;
     
+    char* gas_smoke_state = "";
+    
     // Periodical sampling of ppm
     while(1){
 		
@@ -371,6 +381,7 @@ static void* threadGasSmoke(void *arg){
 		// Preprocessing data
 		if(ppm > PPM_THRESHOLD){
 			printf("[GAS/SMOKE] WARNING!!!\n");
+			gas_smoke_state = "WARNING!";
 			
 			led_ON(blue_led);
 			led_OFF(white_led);
@@ -379,6 +390,8 @@ static void* threadGasSmoke(void *arg){
 		
 		else if(ppm <= PPM_THRESHOLD){
 			printf("[GAS/SMOKE] ALL OK!\n");
+			gas_smoke_state = "ALL_OK!";
+			
 			led_ON(white_led);
 			led_OFF(blue_led);
 		}
@@ -387,9 +400,12 @@ static void* threadGasSmoke(void *arg){
 		char ppm_s[5];
 		sprintf(ppm_s, "%d", ppm);
 		
-		char data[32] = "{ ";
+		char data[64] = "{ ";
         strcat(data, "\"ppm\": ");
         strcat(data, ppm_s);
+        strcat(data, ", \"gas_smoke_state\": \"");
+        strcat(data, gas_smoke_state);
+        strcat(data, "\"");
         strcat(data, " }");
         
         // Publishing temperature data to MQTT_TOPIC_GAS_SMOKE
