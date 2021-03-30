@@ -22,7 +22,7 @@
 #define TEMP_THRESHOLD_MIN          23
 #define TEMP_THRESHOLD_MAX          24
 
-#define PPM_THRESHOLD               60
+#define PPM_THRESHOLD               54
 
 #define EMCUTE_PRIO         (THREAD_PRIORITY_MAIN - 1)
 
