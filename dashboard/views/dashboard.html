@@ -32,7 +32,7 @@
 			
 			<!-- DASHBOARD -->
 			
-			<div v-if="!showTemperature && !showGasSmoke && !showTemperatureAggregatedValues && !showGasSmokeAggregatedValues && !showTemperatureLatestValues && !showGasSmokeLatestValues">
+			<div v-if="!showTemperature && !showGasSmoke && !showTemperatureAggregatedValues && !showGasSmokeAggregatedValues && !showTemperatureLatestValues && !showGasSmokeLatestValues && !temperatureActuators && !gasSmokeActuators">
 				
 				<center>
 				<div class="container">
@@ -49,6 +49,7 @@
 			<!-- VIEW LATEST TEMPERATURE DATA -->
 			
 			<div v-if="showTemperature">
+				ciao
 				
 				<center>
 				
@@ -97,7 +98,7 @@
 								</div>
 								
 								<div class="col">
-									<button @click="" type="button" class="btn mt-1">Actuators</button>
+									<button @click="goToTempActuators" type="button" class="btn mt-1">Actuators</button>
 								</div>
 							</div>
 							
@@ -212,6 +213,71 @@
 				
 			</div> <!-- v-if="showTemperatureAggregatedValues" CLOSED -->
 			
+			<!-- TEMPERATURE ACTUATORS -->
+			
+			<div v-if="temperatureActuators">
+				
+				<center>
+				
+					<div class="card border-success mt-3">
+						<div class="card-body">
+						<h5 class="card-title"><b>TEMPERATURE ACTUATORS</b></h5>
+                
+							<!--  TABLE  -->
+                
+							<div class="table table-borderless" style="height:350px">
+								<table class="table">
+									
+									<!--  TABLE HEADER -->
+									<thead class="thead-light">
+										<tr>
+											<th scope="col">Device id</th>
+											<th scope="col"></th>
+											<th scope="col"></th>
+											<th scope="col"></th>
+											<th scope="col"></th>
+											<th scope="col"></th>
+											<th scope="col"></th>
+											<th scope="col"></th>
+											<th scope="col"></th>
+										</tr>
+									</thead>
+									
+									<!--  TABLE BODY -->
+									<tbody>
+										<tr v-for="device in devicesIdTemp" :key="device">
+											<td>{{device}}</td>
+											<td><button @click="buzzerON" type="button" class="btn my-buzzer-btn mt-1">Buzzer ON</button></td>
+											<td><button @click="buzzerOFF" type="button" class="btn my-buzzer-btn mt-1">Buzzer OFF</button></td>
+											<td><button @click="redLedON" type="button" class="btn my-red-btn mt-1">Red led ON</button></td>
+											<td><button @click="redLedOFF" type="button" class="btn my-red-btn mt-1">Red led OFF</button></td>
+											<td><button @click="yellowLedON" type="button" class="btn my-yellow-btn mt-1">Yellow led ON</button></td>
+											<td><button @click="yellowLedOFF" type="button" class="btn my-yellow-btn mt-1">Yellow led OFF</button></td>
+											<td><button @click="greenLedON" type="button" class="btn my-green-btn mt-1">Green led ON</button></td>
+											<td><button @click="greenLedOFF" type="button" class="btn my-green-btn mt-1">Green led OFF</button></td>
+										</tr>
+                            
+									</tbody>
+								</table>
+							</div>
+							
+							<div class="row">
+										
+								<div class="col">
+									<div class="col">
+										<button @click="backToTempData()" type="button" class="btn mt-1" style="width:200px;">Back</button>
+									</div>
+								</div>
+										
+							</div>
+							
+						</div>
+					</div>
+					
+				</center>
+				
+			</div> <!-- v-if="temperatureActuators" CLOSED -->
+			
 			
 			<!-- VIEW LATEST GAS/SMOKE DATA -->
 			
@@ -265,7 +331,7 @@
 								</div>
 								
 								<div class="col">
-									<button @click="" type="button" class="btn mt-1">Actuators</button>
+									<button @click="goToGasSmokeActuators" type="button" class="btn mt-1">Actuators</button>
 								</div>
 							</div>
 							
@@ -381,6 +447,67 @@
 				
 			</div> <!-- v-if="showGasSmokeAggregatedValues" CLOSED -->
 			
+			<!-- GAS/SMOKE ACTUATORS -->
+			
+			<div v-if="gasSmokeActuators">
+				
+				<center>
+				
+					<div class="card border-success mt-3">
+						<div class="card-body">
+						<h5 class="card-title"><b>GAS/SMOKE ACTUATORS</b></h5>
+                
+							<!--  TABLE  -->
+                
+							<div class="table table-borderless" style="height:350px">
+								<table class="table">		
+									<!--  TABLE HEADER -->
+									<thead class="thead-light">
+										<tr>
+											<th scope="col">Device id</th>
+											<th scope="col"></th>
+											<th scope="col"></th>
+											<th scope="col"></th>
+											<th scope="col"></th>
+											<th scope="col"></th>
+											<th scope="col"></th>
+										</tr>
+									</thead>
+									
+									<!--  TABLE BODY -->
+									<tbody>
+										<tr v-for="device in devicesIdGasSmoke" :key="device">
+											<td>{{device}}</td>
+											<td><button @click="buzzerON" type="button" class="btn my-buzzer-btn mt-1">Buzzer ON</button></td>
+											<td><button @click="buzzerOFF" type="button" class="btn my-buzzer-btn mt-1">Buzzer OFF</button></td>
+											<td><button @click="whiteLedON" type="button" class="btn my-white-btn mt-1">White led ON</button></td>
+											<td><button @click="whiteLedOFF" type="button" class="btn my-white-btn mt-1">White led OFF</button></td>
+											<td><button @click="blueLedON" type="button" class="btn my-blue-btn mt-1">Blue led ON</button></td>
+											<td><button @click="blueLedOFF" type="button" class="btn my-blue-btn mt-1">Blue led OFF</button></td>
+										</tr>
+                            
+									</tbody>
+									
+								</table>
+							</div>
+							
+							<div class="row">
+										
+								<div class="col">
+									<div class="col">
+										<button @click="backToGasSmokeData" type="button" class="btn mt-1" style="width:200px;">Back</button>
+									</div>
+								</div>
+										
+							</div>
+							
+						</div>
+					</div>
+					
+				</center>
+				
+			</div> <!-- v-if="gasSmokeActuators" CLOSED -->
+			
 						
                     
         </div>   <!-- APP CLOSED -->
@@ -407,12 +534,16 @@
                 showGasSmokeAggregatedValues: false,
                 showTemperatureLatestValues: false,
                 showGasSmokeLatestValues: false,
+                temperatureActuators: false,
+                gasSmokeActuators: false,
                 tempMaxValue: 0,
                 tempMinValue: 0,
                 tempAvgValue: 0.0,
                 gasSmokeMaxValue: 0,
                 gasSmokeMinValue: 0,
-                gasSmokeAvgValue: 0.0
+                gasSmokeAvgValue: 0.0,
+                devicesIdTemp: [],
+                devicesIdGasSmoke: []
             },
             
             beforeCreate: function(){
@@ -454,6 +585,8 @@
 					this.showGasSmokeAggregatedValues = false;
 					this.showTemperatureLatestValues = false;
 					this.showGasSmokeLatestValues = false;
+					this.temperatureActuators = false;
+					this.gasSmokeActuators = false;
 				},
 				
 				goToGasSmoke: function(){
@@ -465,6 +598,8 @@
 					this.showGasSmokeAggregatedValues = false;
 					this.showTemperatureLatestValues = false;
 					this.showGasSmokeLatestValues = false;
+					this.temperatureActuators = false;
+					this.gasSmokeActuators = false;
 				},
 				
 				backToStart: function(){
@@ -474,6 +609,8 @@
 					this.showGasSmokeAggregatedValues = false;
 					this.showTemperatureLatestValues = false;
 					this.showGasSmokeLatestValues = false;
+					this.temperatureActuators = false;
+					this.gasSmokeActuators = false;
 				},
 				
 				goToTempAggregatedValues: function(){
@@ -483,6 +620,8 @@
 					this.showGasSmokeAggregatedValues = false;
 					this.showTemperatureLatestValues = false;
 					this.showGasSmokeLatestValues = false;
+					this.temperatureActuators = false;
+					this.gasSmokeActuators = false;
 					
 					// Getting latest temperature aggregated values
 					this.$http.get('http://localhost:8080/getTemperatureAggregatedValues').then(response => {
@@ -501,6 +640,8 @@
 					this.showGasSmokeAggregatedValues = false;
 					this.showTemperatureLatestValues = false;
 					this.showGasSmokeLatestValues = false;
+					this.temperatureActuators = false;
+					this.gasSmokeActuators = false;
 					
 					this.updateLatestData();
 				},
@@ -513,6 +654,8 @@
 					this.showGasSmokeAggregatedValues = true;
 					this.showTemperatureLatestValues = false;
 					this.showGasSmokeLatestValues = false;
+					this.temperatureActuators = false;
+					this.gasSmokeActuators = false;
 					
 					// Getting latest gas/smoke aggregated values
 					this.$http.get('http://localhost:8080/getGasSmokeAggregatedValues').then(response => {
@@ -525,12 +668,15 @@
 				},
 				
 				backToGasSmokeData : function(){
+					
 					this.showTemperature = false;
 					this.showGasSmoke = true;
 					this.showTemperatureAggregatedValues = false;
 					this.showGasSmokeAggregatedValues = false;
 					this.showTemperatureLatestValues = false;
 					this.showGasSmokeLatestValues = false;
+					this.temperatureActuators = false;
+					this.gasSmokeActuators = false;
 					
 					this.updateLatestData();
 				},
@@ -542,6 +688,8 @@
 					this.showGasSmokeAggregatedValues = false;
 					this.showTemperatureLatestValues = true;
 					this.showGasSmokeLatestValues = false;
+					this.temperatureActuators = false;
+					this.gasSmokeActuators = false;
 					
 					// Getting temperature data
 					this.$http.get('http://localhost:8080/getTemperatureLatestValues').then(response => {
@@ -559,11 +707,52 @@
 					this.showGasSmokeAggregatedValues = false;
 					this.showTemperatureLatestValues = false;
 					this.showGasSmokeLatestValues = true;
+					this.temperatureActuators = false;
+					this.gasSmokeActuators = false;
 					
 					// Getting temperature data
 					this.$http.get('http://localhost:8080/getGasSmokeLatestValues').then(response => {
 					
 						this.gasSmokeLatestValues = response.body;
+					}, response => {
+						// error callback
+					})
+				},
+				
+				goToTempActuators: function(){
+					
+					// Getting devices id for temperature
+					this.$http.get('http://localhost:8080/getDevices/temperature').then(response => {
+						
+						this.showTemperature = false;
+						this.showGasSmoke = false;
+						this.showTemperatureAggregatedValues = false;
+						this.showGasSmokeAggregatedValues = false;
+						this.showTemperatureLatestValues = false;
+						this.showGasSmokeLatestValues = false;
+						this.temperatureActuators = true;
+						this.gasSmokeActuators = false;
+						
+						this.devicesIdTemp = response.body;
+					}, response => {
+						// error callback
+					})
+				},
+				
+				goToGasSmokeActuators: function(){
+					
+					// Getting devices id for gas/smoke
+					this.$http.get('http://localhost:8080/getDevices/gasSmoke').then(response => {
+						this.showTemperature = false;
+						this.showGasSmoke = false;
+						this.showTemperatureAggregatedValues = false;
+						this.showGasSmokeAggregatedValues = false;
+						this.showTemperatureLatestValues = false;
+						this.showGasSmokeLatestValues = false;
+						this.temperatureActuators = false;
+						this.gasSmokeActuators = true;
+					
+						this.devicesIdGasSmoke = response.body;
 					}, response => {
 						// error callback
 					})
@@ -649,6 +838,96 @@
   font-family: arial, verdana, sans-serif;
   font-size: 18px;
   cursor: pointer;
+}
+
+.my-green-btn {
+	display: inline-block;
+	weight: 55px;
+	height: 55px;
+	padding: 3px 6px;
+	background-color: green;
+	color: #FFF;
+	border: 1px solid #222;
+	border-radius: 3px;
+	text-decoration: none;
+	font-family: arial, verdana, sans-serif;
+	font-size: 18px;
+	cursor: pointer;
+}
+
+.my-red-btn {
+	display: inline-block;
+	weight: 55px;
+	height: 55px;
+	padding: 3px 6px;
+	background-color: red;
+	color: #FFF;
+	border: 1px solid #222;
+	border-radius: 3px;
+	text-decoration: none;
+	font-family: arial, verdana, sans-serif;
+	font-size: 18px;
+	cursor: pointer;
+}
+
+.my-yellow-btn {
+	display: inline-block;
+	weight: 55px;
+	height: 55px;
+	padding: 3px 6px;
+	background-color: yellow;
+	color: #FFF;
+	border: 1px solid #222;
+	border-radius: 3px;
+	text-decoration: none;
+	font-family: arial, verdana, sans-serif;
+	font-size: 18px;
+	cursor: pointer;
+}
+
+.my-white-btn {
+	display: inline-block;
+	weight: 55px;
+	height: 55px;
+	padding: 3px 6px;
+	background-color: #ffe6e6;
+	color: #FFF;
+	border: 1px solid #222;
+	border-radius: 3px;
+	text-decoration: none;
+	font-family: arial, verdana, sans-serif;
+	font-size: 18px;
+	cursor: pointer;
+}
+
+.my-blue-btn {
+	display: inline-block;
+	weight: 55px;
+	height: 55px;
+	padding: 3px 6px;
+	background-color: blue;
+	color: #FFF;
+	border: 1px solid #222;
+	border-radius: 3px;
+	text-decoration: none;
+	font-family: arial, verdana, sans-serif;
+	font-size: 18px;
+	cursor: pointer;
+}
+
+.my-buzzer-btn {
+	display: inline-block;
+	weight: 55px;
+	height: 55px;
+	padding: 3px 6px;
+	background-color: violet;
+	color: #FFF;
+	border: 1px solid #222;
+	border-radius: 3px;
+	text-decoration: none;
+	font-family: arial, verdana, sans-serif;
+	font-size: 18px;
+	cursor: pointer;
 }
 
 .card{
