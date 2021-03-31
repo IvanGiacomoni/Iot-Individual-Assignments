@@ -1,4 +1,3 @@
-var items = [5,3,7,6,2,9];
 function swap(items, leftIndex, rightIndex){
     var temp = items[leftIndex];
     items[leftIndex] = items[rightIndex];
@@ -39,7 +38,8 @@ function quickSort(items, left, right) {
 }
 
 // first call to quick sort
-/*console.log(items);
+/*var items = [5,3,7,6,2,9];
+console.log(items);
 var sortedArray = quickSort(items, 0, items.length - 1);
 console.log(sortedArray); //prints [2,3,5,6,7,9]*/
 
