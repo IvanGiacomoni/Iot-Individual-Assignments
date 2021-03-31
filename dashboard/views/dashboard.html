@@ -446,6 +446,8 @@
 
             methods: {
 				goToTemperature: function(){
+					this.updateLatestData();
+					
 					this.showTemperature = true;
 					this.showGasSmoke = false;
 					this.showTemperatureAggregatedValues = false;
@@ -455,6 +457,8 @@
 				},
 				
 				goToGasSmoke: function(){
+					this.updateLatestData();
+					
 					this.showTemperature = false;
 					this.showGasSmoke = true;
 					this.showTemperatureAggregatedValues = false;
@@ -473,7 +477,6 @@
 				},
 				
 				goToTempAggregatedValues: function(){
-					
 					this.showTemperature = false;
 					this.showGasSmoke = false;
 					this.showTemperatureAggregatedValues = true;
@@ -499,7 +502,7 @@
 					this.showTemperatureLatestValues = false;
 					this.showGasSmokeLatestValues = false;
 					
-					// TO DO: aggiornare i dati facendo query dal db!
+					this.updateLatestData();
 				},
 				
 				goToGasSmokeAggregatedValues: function(){
@@ -529,7 +532,7 @@
 					this.showTemperatureLatestValues = false;
 					this.showGasSmokeLatestValues = false;
 					
-					// TO DO: aggiornare i dati facendo query dal db!
+					this.updateLatestData();
 				},
 				
 				goToLatestTempValues: function(){
