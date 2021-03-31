@@ -32,7 +32,7 @@
 			
 			<!-- DASHBOARD -->
 			
-			<div v-if="!showTemperature && !showGasSmoke && !showTemperatureAggregatedValues && !showGasSmokeAggregatedValues">
+			<div v-if="!showTemperature && !showGasSmoke && !showTemperatureAggregatedValues && !showGasSmokeAggregatedValues && !showTemperatureLatestValues && !showGasSmokeLatestValues">
 				
 				<center>
 				<div class="container">
@@ -46,7 +46,7 @@
 				
 			</div>
 			
-			<!-- VIEW ALL TEMPERATURE DATA -->
+			<!-- VIEW LATEST TEMPERATURE DATA -->
 			
 			<div v-if="showTemperature">
 				
@@ -73,13 +73,12 @@
 
 									<!--  TABLE BODY -->
 									<tbody>
-										<tr v-for="entry in temperatureData" :key="entry.sample_time" :class="changeClassTemp(entry)">
+										<tr v-for="entry in temperatureData" :key="entry.sample_time" :class="changeClassTemp(entry.device_data.temperature_state)">
 											<td>{{entry.sample_time}}</td>
 											<td>{{entry.device_id}}</td>
 											<td>{{entry.device_data.temperature}}</td>
 											<td>{{entry.device_data.temperature_state}}</td>
 										</tr>
-                            
 									</tbody>
 								</table>
 							</div>
@@ -90,7 +89,7 @@
 								</div>
 								
 								<div class="col">
-									<button @click="" type="button" class="btn mt-1">Last hour values</button>
+									<button @click="goToLatestTempValues" type="button" class="btn mt-1">Last values</button>
 								</div>
 								
 								<div class="col">
@@ -108,9 +107,60 @@
 					
 				</center>
 				
-			</div> <!-- v-if="showTemperature" CLOSED -->
+			</div> <!-- v-if="showTemperatureLatestValues" CLOSED -->
 			
-			<!-- VIEW TEMPERATURE AGGREGATED VALUES -->
+			<!-- VIEW LATEST TEMPERATURE DATA -->
+			
+			<div v-if="showTemperatureLatestValues">
+				
+				<center>
+				
+					<div class="card border-success mt-3">
+						<div class="card-body">
+						<h5 class="card-title"><b>TEMPERATURE LATEST VALUES</b></h5>
+                
+							<!--  TABLE  -->
+                
+							<div class="table-responsive table-borderless" style="height:200px">
+								<table class="table">
+                        
+									<!--  TABLE HEADER -->
+									<thead class="thead-light">
+										<tr>
+											<th scope="col">Device id</th>
+											<th scope="col">Date</th>
+											<th scope="col">Value</th>
+											<th scope="col">State</th>
+										</tr>
+									</thead>
+
+									<!--  TABLE BODY -->
+									<tbody>
+										<tr v-for="device in temperatureLatestValues" :key="device.device_id" :class="changeClassTemp(device.state)">
+											<td>{{device.device_id}}</td>
+											<td>{{device.sample_time}}</td>
+											<td>{{device.value}}</td>
+											<td>{{device.state}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							
+							<div class="row">
+								<div class="col">
+									<button @click="backToTempData" type="button" class="btn mt-1">Back</button>
+								</div>
+							</div>
+							
+							
+						</div>
+					</div>
+					
+				</center>
+				
+			</div> <!-- v-if="showTemperatureLatestValues" CLOSED -->
+			
+			<!-- VIEW LATEST TEMPERATURE AGGREGATED VALUES -->
 			
 			<div v-if="showTemperatureAggregatedValues">
 				
@@ -118,16 +168,17 @@
 				
 					<div class="card border-success mt-3">
 						<div class="card-body">
-						<h5 class="card-title"><b>TEMPERATURE AGGREGATED VALUES</b></h5>
+						<h5 class="card-title"><b>LATEST TEMPERATURE AGGREGATED VALUES</b></h5>
                 
 							<!--  TABLE  -->
                 
-							<div class="table-responsive table-borderless" style="height:100px">
+							<div class="table-responsive table-borderless" style="height:200px">
 								<table class="table">
                         
 									<!--  TABLE HEADER -->
 									<thead class="thead-light">
 										<tr>
+											<th scope="col">Device id</th>
 											<th scope="col">Max value</th>
 											<th scope="col">Min value</th>
 											<th scope="col">Avg value</th>
@@ -136,10 +187,11 @@
 
 									<!--  TABLE BODY -->
 									<tbody>
-										<tr>
-											<td>{{tempMaxValue}}</td>
-											<td>{{tempMinValue}}</td>
-											<td>{{tempAvgValue}}</td>
+										<tr v-for="device in temperatureAggregatedValues" :key="device.device_id">
+											<td>{{device.device_id}}</td>
+											<td>{{device.maxTemp}}</td>
+											<td>{{device.minTemp}}</td>
+											<td>{{device.avgTemp}}</td>
 										</tr>
                             
 									</tbody>
@@ -161,7 +213,7 @@
 			</div> <!-- v-if="showTemperatureAggregatedValues" CLOSED -->
 			
 			
-			<!-- VIEW ALL GAS/SMOKE DATA -->
+			<!-- VIEW LATEST GAS/SMOKE DATA -->
 			
 			<div v-if="showGasSmoke">
 				
@@ -188,7 +240,7 @@
 
 									<!--  TABLE BODY -->
 									<tbody>
-										<tr v-for="entry in gasSmokeData" :key="entry.sample_time" :class="changeClassGasSmoke(entry)">
+										<tr v-for="entry in gasSmokeData" :key="entry.sample_time" :class="changeClassGasSmoke(entry.device_data.gas_smoke_state)">
 											<td>{{entry.sample_time}}</td>
 											<td>{{entry.device_id}}</td>
 											<td>{{entry.device_data.ppm}}</td>
@@ -205,7 +257,7 @@
 								</div>
 								
 								<div class="col">
-									<button @click="" type="button" class="btn mt-1">Last hour values</button>
+									<button @click="goToGasSmokeLatestValues" type="button" class="btn mt-1">Last values</button>
 								</div>
 								
 								<div class="col">
@@ -225,8 +277,59 @@
 				
 			</div> <!-- v-if="showGasSmoke" CLOSED -->
 			
+			<!-- VIEW LATEST GAS/SMOKE DATA -->
 			
-			<!-- VIEW GAS/SMOKE AGGREGATED VALUES -->
+			<div v-if="showGasSmokeLatestValues">
+				
+				<center>
+				
+					<div class="card border-success mt-3">
+						<div class="card-body">
+						<h5 class="card-title"><b>GAS SMOKE LATEST VALUES</b></h5>
+                
+							<!--  TABLE  -->
+                
+							<div class="table-responsive table-borderless" style="height:200px">
+								<table class="table">
+                        
+									<!--  TABLE HEADER -->
+									<thead class="thead-light">
+										<tr>
+											<th scope="col">Device id</th>
+											<th scope="col">Date</th>
+											<th scope="col">Value</th>
+											<th scope="col">State</th>
+										</tr>
+									</thead>
+
+									<!--  TABLE BODY -->
+									<tbody>
+										<tr v-for="device in gasSmokeLatestValues" :key="device.device_id" :class="changeClassGasSmoke(device.state)">
+											<td>{{device.device_id}}</td>
+											<td>{{device.sample_time}}</td>
+											<td>{{device.value}}</td>
+											<td>{{device.state}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							
+							<div class="row">
+								<div class="col">
+									<button @click="backToGasSmokeData" type="button" class="btn mt-1">Back</button>
+								</div>
+							</div>
+							
+							
+						</div>
+					</div>
+					
+				</center>
+				
+			</div> <!-- v-if="showGasSmokeLatestValues" CLOSED -->
+			
+			
+			<!-- VIEW LATEST GAS/SMOKE AGGREGATED VALUES -->
 			
 			<div v-if="showGasSmokeAggregatedValues">
 				
@@ -234,16 +337,17 @@
 				
 					<div class="card border-success mt-3">
 						<div class="card-body">
-						<h5 class="card-title"><b>GAS/SMOKE AGGREGATED VALUES</b></h5>
+						<h5 class="card-title"><b>LATEST GAS/SMOKE AGGREGATED VALUES</b></h5>
                 
 							<!--  TABLE  -->
                 
-							<div class="table-responsive table-borderless" style="height:100px">
+							<div class="table-responsive table-borderless" style="height:200px">
 								<table class="table">
                         
 									<!--  TABLE HEADER -->
 									<thead class="thead-light">
 										<tr>
+											<th scope="col">Device id</th>
 											<th scope="col">Max value</th>
 											<th scope="col">Min value</th>
 											<th scope="col">Avg value</th>
@@ -252,10 +356,11 @@
 
 									<!--  TABLE BODY -->
 									<tbody>
-										<tr>
-											<td>{{gasSmokeMaxValue}}</td>
-											<td>{{gasSmokeMinValue}}</td>
-											<td>{{gasSmokeAvgValue}}</td>
+										<tr v-for="device in gasSmokeAggregatedValues" :key="device.device_id">
+											<td>{{device.device_id}}</td>
+											<td>{{device.maxPpm}}</td>
+											<td>{{device.minPpm}}</td>
+											<td>{{device.avgPpm}}</td>
 										</tr>
                             
 									</tbody>
@@ -291,11 +396,17 @@
             el: '#app',
             data: {
                 temperatureData : [],
+                temperatureAggregatedValues: [],
+                temperatureLatestValues: [],
+                gasSmokeLatestValues: [],
                 gasSmokeData : [],
+                gasSmokeAggregatedValues: [],
                 showTemperature: false,
                 showGasSmoke: false,
                 showTemperatureAggregatedValues: false,
                 showGasSmokeAggregatedValues: false,
+                showTemperatureLatestValues: false,
+                showGasSmokeLatestValues: false,
                 tempMaxValue: 0,
                 tempMinValue: 0,
                 tempAvgValue: 0.0,
@@ -305,20 +416,27 @@
             },
             
             beforeCreate: function(){
-                
                 // Getting temperature data
-			    this.$http.get('http://localhost:8080/getTemperatureData').then(response => {	
+			    this.$http.get('http://localhost:8080/getLatestData/temperature').then(response => {
 					
-					this.temperatureData = response.body;
- 
+					response.body.forEach(device => {
+						device.latest.forEach(entry => {
+							this.temperatureData.push(entry);
+						});
+					});
+					
 			    }, response => {
 					// error callback
 				})
               
 				// Getting gas/smoke data
-				this.$http.get('http://localhost:8080/getGasSmokeData').then(response => {
+				this.$http.get('http://localhost:8080/getLatestData/gasSmoke').then(response => {
 					
-					this.gasSmokeData = response.body;
+					response.body.forEach(device => {
+						device.latest.forEach(entry => {
+							this.gasSmokeData.push(entry);
+						});
+					});
 
 				}, response => {
 					// error callback
@@ -332,6 +450,8 @@
 					this.showGasSmoke = false;
 					this.showTemperatureAggregatedValues = false;
 					this.showGasSmokeAggregatedValues = false;
+					this.showTemperatureLatestValues = false;
+					this.showGasSmokeLatestValues = false;
 				},
 				
 				goToGasSmoke: function(){
@@ -339,6 +459,8 @@
 					this.showGasSmoke = true;
 					this.showTemperatureAggregatedValues = false;
 					this.showGasSmokeAggregatedValues = false;
+					this.showTemperatureLatestValues = false;
+					this.showGasSmokeLatestValues = false;
 				},
 				
 				backToStart: function(){
@@ -346,34 +468,27 @@
 					this.showGasSmoke = false;
 					this.showTemperatureAggregatedValues = false;
 					this.showGasSmokeAggregatedValues = false;
+					this.showTemperatureLatestValues = false;
+					this.showGasSmokeLatestValues = false;
 				},
 				
 				goToTempAggregatedValues: function(){
-					// TO DO: devo aggregare da quelli dell'ultima ora, non tutti!
 					
 					this.showTemperature = false;
 					this.showGasSmoke = false;
 					this.showTemperatureAggregatedValues = true;
 					this.showGasSmokeAggregatedValues = false;
+					this.showTemperatureLatestValues = false;
+					this.showGasSmokeLatestValues = false;
 					
-					let maxTemp = this.temperatureData[0].device_data.temperature;
-					let minTemp = this.temperatureData[0].device_data.temperature;
+					// Getting latest temperature aggregated values
+					this.$http.get('http://localhost:8080/getTemperatureAggregatedValues').then(response => {
 					
-					let sumTempValues = 0;
-					
-					this.temperatureData.forEach(elem => {
-						if (elem.device_data.temperature > maxTemp)
-							maxTemp = elem.device_data.temperature;
-						if (elem.device_data.temperature < minTemp)
-							minTemp = elem.device_data.temperature;
-							
-						sumTempValues += elem.device_data.temperature;
-					});
-					
-					this.tempMaxValue = maxTemp;
-					this.tempMinValue = minTemp;
-					
-					this.tempAvgValue = (sumTempValues / this.temperatureData.length).toFixed(2);
+						this.temperatureAggregatedValues = response.body;
+
+					}, response => {
+						// error callback
+					})
 				},
 				
 				backToTempData : function(){
@@ -381,35 +496,29 @@
 					this.showGasSmoke = false;
 					this.showTemperatureAggregatedValues = false;
 					this.showGasSmokeAggregatedValues = false;
+					this.showTemperatureLatestValues = false;
+					this.showGasSmokeLatestValues = false;
 					
 					// TO DO: aggiornare i dati facendo query dal db!
 				},
 				
 				goToGasSmokeAggregatedValues: function(){
-					// TO DO: devo aggregare da quelli dell'ultima ora, non tutti!
 					
 					this.showTemperature = false;
 					this.showGasSmoke = false;
 					this.showTemperatureAggregatedValues = false;
 					this.showGasSmokeAggregatedValues = true;
+					this.showTemperatureLatestValues = false;
+					this.showGasSmokeLatestValues = false;
 					
-					let maxGasSmoke = this.gasSmokeData[0].device_data.ppm;
-					let minGasSmoke = this.gasSmokeData[0].device_data.ppm;
+					// Getting latest gas/smoke aggregated values
+					this.$http.get('http://localhost:8080/getGasSmokeAggregatedValues').then(response => {
 					
-					let sumGasSmokeValues = 0;
-					
-					this.gasSmokeData.forEach(elem => {
-						if (elem.device_data.ppm > maxGasSmoke)
-							maxGasSmoke = elem.device_data.ppm;
-						if (elem.device_data.ppm < minGasSmoke)
-							minGasSmoke = elem.device_data.ppm;
-							
-						sumGasSmokeValues += elem.device_data.ppm;
-					});
-					
-					this.gasSmokeMaxValue = maxGasSmoke;
-					this.gasSmokeMinValue = minGasSmoke;
-					this.gasSmokeAvgValue = (sumGasSmokeValues / this.gasSmokeData.length).toFixed(2);
+						this.gasSmokeAggregatedValues = response.body;
+
+					}, response => {
+						// error callback
+					})
 				},
 				
 				backToGasSmokeData : function(){
@@ -417,24 +526,88 @@
 					this.showGasSmoke = true;
 					this.showTemperatureAggregatedValues = false;
 					this.showGasSmokeAggregatedValues = false;
+					this.showTemperatureLatestValues = false;
+					this.showGasSmokeLatestValues = false;
 					
 					// TO DO: aggiornare i dati facendo query dal db!
 				},
+				
+				goToLatestTempValues: function(){
+					this.showTemperature = false;
+					this.showGasSmoke = false;
+					this.showTemperatureAggregatedValues = false;
+					this.showGasSmokeAggregatedValues = false;
+					this.showTemperatureLatestValues = true;
+					this.showGasSmokeLatestValues = false;
+					
+					// Getting temperature data
+					this.$http.get('http://localhost:8080/getTemperatureLatestValues').then(response => {
+					
+						this.temperatureLatestValues = response.body;
+					}, response => {
+						// error callback
+					})
+				},
+				
+				goToGasSmokeLatestValues: function(){
+					this.showTemperature = false;
+					this.showGasSmoke = false;
+					this.showTemperatureAggregatedValues = false;
+					this.showGasSmokeAggregatedValues = false;
+					this.showTemperatureLatestValues = false;
+					this.showGasSmokeLatestValues = true;
+					
+					// Getting temperature data
+					this.$http.get('http://localhost:8080/getGasSmokeLatestValues').then(response => {
+					
+						this.gasSmokeLatestValues = response.body;
+					}, response => {
+						// error callback
+					})
+				},
 			
-				changeClassTemp : function(tempEntry){
-					if(tempEntry.device_data.temperature_state == "ALL OK!")
+				changeClassTemp : function(state){
+					if(state == "ALL OK!")
 						return "bg-success"
-					else if(tempEntry.device_data.temperature_state == "GROWING!")
+					else if(state == "GROWING!")
 						return "bg-warning"
-					else if(tempEntry.device_data.temperature_state == "WARNING!")
+					else if(state == "WARNING!")
 						return "bg-danger"
 				},
 				
-				changeClassGasSmoke: function(gasSmokeEntry){
-					if(gasSmokeEntry.device_data.gas_smoke_state == "ALL_OK!")
+				changeClassGasSmoke: function(state){
+					if(state == "ALL_OK!")
 						return "bg-light"
-					else
+					else if(state == "WARNING!")
 						return "bg-primary"
+				},
+				
+				updateLatestData : function(){
+					// Getting temperature data
+					this.$http.get('http://localhost:8080/getLatestData/temperature').then(response => {
+					
+						response.body.forEach(device => {
+							device.latest.forEach(entry => {
+								this.temperatureData.push(entry);
+							});
+						});
+					
+					}, response => {
+						// error callback
+					})
+              
+					// Getting gas/smoke data
+					this.$http.get('http://localhost:8080/getLatestData/gasSmoke').then(response => {
+					
+						response.body.forEach(device => {
+							device.latest.forEach(entry => {
+								this.gasSmokeData.push(entry);
+							});
+						});
+
+					}, response => {
+						// error callback
+					})
 				}
             }
     })
