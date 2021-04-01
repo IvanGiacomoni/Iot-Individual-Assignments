@@ -16,8 +16,8 @@
 #define ADC_IN_USE                  ADC_LINE(0)
 #define ADC_RES                     ADC_RES_10BIT
 
-#define GAS_SMOKE_DELAY             2
-#define TEMP_DELAY                  10
+#define GAS_SMOKE_DELAY             300
+#define TEMP_DELAY                  300
 
 #define TEMP_THRESHOLD_MIN          23
 #define TEMP_THRESHOLD_MAX          24
@@ -26,7 +26,7 @@
 
 #define EMCUTE_PRIO         (THREAD_PRIORITY_MAIN - 1)
 
-#define NUMOFSUBS           (4U)
+#define NUMOFSUBS           (3U)
 #define TOPIC_MAXLEN        (64U)
 
 #ifndef EMCUTE_ID
@@ -485,31 +485,17 @@ int main(void){
     xtimer_sleep(1);
 	printf("\n");
 	
-	// Setup subscription to MQTT_TOPIC_SWITCH_MODE_DEVICE_1
+	// Setup subscription to SWITCH_MODE_DEVICE_1
 	subscriptions[2].cb = on_pub;
-    strcpy(topics[2], MQTT_TOPIC_TEMP_SWITCH_MODE_DEVICE_1);
-    subscriptions[2].topic.name = MQTT_TOPIC_TEMP_SWITCH_MODE_DEVICE_1;
+    strcpy(topics[2], SWITCH_MODE_DEVICE_1);
+    subscriptions[2].topic.name = SWITCH_MODE_DEVICE_1;
     
 	if (emcute_sub(&subscriptions[2], flags) != EMCUTE_OK) {
-        printf("error: unable to subscribe to %s\n", MQTT_TOPIC_TEMP_SWITCH_MODE_DEVICE_1);
+        printf("error: unable to subscribe to %s\n", SWITCH_MODE_DEVICE_1);
         return 1;
     }
 
-    printf("Now subscribed to %s\n", MQTT_TOPIC_TEMP_SWITCH_MODE_DEVICE_1);
-    xtimer_sleep(1);
-	printf("\n");
-	
-	// Setup subscription to MQTT_TOPIC_GAS_SMOKE_SWITCH_MODE_DEVICE_1
-	subscriptions[3].cb = on_pub;
-    strcpy(topics[3], MQTT_TOPIC_GAS_SMOKE_SWITCH_MODE_DEVICE_1);
-    subscriptions[3].topic.name = MQTT_TOPIC_GAS_SMOKE_SWITCH_MODE_DEVICE_1;
-    
-	if (emcute_sub(&subscriptions[3], flags) != EMCUTE_OK) {
-        printf("error: unable to subscribe to %s\n", MQTT_TOPIC_GAS_SMOKE_SWITCH_MODE_DEVICE_1);
-        return 1;
-    }
-
-    printf("Now subscribed to %s\n", MQTT_TOPIC_GAS_SMOKE_SWITCH_MODE_DEVICE_1);
+    printf("Now subscribed to %s\n", SWITCH_MODE_DEVICE_1);
     xtimer_sleep(1);
 	printf("\n");
 	
