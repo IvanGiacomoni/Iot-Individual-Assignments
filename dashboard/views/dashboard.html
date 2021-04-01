@@ -248,8 +248,8 @@
 											<td><button @click="buzzerOFF" type="button" :id="device" class="btn my-buzzer-btn mt-1">Buzzer OFF</button></td>
 											<td><button @click="redLedON" type="button" :id="device" class="btn my-red-btn mt-1">Red led ON</button></td>
 											<td><button @click="redLedOFF" type="button" :id="device" class="btn my-red-btn mt-1">Red led OFF</button></td>
-										    <td><button @click="switchModeTempManual" type="button" :id="device" class="btn mt-1" style="width:200px;">Manual</button></td>
-										    <td><button @click="switchModeTempAuto" type="button" :id="device" class="btn mt-1" style="width:200px;">Auto</button></td>
+										    <td><button @click="switchModeManual" type="button" :id="device" class="btn mt-1" style="width:200px;">Manual</button></td>
+										    <td><button @click="switchModeAuto" type="button" :id="device" class="btn mt-1" style="width:200px;">Auto</button></td>
 										</tr>
                             
 									</tbody>
@@ -473,8 +473,8 @@
 											<td><button @click="buzzerOFF" type="button" :id="device" class="btn my-buzzer-btn mt-1">Buzzer OFF</button></td>
 											<td><button @click="blueLedON" type="button" :id="device" class="btn my-blue-btn mt-1">Blue led ON</button></td>
 											<td><button @click="blueLedOFF" type="button" :id="device" class="btn my-blue-btn mt-1">Blue led OFF</button></td>
-										    <td><button @click="switchModeGasSmokeManual" type="button" :id="device" class="btn mt-1" style="width:200px;">Manual</button></td>
-										    <td><button @click="switchModeGasSmokeAuto" type="button" :id="device" class="btn mt-1" style="width:200px;">Auto</button></td>   
+										    <td><button @click="switchModeManual" type="button" :id="device" class="btn mt-1" style="width:200px;">Manual</button></td>
+										    <td><button @click="switchModeAuto" type="button" :id="device" class="btn mt-1" style="width:200px;">Auto</button></td>   
 										</tr>
                             
 									</tbody>
@@ -535,7 +535,6 @@
                 devicesIdGasSmoke: [],
                 
                 mode: "auto",
-                topic_type : "",
             },
             
             beforeCreate: function(){
@@ -794,44 +793,39 @@
 					})
 				},
 				
-				switchModeTempManual: function(event){
+				switchModeManual: function(event){
+					
 					const id = event.target.id;
 					
 					this.$http.post("http://localhost:8080/switchMode", {
-							device_id: event.target.id.toString(),
-							topic_type: "temperature",
-							mode: "manual",
-						})
-						.then(
-							(response) => {
-								alert("Iot device "+id+" passed to manual mode for temperature!");
-							},
-							(response) => {
-								alert("catch!");
-								console.log(response);
-						})
-						
-					
+						device_id: event.target.id.toString(),
+						mode: "manual",
+					})
+					.then(
+						(response) => {
+							alert("Iot device "+id+" passed to manual mode!");
+						},
+						(response) => {
+							alert("catch!");
+						    console.log(response);
+					    })
 				},
 				
-				switchModeGasSmokeManual: function(event){
+				switchModeAuto: function(event){
 					const id = event.target.id;
 					
 					this.$http.post("http://localhost:8080/switchMode", {
-							device_id: event.target.id.toString(),
-							topic_type: "gas_smoke",
-							mode: "manual",
-						})
-						.then(
-							(response) => {
-								alert("Iot device "+id+" passed to manual mode for gas/smoke!");
-							},
-							(response) => {
-								alert("catch!");
-								console.log(response);
-						})
-						
-					
+						device_id: event.target.id.toString(),
+						mode: "auto",
+					})
+					.then(
+						(response) => {
+								alert("Iot device "+id+" passed to automatic mode!");
+						},
+						(response) => {
+							alert("catch!");
+							console.log(response);
+					})
 				},
             }
     })
