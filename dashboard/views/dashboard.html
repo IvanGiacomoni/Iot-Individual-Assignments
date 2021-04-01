@@ -235,6 +235,8 @@
 											<th scope="col"></th>
 											<th scope="col"></th>
 											<th scope="col"></th>
+											<th scope="col"></th>
+											<th scope="col"></th>
 										</tr>
 									</thead>
 									
@@ -242,10 +244,12 @@
 									<tbody>
 										<tr v-for="device in devicesIdTemp" :key="device">
 											<td>{{device}}</td>
-											<td><button @click="buzzerON" type="button" class="btn my-buzzer-btn mt-1">Buzzer ON</button></td>
-											<td><button @click="buzzerOFF" type="button" class="btn my-buzzer-btn mt-1">Buzzer OFF</button></td>
-											<td><button @click="redLedON" type="button" class="btn my-red-btn mt-1">Red led ON</button></td>
-											<td><button @click="redLedOFF" type="button" class="btn my-red-btn mt-1">Red led OFF</button></td>
+											<td><button @click="buzzerON" type="button" :id="device" class="btn my-buzzer-btn mt-1">Buzzer ON</button></td>
+											<td><button @click="buzzerOFF" type="button" :id="device" class="btn my-buzzer-btn mt-1">Buzzer OFF</button></td>
+											<td><button @click="redLedON" type="button" :id="device" class="btn my-red-btn mt-1">Red led ON</button></td>
+											<td><button @click="redLedOFF" type="button" :id="device" class="btn my-red-btn mt-1">Red led OFF</button></td>
+										    <td><button @click="switchModeTempManual" type="button" :id="device" class="btn mt-1" style="width:200px;">Manual</button></td>
+										    <td><button @click="switchModeTempAuto" type="button" :id="device" class="btn mt-1" style="width:200px;">Auto</button></td>
 										</tr>
                             
 									</tbody>
@@ -256,14 +260,6 @@
 									<div class="col">
 										<button @click="backToTempData()" type="button" class="btn mt-1" style="width:200px;">Back</button>
 									</div>
-									
-									<div class="col">
-										<button @click="swithMode()" type="button" class="btn mt-1" style="width:200px;">Manual</button>
-									</div>
-									
-									<div class="col">
-										<button @click="swithMode()" type="button" class="btn mt-1" style="width:200px;">Auto</button>
-									</div>	
 							</div>
 							
 						</div>
@@ -464,6 +460,8 @@
 											<th scope="col"></th>
 											<th scope="col"></th>
 											<th scope="col"></th>
+											<th scope="col"></th>
+											<th scope="col"></th>
 										</tr>
 									</thead>
 									
@@ -471,10 +469,12 @@
 									<tbody>
 										<tr v-for="device in devicesIdGasSmoke" :key="device">
 											<td>{{device}}</td>
-											<td><button @click="buzzerON" type="button" class="btn my-buzzer-btn mt-1">Buzzer ON</button></td>
-											<td><button @click="buzzerOFF" type="button" class="btn my-buzzer-btn mt-1">Buzzer OFF</button></td>
-											<td><button @click="blueLedON" type="button" class="btn my-blue-btn mt-1">Blue led ON</button></td>
-											<td><button @click="blueLedOFF" type="button" class="btn my-blue-btn mt-1">Blue led OFF</button></td>
+											<td><button @click="buzzerON" type="button" :id="device" class="btn my-buzzer-btn mt-1">Buzzer ON</button></td>
+											<td><button @click="buzzerOFF" type="button" :id="device" class="btn my-buzzer-btn mt-1">Buzzer OFF</button></td>
+											<td><button @click="blueLedON" type="button" :id="device" class="btn my-blue-btn mt-1">Blue led ON</button></td>
+											<td><button @click="blueLedOFF" type="button" :id="device" class="btn my-blue-btn mt-1">Blue led OFF</button></td>
+										    <td><button @click="switchModeGasSmokeManual" type="button" :id="device" class="btn mt-1" style="width:200px;">Manual</button></td>
+										    <td><button @click="switchModeGasSmokeAuto" type="button" :id="device" class="btn mt-1" style="width:200px;">Auto</button></td>   
 										</tr>
                             
 									</tbody>
@@ -486,14 +486,6 @@
 										
 								<div class="col">
 									<button @click="backToGasSmokeData" type="button" class="btn mt-1" style="width:200px;">Back</button>
-								</div>
-								
-								<div class="col">
-									<button @click="swithMode()" type="button" class="btn mt-1" style="width:200px;">Manual</button>
-								</div>
-								
-								<div class="col">
-									<button @click="swithMode()" type="button" class="btn mt-1" style="width:200px;">Auto</button>
 								</div>
 										
 							</div>
@@ -540,7 +532,10 @@
                 gasSmokeMinValue: 0,
                 gasSmokeAvgValue: 0.0,
                 devicesIdTemp: [],
-                devicesIdGasSmoke: []
+                devicesIdGasSmoke: [],
+                
+                mode: "auto",
+                topic_type : "",
             },
             
             beforeCreate: function(){
@@ -727,8 +722,8 @@
 						this.showGasSmokeAggregatedValues = false;
 						this.showTemperatureLatestValues = false;
 						this.showGasSmokeLatestValues = false;
-						this.temperatureActuators = true;
 						this.gasSmokeActuators = false;
+						this.temperatureActuators = true;
 						
 						this.devicesIdTemp = response.body;
 					}, response => {
@@ -797,7 +792,47 @@
 					}, response => {
 						// error callback
 					})
-				}
+				},
+				
+				switchModeTempManual: function(event){
+					const id = event.target.id;
+					
+					this.$http.post("http://localhost:8080/switchMode", {
+							device_id: event.target.id.toString(),
+							topic_type: "temperature",
+							mode: "manual",
+						})
+						.then(
+							(response) => {
+								alert("Iot device "+id+" passed to manual mode for temperature!");
+							},
+							(response) => {
+								alert("catch!");
+								console.log(response);
+						})
+						
+					
+				},
+				
+				switchModeGasSmokeManual: function(event){
+					const id = event.target.id;
+					
+					this.$http.post("http://localhost:8080/switchMode", {
+							device_id: event.target.id.toString(),
+							topic_type: "gas_smoke",
+							mode: "manual",
+						})
+						.then(
+							(response) => {
+								alert("Iot device "+id+" passed to manual mode for gas/smoke!");
+							},
+							(response) => {
+								alert("catch!");
+								console.log(response);
+						})
+						
+					
+				},
             }
     })
     </script>
