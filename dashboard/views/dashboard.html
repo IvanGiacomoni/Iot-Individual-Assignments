@@ -49,7 +49,6 @@
 			<!-- VIEW LATEST TEMPERATURE DATA -->
 			
 			<div v-if="showTemperature">
-				ciao
 				
 				<center>
 				
@@ -236,10 +235,6 @@
 											<th scope="col"></th>
 											<th scope="col"></th>
 											<th scope="col"></th>
-											<th scope="col"></th>
-											<th scope="col"></th>
-											<th scope="col"></th>
-											<th scope="col"></th>
 										</tr>
 									</thead>
 									
@@ -251,10 +246,6 @@
 											<td><button @click="buzzerOFF" type="button" class="btn my-buzzer-btn mt-1">Buzzer OFF</button></td>
 											<td><button @click="redLedON" type="button" class="btn my-red-btn mt-1">Red led ON</button></td>
 											<td><button @click="redLedOFF" type="button" class="btn my-red-btn mt-1">Red led OFF</button></td>
-											<td><button @click="yellowLedON" type="button" class="btn my-yellow-btn mt-1">Yellow led ON</button></td>
-											<td><button @click="yellowLedOFF" type="button" class="btn my-yellow-btn mt-1">Yellow led OFF</button></td>
-											<td><button @click="greenLedON" type="button" class="btn my-green-btn mt-1">Green led ON</button></td>
-											<td><button @click="greenLedOFF" type="button" class="btn my-green-btn mt-1">Green led OFF</button></td>
 										</tr>
                             
 									</tbody>
@@ -262,13 +253,17 @@
 							</div>
 							
 							<div class="row">
-										
-								<div class="col">
 									<div class="col">
 										<button @click="backToTempData()" type="button" class="btn mt-1" style="width:200px;">Back</button>
 									</div>
-								</div>
-										
+									
+									<div class="col">
+										<button @click="swithMode()" type="button" class="btn mt-1" style="width:200px;">Manual</button>
+									</div>
+									
+									<div class="col">
+										<button @click="swithMode()" type="button" class="btn mt-1" style="width:200px;">Auto</button>
+									</div>	
 							</div>
 							
 						</div>
@@ -469,8 +464,6 @@
 											<th scope="col"></th>
 											<th scope="col"></th>
 											<th scope="col"></th>
-											<th scope="col"></th>
-											<th scope="col"></th>
 										</tr>
 									</thead>
 									
@@ -480,8 +473,6 @@
 											<td>{{device}}</td>
 											<td><button @click="buzzerON" type="button" class="btn my-buzzer-btn mt-1">Buzzer ON</button></td>
 											<td><button @click="buzzerOFF" type="button" class="btn my-buzzer-btn mt-1">Buzzer OFF</button></td>
-											<td><button @click="whiteLedON" type="button" class="btn my-white-btn mt-1">White led ON</button></td>
-											<td><button @click="whiteLedOFF" type="button" class="btn my-white-btn mt-1">White led OFF</button></td>
 											<td><button @click="blueLedON" type="button" class="btn my-blue-btn mt-1">Blue led ON</button></td>
 											<td><button @click="blueLedOFF" type="button" class="btn my-blue-btn mt-1">Blue led OFF</button></td>
 										</tr>
@@ -494,9 +485,15 @@
 							<div class="row">
 										
 								<div class="col">
-									<div class="col">
-										<button @click="backToGasSmokeData" type="button" class="btn mt-1" style="width:200px;">Back</button>
-									</div>
+									<button @click="backToGasSmokeData" type="button" class="btn mt-1" style="width:200px;">Back</button>
+								</div>
+								
+								<div class="col">
+									<button @click="swithMode()" type="button" class="btn mt-1" style="width:200px;">Manual</button>
+								</div>
+								
+								<div class="col">
+									<button @click="swithMode()" type="button" class="btn mt-1" style="width:200px;">Auto</button>
 								</div>
 										
 							</div>
