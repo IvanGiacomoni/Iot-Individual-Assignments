@@ -8,13 +8,11 @@ const path = require("path");
 var awsIot = require('aws-iot-device-sdk');
 
 router.post("/switchMode", async (req, res) => {
-	console.log("QUI\n");
 	
 	const device_id = req.body.device_id;
-	const topic_type = req.body.topic_type;  // gas_smoke, temperature
 	const mode = req.body.mode;
 	
-	const myTopic = "switchMode/device/"+device_id+"/"+topic_type;
+	const myTopic = "switchMode/device/"+device_id;
 	
 	console.log("topic: "+myTopic+"\n");
 	
@@ -32,7 +30,7 @@ router.post("/switchMode", async (req, res) => {
 		.on('connect', function() {
 			console.log('connect');
 			device.subscribe(myTopic);
-			device.publish(myTopic, JSON.stringify({mode: "manual"}));
+			device.publish(myTopic, JSON.stringify({mode: mode}));
 		});
 		
 		device
