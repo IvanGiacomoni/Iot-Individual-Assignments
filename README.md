@@ -69,3 +69,8 @@ Gas/smoke states:
 - ALL OK -> white led
 - WARNING -> blue led
 
+## Architecture of the system
+
+Our system is thinked to be used by several devices. For this first assignment we have the STM32 Nucleo F401RE board, where there will be flashed all the code needed to retrieve data from sensors and to manage the actuators. The next step is that of saving the obtained values into the cloud, in particular using Amazon Web Services. In order to do this, we need to use MQTT, that is a communication protocol based on topics: the key is that every device that is subscribed to a certain topic will receive a message published on that topic. In particular, when we will publish the data from the device, those data will be sent to an MQTT-SN Broker, in this case RSMB, and then from RSMB they will be sent to the Mosquitto broker, which is the transparent bridge between RSMB and Iot-Core, that is a service provided by AWS that uses MQTT and that we can exploit to receive data coming from our device. So, after Mosquitto redirects our data to Iot-Core, there is the needing to save them in the cloud: my choice was DynamoDB, a noSQL database provided by AWS. Once data are stored in the db, we can query them using an appropriate server in order to finally show them on the front-end side: my choice for the back-end side was NodeJS, while for the front-end side I used HTML, Bootstrap, Javascript and Vue-js. The frontend and the backend will create the Web Dashboard. Below I show an image that shows at an high level all the connected components of the application:
+
+
