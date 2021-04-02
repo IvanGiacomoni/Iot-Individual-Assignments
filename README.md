@@ -71,6 +71,22 @@ Gas/smoke states:
 
 ## Architecture of the system
 
-Our system is thinked to be used by several devices. For this first assignment we have the STM32 Nucleo F401RE board, where there will be flashed all the code needed to retrieve data from sensors and to manage the actuators. The next step is that of saving the obtained values into the cloud, in particular using Amazon Web Services. In order to do this, we need to use MQTT, that is a communication protocol based on topics: the key is that every device that is subscribed to a certain topic will receive a message published on that topic. In particular, when we will publish the data from the device, those data will be sent to an MQTT-SN Broker, in this case RSMB, and then from RSMB they will be sent to the Mosquitto broker, which is the transparent bridge between RSMB and Iot-Core, that is a service provided by AWS that uses MQTT and that we can exploit to receive data coming from our device. So, after Mosquitto redirects our data to Iot-Core, there is the needing to save them in the cloud: my choice was DynamoDB, a noSQL database provided by AWS. Once data are stored in the db, we can query them using an appropriate server in order to finally show them on the front-end side: my choice for the back-end side was NodeJS, while for the front-end side I used HTML, Bootstrap, Javascript and Vue-js. The frontend and the backend will create the Web Dashboard. Below I show an image that shows at an high level all the connected components of the application:
+Our system is thinked to be used by several devices. For this first assignment we have the STM32 Nucleo F401RE board, where there will be flashed all the code needed to retrieve data from sensors and to manage the actuators. The next step is that of saving the obtained values into the cloud, in particular using Amazon Web Services. In order to do this, we need to use MQTT, that is a communication protocol based on topics: the key is that every device that is subscribed to a certain topic will receive a message published on that topic. In particular, when we will publish the data from the device, those data will be sent to an MQTT-SN Broker, in this case RSMB, and then from RSMB they will be sent to the Mosquitto broker, which is the transparent bridge between RSMB and Iot-Core, that is a service provided by AWS that uses MQTT and that we can exploit to receive data coming from our device. So, after Mosquitto redirects our data to Iot-Core, there is the needing to save them in the cloud: my choice was DynamoDB, a noSQL database provided by AWS. Once data are stored in the db, we can query them using an appropriate server in order to finally show them on the front-end side: my choice for the back-end side was NodeJS, while for the front-end side I used HTML, Bootstrap, Javascript and Vue-js. The frontend and the backend will create the Web Dashboard. Finally, the frontend will be used also to control the state of actuators. Below I show an image that higlights all the connected components of the application:
 
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/imgs/architecture_indiv_assign.png)
+
+## Manual and automatic mode
+The system is capable of switching between two modes through the interaction by the front-end:
+
+- auto: data from both sensors are periodically sampled and published by MQTT towards Iot-Core, actuators are automatically controlled
+- manual: the periodical sample of data is stopped in order to allow the user to manually control the actuators
+
+This is done because there could be situations in which the manual mode could be useful, for example when sensors wrongly sample values and detect a danger, so I need to stop the auto mode in order to activate the manual mode, and then deactivate the actuators.
+
+## Topics
+Below I list the main topics used by the system:
+- device/+/temperature: used to publish temperature data from a device with a certain id towards Iot-Core
+- device/+/gas_smoke: used to publish gas/smoke data from a device with a certain id towards Ior-Core
+- switchMode/device/+: used to publish towards a device with a certain id the indication of switching to auto/manual mode
+- controlActuatord/device/+: used to publish towards a device with a certain id the indication of turning on/off a certain actuator
 
