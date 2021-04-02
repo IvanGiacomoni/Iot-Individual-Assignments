@@ -53,6 +53,23 @@ gpio_t gas_smoke_buzzer, temp_buzzer;
 // Mode
 char* mode = "auto";
 
+
+void led_ON(gpio_t led){
+	gpio_set(led);
+}
+
+void led_OFF(gpio_t led){
+	gpio_clear(led);
+}
+
+void buzzer_ON(gpio_t buzzer){
+	gpio_set(buzzer);
+}
+
+void buzzer_OFF(gpio_t buzzer){
+	gpio_clear(buzzer);
+}
+
 static void *emcute_thread(void *arg){
     (void)arg;
     emcute_run(CONFIG_EMCUTE_DEFAULT_PORT, EMCUTE_ID);
@@ -98,6 +115,81 @@ static void on_pub(const emcute_topic_t *topic, void *data, size_t len){
 				printf("Already in auto mode!\n");
 			}
 		}
+		printf("\n");
+		fflush(stdout);
+	}
+	
+	else if(strcmp(topic->name, MANAGE_ACTUATORS_DEVICE_1) == 0){
+		
+		fflush(stdout);
+		
+		printf("received: %s\n",in);
+		
+		char* actuator = strtok(in, ";");
+		printf("actuator: %s\n",actuator);
+		
+		char *typeData = strtok(NULL, ";");
+		printf("typeData: %s\n",typeData);
+		
+		char *operation = strtok(NULL, ";");
+		printf("operation: %s\n", operation);
+		
+		if(strcmp(typeData, "temperature") == 0){
+			
+			if(strcmp(actuator, "temp_buzzer") == 0){
+				
+				if(strcmp(operation, "ON") == 0){
+					buzzer_ON(temp_buzzer);
+				}
+				
+				else if(strcmp(operation, "OFF") == 0){
+					buzzer_OFF(temp_buzzer);
+				}
+			
+			}
+			
+			else if(strcmp(actuator, "red_led") == 0){
+				
+				if(strcmp(operation, "ON") == 0){
+					led_ON(red_led);
+				}
+				
+				else if(strcmp(operation, "OFF") == 0){
+					led_OFF(red_led);
+				} 
+			
+			}
+		}
+		
+		else if(strcmp(typeData, "gas_smoke") == 0){
+			
+			if(strcmp(actuator, "gas_smoke_buzzer") == 0){
+				
+				if(strcmp(operation, "ON") == 0){
+					buzzer_ON(gas_smoke_buzzer);
+				}
+				
+				else if(strcmp(operation, "OFF") == 0){
+					buzzer_OFF(gas_smoke_buzzer);
+				}
+				
+			}
+			
+			else if(strcmp(actuator, "blue_led") == 0){
+				
+				if(strcmp(operation, "ON") == 0){
+					led_ON(blue_led);
+				}
+				
+				else if(strcmp(operation, "OFF") == 0){
+					led_OFF(blue_led);
+				}
+				
+			}
+			
+		}
+		
+		
 		printf("\n");
 		fflush(stdout);
 	}
@@ -299,22 +391,6 @@ int readTemperatureByDHT(void){
 	int temp_int = atoi(temp_s);
 	
 	return temp_int;
-}
-
-void led_ON(gpio_t led){
-	gpio_set(led);
-}
-
-void led_OFF(gpio_t led){
-	gpio_clear(led);
-}
-
-void buzzer_ON(gpio_t buzzer){
-	gpio_set(buzzer);
-}
-
-void buzzer_OFF(gpio_t buzzer){
-	gpio_clear(buzzer);
 }
 
 void mqttSubscribeTo(char* topic_name, int pos_into_subscriptions){
