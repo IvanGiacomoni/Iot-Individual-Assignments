@@ -34,3 +34,34 @@ Gas and smoke actuators:
 Also, I want to specify the real utilities provided by both leds and buzzers. Leds are very useful in a lot of situations, for example that of a person that is listening to the music on his phone at a very high volume, and cannot hear the buzzer sound, while buzzers are useful in different types of situations, for example situations where people are very distracted and do not notice that the red led is flashing, or when they are sleeping, or also when they are out of home and neighbors could hear the buzzer noising.
 
 ## Data collected
+For the DHT-22 sensor we have this features:
+
+- Dimensions: 28mm X 12mm X 10mm
+- Unit of measurement: Celsius degrees
+- Temperature measurement range: [-40 , 80] ° C
+- Periodicity of the measurements: 10 seconds
+
+Below we can see an image of the DHT-22 sensor:
+
+![img](https://m.media-amazon.com/images/I/61OFHCBgTaL._AC_UL320_.jpg)
+
+For the MQ-2 sensor we have this features:
+
+- Unit of measurement: parts per million
+- Temperature measurement range: [100, 10000] ppm 
+- Periodicity of the measurements: 2 seconds
+
+Below we can see an image of the MQ-2 sensor:
+
+![img](https://m.media-amazon.com/images/I/71knmA03nPL._AC_UL320_.jpg)
+
+The system will be capable of determining whether the values retrieved by the sensors are dangerous or not, and these observations will be done for the temperature by checking if value is first above a medium threshold, in order to possibly activate the yellow led, and in the worst case above an high threshold, in order to activate the red led and the buzzer, while for gas and smoke concentration there will be a single threshold, so if the value is above that threshold the blue led will flash and the other buzzer will be activated.
+I want to specify that based, on the values of temperature and concentration of gas and smoke, the system will associate a state to that feature in the environment: in particular, for temperature we have 3 states and for gas and smoke 2 states:
+
+- ALL OK! -> green led
+- GROWING! -> yellow led
+- WARNING! -> red led + buzzer
+
+- ALL OK -> white led
+- WARNING -> blue led
+
