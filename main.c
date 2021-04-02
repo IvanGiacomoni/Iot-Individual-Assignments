@@ -38,6 +38,18 @@ static char stack[THREAD_STACKSIZE_DEFAULT];
 static emcute_sub_t subscriptions[NUMOFSUBS];
 static char topics[NUMOFSUBS][TOPIC_MAXLEN];
 
+// GLOBAL VARIABLES
+
+// DHT-22 sensor
+dht_params_t params;
+dht_t dev;
+
+// Leds
+gpio_t red_led, green_led, yellow_led, blue_led, white_led;
+
+// Buzzers
+gpio_t gas_smoke_buzzer, temp_buzzer;
+
 static void *emcute_thread(void *arg){
     (void)arg;
     emcute_run(CONFIG_EMCUTE_DEFAULT_PORT, EMCUTE_ID);
@@ -97,18 +109,17 @@ int setup_mqtt(void){
 void publishDataForAws(char* data, emcute_topic_t* topic){
 	
 	if(emcute_pub(topic, data, strlen(data), EMCUTE_QOS_0) != EMCUTE_OK){
-		printf("error: unable to publish to %s\n", topic->name); // DA CAMBIARE!!!!
+		printf("error: unable to publish to %s\n", topic->name);
 		exit(EXIT_FAILURE);
 	} 	
 }
 
-void initializeLeds(gpio_t* red_led, gpio_t* green_led, gpio_t* yellow_led,
-    gpio_t* blue_led, gpio_t* white_led){
+void initializeLeds(void){
 	
 	// Red led initialization
-	*red_led = GPIO_PIN(PORT_B, 5);  // PIN D4
+	red_led = GPIO_PIN(PORT_B, 5);  // PIN D4
 		
-	if (gpio_init(*red_led, GPIO_OUT)) {
+	if (gpio_init(red_led, GPIO_OUT)) {
 		printf("Error to initialize GPIO_PIN(%d %d)\n", PORT_B, 5);
 		exit(EXIT_FAILURE);
 	}
@@ -117,9 +128,9 @@ void initializeLeds(gpio_t* red_led, gpio_t* green_led, gpio_t* yellow_led,
 	}
 	
 	// Green led initialization
-	*green_led = GPIO_PIN(PORT_A, 8); // PIN D7
+	green_led = GPIO_PIN(PORT_A, 8); // PIN D7
 		
-	if (gpio_init(*green_led, GPIO_OUT)) {
+	if (gpio_init(green_led, GPIO_OUT)) {
 		printf("Error to initialize GPIO_PIN(%d %d)\n", PORT_A, 8);
 		exit(EXIT_FAILURE);
 	}
@@ -128,9 +139,9 @@ void initializeLeds(gpio_t* red_led, gpio_t* green_led, gpio_t* yellow_led,
 	}
 	
 	// Yellow led initialization
-	*yellow_led = GPIO_PIN(PORT_A, 9); // PIN D9
+	yellow_led = GPIO_PIN(PORT_A, 9); // PIN D9
 		
-	if (gpio_init(*yellow_led, GPIO_OUT)) {
+	if (gpio_init(yellow_led, GPIO_OUT)) {
 		printf("Error to initialize GPIO_PIN(%d %d)\n", PORT_A, 9);
 		exit(EXIT_FAILURE);
 	}
@@ -139,9 +150,9 @@ void initializeLeds(gpio_t* red_led, gpio_t* green_led, gpio_t* yellow_led,
 	}
 	
 	// Blue led initialization
-	*blue_led = GPIO_PIN(PORT_B, 6); // PIN D10
+	blue_led = GPIO_PIN(PORT_B, 6); // PIN D10
 		
-	if (gpio_init(*blue_led, GPIO_OUT)) {
+	if (gpio_init(blue_led, GPIO_OUT)) {
 		printf("Error to initialize GPIO_PIN(%d %d)\n", PORT_B, 6);
 		exit(EXIT_FAILURE);
 	}
@@ -150,9 +161,9 @@ void initializeLeds(gpio_t* red_led, gpio_t* green_led, gpio_t* yellow_led,
 	}
 	
 	// White led initialization
-	*white_led = GPIO_PIN(PORT_A, 6); // PIN D12
+	white_led = GPIO_PIN(PORT_A, 6); // PIN D12
 		
-	if (gpio_init(*white_led, GPIO_OUT)) {
+	if (gpio_init(white_led, GPIO_OUT)) {
 		printf("Error to initialize GPIO_PIN(%d %d)\n", PORT_A, 6);
 		exit(EXIT_FAILURE);
 	}
@@ -161,12 +172,12 @@ void initializeLeds(gpio_t* red_led, gpio_t* green_led, gpio_t* yellow_led,
 	}
 }
 
-void initializeBuzzers(gpio_t* gas_smoke_buzzer, gpio_t* temp_buzzer){
+void initializeBuzzers(void){
 	
 	// Gas/Smoke buzzer initialization
-	*gas_smoke_buzzer = GPIO_PIN(PORT_C, 7);  // PIN D9
+	gas_smoke_buzzer = GPIO_PIN(PORT_C, 7);  // PIN D9
 		
-	if (gpio_init(*gas_smoke_buzzer, GPIO_OUT)) {
+	if (gpio_init(gas_smoke_buzzer, GPIO_OUT)) {
 		printf("Error to initialize GPIO_PIN(%d %d)\n", PORT_C, 7);
 		exit(EXIT_FAILURE);
 	}
@@ -175,9 +186,9 @@ void initializeBuzzers(gpio_t* gas_smoke_buzzer, gpio_t* temp_buzzer){
 	}
 	
 	// Temperature buzzer initialization
-	*temp_buzzer = GPIO_PIN(PORT_A, 5);  // PIN D13
+	temp_buzzer = GPIO_PIN(PORT_A, 5);  // PIN D13
 		
-	if (gpio_init(*temp_buzzer, GPIO_OUT)) {
+	if (gpio_init(temp_buzzer, GPIO_OUT)) {
 		printf("Error to initialize GPIO_PIN(%d %d)\n", PORT_A, 5);
 		exit(EXIT_FAILURE);
 	}
@@ -196,15 +207,15 @@ void initializeADCLine(void){
     }
 }
 
-void initializeDHT(dht_params_t* params, dht_t* dev){
+void initializeDHT(void){
 	
 	// Initializing DHT_22 parameters
-	params -> pin = GPIO_PIN(PORT_A, 10);
-	params -> type = DHT22;
-	params -> in_mode = DHT_PARAM_PULL;
+	params.pin = GPIO_PIN(PORT_A, 10);
+	params.type = DHT22;
+	params.in_mode = DHT_PARAM_PULL;
 	
 	// Initializating DHT_22 module
-	if (dht_init(dev, params) == DHT_OK) {
+	if (dht_init(&dev, &params) == DHT_OK) {
 		printf("DHT sensor connected\n");
 	}
 	
@@ -227,9 +238,9 @@ int readPpmByMQ2(void){
     return ppm;
 }
 
-int readTemperatureByDHT(dht_t* dev){
+int readTemperatureByDHT(void){
 	int16_t temp, hum;
-	if (dht_read(dev, &temp, &hum) != DHT_OK) {
+	if (dht_read(&dev, &temp, &hum) != DHT_OK) {
 		printf("Error reading values\n");
 		return -1;
 	}
@@ -261,36 +272,35 @@ void buzzer_OFF(gpio_t buzzer){
 	gpio_clear(buzzer);
 }
 
+void mqttSubscribeTo(char* topic_name, int pos_into_subscriptions){
+	unsigned flags = EMCUTE_QOS_0;
+    subscriptions[pos_into_subscriptions].cb = on_pub;
+    strcpy(topics[pos_into_subscriptions], topic_name);
+    subscriptions[pos_into_subscriptions].topic.name = topic_name;
+
+    if (emcute_sub(&subscriptions[pos_into_subscriptions], flags) != EMCUTE_OK) {
+        printf("error: unable to subscribe to %s\n", topic_name);
+        exit(EXIT_FAILURE);
+    }
+
+    printf("Now subscribed to %s\n", topic_name);
+    xtimer_sleep(1);
+	printf("\n");
+}
+
 static char stackThreadTemp[THREAD_STACKSIZE_DEFAULT];
 static char stackThreadGasSmoke[THREAD_STACKSIZE_DEFAULT];
 
-struct threadTempArgs {
-	gpio_t red_led;
-	gpio_t green_led;
-	gpio_t yellow_led;
-	
-	gpio_t temp_buzzer;
-	
-	dht_t dev;
-};
-
-struct threadGasSmokeArgs {
-	gpio_t white_led;
-	gpio_t blue_led;
-	
-	gpio_t gas_smoke_buzzer;
-};
-
 static void* threadTemp(void *arg){
+	// using arg in order to avoid compilation errors
+	void* args = arg;
+	args = NULL;
+	
+	if(args == NULL){
+	    printf("No arguments for thread temp\n");	
+	}
+	
     printf("I'm temperature thread with pid %d\n", thread_getpid());
-    
-    struct threadTempArgs* args = (struct threadTempArgs*) arg;
-    
-    gpio_t red_led = args->red_led;
-    gpio_t green_led = args->green_led;
-    gpio_t yellow_led = args->yellow_led;
-    gpio_t temp_buzzer = args->temp_buzzer;
-    dht_t dev = args->dev;
     
     char* temperature_state = "";
     
@@ -298,7 +308,11 @@ static void* threadTemp(void *arg){
     while(1){
 		
 		// Reading temperature values by DHT-22 sensor
-        int temperature = readTemperatureByDHT(&dev);
+        int temperature = readTemperatureByDHT();
+        
+        if(temperature < 0){
+			continue;
+		}
 	  
 		printf("temperature: %d°C\n", temperature);
 		
@@ -360,14 +374,16 @@ static void* threadTemp(void *arg){
     return NULL;    
 }
 
-static void* threadGasSmoke(void *arg){
+static void* threadGasSmoke(void* arg){
+    // using arg in order to avoid compilation errors
+    void* args = arg;
+	args = NULL;
+	
+	if(args == NULL){
+	    printf("No arguments for thread temp\n");	
+	}
+    
     printf("I'm gas/smoke thread with pid %d\n", thread_getpid());
-    
-    struct threadGasSmokeArgs* args = (struct threadGasSmokeArgs*) arg;
-    
-    gpio_t blue_led = args->blue_led;
-    gpio_t white_led = args->white_led;
-    gpio_t gas_smoke_buzzer = args->gas_smoke_buzzer;
     
     char* gas_smoke_state = "";
     
@@ -424,6 +440,12 @@ int main(void){
     
     printf("\nStarting the application...\n");
 	xtimer_sleep(1);
+	
+	// Initializing DHT_22 parameters and module
+
+	initializeDHT();
+	xtimer_sleep(1);
+	printf("\n");
 
     /* Initializing the ADC line */
     initializeADCLine();
@@ -431,25 +453,13 @@ int main(void){
     printf("\n");
     
     // Initializing leds
-	gpio_t red_led, green_led, yellow_led, blue_led, white_led;
-	
-	initializeLeds(&red_led, &green_led, &yellow_led, &blue_led, &white_led);
+	initializeLeds();
 	xtimer_sleep(1);
 	printf("\n");
 	
 	// Initializing buzzers
-	gpio_t gas_smoke_buzzer, temp_buzzer;
-	
-	initializeBuzzers(&gas_smoke_buzzer, &temp_buzzer);
+	initializeBuzzers();
     xtimer_sleep(1);
-	printf("\n");
-	
-    // Initializing DHT_22 parameters and module
-    dht_params_t params;
-    dht_t dev;
-
-	initializeDHT(&params, &dev);
-	xtimer_sleep(1);
 	printf("\n");
 	
 	// setup MQTT-SN connection
@@ -457,85 +467,32 @@ int main(void){
     setup_mqtt();
     
     // Setup subscription to MQTT_TOPIC_TEMP
-    unsigned flags = EMCUTE_QOS_0;
-    subscriptions[0].cb = on_pub;
-    strcpy(topics[0], MQTT_TOPIC_TEMP);
-    subscriptions[0].topic.name = MQTT_TOPIC_TEMP;
-
-    if (emcute_sub(&subscriptions[0], flags) != EMCUTE_OK) {
-        printf("error: unable to subscribe to %s\n", MQTT_TOPIC_TEMP);
-        return 1;
-    }
-
-    printf("Now subscribed to %s\n", MQTT_TOPIC_TEMP);
-    xtimer_sleep(1);
-	printf("\n");
+    mqttSubscribeTo(MQTT_TOPIC_TEMP, 0);
 	
 	// Setup subscription to MQTT_TOPIC_GAS_SMOKE
-	subscriptions[1].cb = on_pub;
-    strcpy(topics[1], MQTT_TOPIC_GAS_SMOKE);
-    subscriptions[1].topic.name = MQTT_TOPIC_GAS_SMOKE;
-
-    if (emcute_sub(&subscriptions[1], flags) != EMCUTE_OK) {
-        printf("error: unable to subscribe to %s\n", MQTT_TOPIC_GAS_SMOKE);
-        return 1;
-    }
-
-    printf("Now subscribed to %s\n", MQTT_TOPIC_GAS_SMOKE);
-    xtimer_sleep(1);
-	printf("\n");
+	mqttSubscribeTo(MQTT_TOPIC_GAS_SMOKE, 1);
 	
-	// Setup subscription to SWITCH_MODE_DEVICE_1
-	subscriptions[2].cb = on_pub;
-    strcpy(topics[2], SWITCH_MODE_DEVICE_1);
-    subscriptions[2].topic.name = SWITCH_MODE_DEVICE_1;
-    
-	if (emcute_sub(&subscriptions[2], flags) != EMCUTE_OK) {
-        printf("error: unable to subscribe to %s\n", SWITCH_MODE_DEVICE_1);
-        return 1;
-    }
-
-    printf("Now subscribed to %s\n", SWITCH_MODE_DEVICE_1);
-    xtimer_sleep(1);
-	printf("\n");
+	// Setup subscription to MQTT_TOPIC_GAS_SMOKE
+	mqttSubscribeTo(SWITCH_MODE_DEVICE_1, 2);
 	
 	printf("Creating thread for sampling temperature...\n");
 	
-	// Setting arguments for temperature thread
-	struct threadTempArgs* threadTemperatureArgs = (struct threadTempArgs*)malloc(sizeof(struct threadTempArgs));
-	threadTemperatureArgs->red_led = red_led;
-	threadTemperatureArgs->yellow_led = yellow_led;
-	threadTemperatureArgs->green_led = green_led;
-	threadTemperatureArgs->temp_buzzer = temp_buzzer;
-	threadTemperatureArgs->dev = dev;
-	
 	// Creating temperature thread 
 	int pid_t_temp = thread_create(stackThreadTemp, sizeof(stackThreadTemp), THREAD_PRIORITY_MAIN - 1, 0, 
-		threadTemp, (void*)threadTemperatureArgs, "Thread temperature");
+		threadTemp, NULL, "Thread temperature");
 	printf("Temperature thread created...\n");
 	
 	printf("Creating thread for sampling ppm...\n");
 	
-	// Setting arguments for gas/smoke thread
-	struct threadGasSmokeArgs* threadPpmArgs = (struct threadGasSmokeArgs*)malloc(sizeof(struct threadGasSmokeArgs));
-	threadPpmArgs->blue_led = blue_led;
-	threadPpmArgs->white_led = white_led;
-	threadPpmArgs->gas_smoke_buzzer = gas_smoke_buzzer;
-	
 	// Creating gas/smoke thread 
 	int pid_t_gas_smoke = thread_create(stackThreadGasSmoke, sizeof(stackThreadGasSmoke), THREAD_PRIORITY_MAIN - 1, 0, 
-		threadGasSmoke, (void*)threadPpmArgs, "Thread gas/smoke");
+		threadGasSmoke, NULL, "Thread gas/smoke");
 	printf("Gas/smoke thread created...\n");
-	
-	
 	
 	printf("\n\n");
 	printf("pid temp: %d\n",pid_t_temp);
 	printf("\n\n");
 	printf("pid gas_smoke: %d\n",pid_t_gas_smoke);
-	
-	
-	
     
     // Protecting threads
     while(1){};
