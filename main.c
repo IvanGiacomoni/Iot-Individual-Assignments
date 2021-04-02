@@ -16,8 +16,8 @@
 #define ADC_IN_USE                  ADC_LINE(0)
 #define ADC_RES                     ADC_RES_10BIT
 
-#define GAS_SMOKE_DELAY             300
-#define TEMP_DELAY                  300
+#define GAS_SMOKE_DELAY             5
+#define TEMP_DELAY                  5
 
 #define TEMP_THRESHOLD_MIN          23
 #define TEMP_THRESHOLD_MAX          24
@@ -26,7 +26,7 @@
 
 #define EMCUTE_PRIO         (THREAD_PRIORITY_MAIN - 1)
 
-#define NUMOFSUBS           (3U)
+#define NUMOFSUBS           (4U)
 #define TOPIC_MAXLEN        (64U)
 
 #ifndef EMCUTE_ID
@@ -50,6 +50,9 @@ gpio_t red_led, green_led, yellow_led, blue_led, white_led;
 // Buzzers
 gpio_t gas_smoke_buzzer, temp_buzzer;
 
+// Mode
+char* mode = "auto";
+
 static void *emcute_thread(void *arg){
     (void)arg;
     emcute_run(CONFIG_EMCUTE_DEFAULT_PORT, EMCUTE_ID);
@@ -57,13 +60,55 @@ static void *emcute_thread(void *arg){
 }
 
 static void on_pub(const emcute_topic_t *topic, void *data, size_t len){
-    char *in = (char *)data;
+	
+	fflush(stdout);
+	
+	char *in = (char *)data;
 
-    printf("### got publication for topic '%s' [%i] ###\n", topic->name, (int)topic->id);
-    for (size_t i = 0; i < len; i++) {
-        printf("%c", in[i]);
-    }
-    puts("");
+	printf("### got publication for topic '%s' [%i] ###\n", topic->name, (int)topic->id);
+    
+    if(strcmp(topic->name, SWITCH_MODE_DEVICE_1) == 0){
+		
+		fflush(stdout);
+		
+		printf("received: %s\n",in);
+		
+		if(strcmp(in, "manual") == 0){
+			if(strcmp(mode, "auto") == 0){
+				printf("Switching to manual...\n");
+				xtimer_sleep(2);
+				
+				mode = "manual";
+			}
+			else if(strcmp(mode, "manual") == 0){
+				printf("Already in manual mode!\n");
+			}
+		}
+		
+		else if(strcmp(in, "auto") == 0){
+			
+			if(strcmp(mode, "manual") == 0){
+				printf("Switching to auto...\n");
+				xtimer_sleep(2);
+				
+				mode = "auto";
+				
+			}
+			else if(strcmp(mode, "auto") == 0){
+				printf("Already in auto mode!\n");
+			}
+		}
+		printf("\n");
+		fflush(stdout);
+	}
+	
+	else{
+		fflush(stdout);
+		for (size_t i = 0; i < len; i++) {
+			printf("%c", in[i]);
+		}
+		puts("");
+	}
 }
 
 /**
@@ -307,67 +352,76 @@ static void* threadTemp(void *arg){
     // Periodic sampling of temperature
     while(1){
 		
-		// Reading temperature values by DHT-22 sensor
-        int temperature = readTemperatureByDHT();
+		printf("[TEMPERATURE] mode: %s\n", mode);
+		
+		if(strcmp(mode, "auto") == 0){
+			// Reading temperature values by DHT-22 sensor
+			int temperature = readTemperatureByDHT();
         
-        if(temperature < 0){
-			continue;
-		}
+			if(temperature < 0){
+				continue;
+			}
 	  
-		printf("temperature: %d°C\n", temperature);
+			printf("temperature: %d°C\n", temperature);
 		
-		// Preprocessing data
+			// Preprocessing data
 		
-		if (temperature > TEMP_THRESHOLD_MAX){
-			printf("[TEMPERATURE] WARNING!!\n");
-			temperature_state = "WARNING!";
+			if (temperature > TEMP_THRESHOLD_MAX){
+				printf("[TEMPERATURE] WARNING!!\n");
+				temperature_state = "WARNING!";
 			
-			led_OFF(green_led);
-			led_OFF(yellow_led);
+				led_OFF(green_led);
+				led_OFF(yellow_led);
 			
-			led_ON(red_led);
-			//buzzer_ON(temp_buzzer);
-		}
+				led_ON(red_led);
+				//buzzer_ON(temp_buzzer);
+			}
 		
-		else if (temperature > TEMP_THRESHOLD_MIN && temperature <= TEMP_THRESHOLD_MAX){
-			printf("[TEMPERATURE] BE CAREFUL TO THE TEMPERATURE!\n");
-			temperature_state = "GROWING!";
+			else if (temperature > TEMP_THRESHOLD_MIN && temperature <= TEMP_THRESHOLD_MAX){
+				printf("[TEMPERATURE] BE CAREFUL TO THE TEMPERATURE!\n");
+				temperature_state = "GROWING!";
 			
-			led_OFF(green_led);
-			led_OFF(red_led);
+				led_OFF(green_led);
+				led_OFF(red_led);
 			
-			led_ON(yellow_led);
-		}
+				led_ON(yellow_led);
+			}
 		
-		else if(temperature <= TEMP_THRESHOLD_MIN){
-			printf("[TEMPERATURE] ALL OK!\n");
-			temperature_state = "ALL OK!";
+			else if(temperature <= TEMP_THRESHOLD_MIN){
+				printf("[TEMPERATURE] ALL OK!\n");
+				temperature_state = "ALL OK!";
 			
-			led_OFF(red_led);
-			led_OFF(yellow_led);
+				led_OFF(red_led);
+				led_OFF(yellow_led);
 			
-			led_ON(green_led);
-		}
+				led_ON(green_led);
+			}
 		
-		// Formatting all data into a string for mqtt publishing
-		char temp_s[5];
-		sprintf(temp_s, "%d", temperature);
+			// Formatting all data into a string for mqtt publishing
+			char temp_s[5];
+			sprintf(temp_s, "%d", temperature);
 		
-		char data[64] = "{ ";
-        strcat(data, "\"temperature\": ");
-        strcat(data, temp_s);
-        strcat(data, ", \"temperature_state\": \"");
-        strcat(data, temperature_state);
-        strcat(data, "\"");
-        strcat(data, " }");
+			char data[64] = "{ ";
+			strcat(data, "\"temperature\": ");
+			strcat(data, temp_s);
+			strcat(data, ", \"temperature_state\": \"");
+			strcat(data, temperature_state);
+			strcat(data, "\"");
+			strcat(data, " }");
         
-        // Publishing temperature data to MQTT_TOPIC_TEMP
-        publishDataForAws(data, &subscriptions[0].topic);
+			// Publishing temperature data to MQTT_TOPIC_TEMP
+			publishDataForAws(data, &subscriptions[0].topic);
 		
 		
-		xtimer_sleep(TEMP_DELAY);
-		buzzer_OFF(temp_buzzer);
-		printf("\n");
+			xtimer_sleep(TEMP_DELAY);
+			buzzer_OFF(temp_buzzer);
+			printf("\n");
+		}
+		
+		else{
+			printf("[TEMPERATURE] Now in manual mode\n");
+			xtimer_sleep(5);
+		}
 		
 	}
     
@@ -390,46 +444,57 @@ static void* threadGasSmoke(void* arg){
     // Periodical sampling of ppm
     while(1){
 		
-		// Reading ppm values by MQ-2 sensor
-		int ppm = readPpmByMQ2();
-		printf("ppm: %d\n", ppm);
+		printf("[GAS/SMOKE] mode: %s\n", mode);
 		
-		// Preprocessing data
-		if(ppm > PPM_THRESHOLD){
-			printf("[GAS/SMOKE] WARNING!!!\n");
-			gas_smoke_state = "WARNING!";
+		if(strcmp(mode, "auto") == 0){
+			// Reading ppm values by MQ-2 sensor
+			int ppm = readPpmByMQ2();
+			printf("ppm: %d\n", ppm);
+		
+			// Preprocessing data
+			if(ppm > PPM_THRESHOLD){
+				printf("[GAS/SMOKE] WARNING!!!\n");
+				gas_smoke_state = "WARNING!";
 			
-			led_ON(blue_led);
-			led_OFF(white_led);
-			//buzzer_ON(gas_smoke_buzzer);
-		}
+				led_ON(blue_led);
+				led_OFF(white_led);
+				//buzzer_ON(gas_smoke_buzzer);
+			}
 		
-		else if(ppm <= PPM_THRESHOLD){
-			printf("[GAS/SMOKE] ALL OK!\n");
-			gas_smoke_state = "ALL_OK!";
+			else if(ppm <= PPM_THRESHOLD){
+				printf("[GAS/SMOKE] ALL OK!\n");
+				gas_smoke_state = "ALL_OK!";
 			
-			led_ON(white_led);
-			led_OFF(blue_led);
-		}
+				led_ON(white_led);
+				led_OFF(blue_led);
+			}
 		
-		// Formatting data into a string for mqtt publishing
-		char ppm_s[5];
-		sprintf(ppm_s, "%d", ppm);
+			// Formatting data into a string for mqtt publishing
+			char ppm_s[5];
+			sprintf(ppm_s, "%d", ppm);
 		
-		char data[64] = "{ ";
-        strcat(data, "\"ppm\": ");
-        strcat(data, ppm_s);
-        strcat(data, ", \"gas_smoke_state\": \"");
-        strcat(data, gas_smoke_state);
-        strcat(data, "\"");
-        strcat(data, " }");
+			char data[64] = "{ ";
+			strcat(data, "\"ppm\": ");
+			strcat(data, ppm_s);
+			strcat(data, ", \"gas_smoke_state\": \"");
+			strcat(data, gas_smoke_state);
+			strcat(data, "\"");
+			strcat(data, " }");
         
-        // Publishing temperature data to MQTT_TOPIC_GAS_SMOKE
-        publishDataForAws(data, &subscriptions[1].topic);
+			// Publishing temperature data to MQTT_TOPIC_GAS_SMOKE
+			publishDataForAws(data, &subscriptions[1].topic);
 		
-		xtimer_sleep(GAS_SMOKE_DELAY);
-		buzzer_OFF(gas_smoke_buzzer);
-		printf("\n");
+			xtimer_sleep(GAS_SMOKE_DELAY);
+			buzzer_OFF(gas_smoke_buzzer);
+			printf("\n");
+		}
+		
+		else{
+			printf("[GAS/SMOKE] Now in manual mode\n");
+			xtimer_sleep(5);
+		}
+		
+		
 		
 	}
     
@@ -474,6 +539,9 @@ int main(void){
 	
 	// Setup subscription to MQTT_TOPIC_GAS_SMOKE
 	mqttSubscribeTo(SWITCH_MODE_DEVICE_1, 2);
+	
+	// Setup subscription to MANAGE_ACTUATORS_DEVICE_1
+	mqttSubscribeTo(MANAGE_ACTUATORS_DEVICE_1, 3);
 	
 	printf("Creating thread for sampling temperature...\n");
 	
