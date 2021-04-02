@@ -16,8 +16,8 @@
 #define ADC_IN_USE                  ADC_LINE(0)
 #define ADC_RES                     ADC_RES_10BIT
 
-#define GAS_SMOKE_DELAY             5
-#define TEMP_DELAY                  5
+#define GAS_SMOKE_DELAY             2
+#define TEMP_DELAY                  10
 
 #define TEMP_THRESHOLD_MIN          23
 #define TEMP_THRESHOLD_MAX          24
@@ -106,6 +106,15 @@ static void on_pub(const emcute_topic_t *topic, void *data, size_t len){
 			
 			if(strcmp(mode, "manual") == 0){
 				printf("Switching to auto...\n");
+				
+				led_OFF(red_led);
+				led_OFF(green_led);
+				led_OFF(yellow_led);
+				led_OFF(white_led);
+				led_OFF(blue_led);
+				buzzer_OFF(temp_buzzer);
+				buzzer_OFF(gas_smoke_buzzer);
+				
 				xtimer_sleep(2);
 				
 				mode = "auto";
@@ -622,22 +631,17 @@ int main(void){
 	printf("Creating thread for sampling temperature...\n");
 	
 	// Creating temperature thread 
-	int pid_t_temp = thread_create(stackThreadTemp, sizeof(stackThreadTemp), THREAD_PRIORITY_MAIN - 1, 0, 
+	thread_create(stackThreadTemp, sizeof(stackThreadTemp), THREAD_PRIORITY_MAIN - 1, 0, 
 		threadTemp, NULL, "Thread temperature");
 	printf("Temperature thread created...\n");
 	
 	printf("Creating thread for sampling ppm...\n");
 	
 	// Creating gas/smoke thread 
-	int pid_t_gas_smoke = thread_create(stackThreadGasSmoke, sizeof(stackThreadGasSmoke), THREAD_PRIORITY_MAIN - 1, 0, 
+	thread_create(stackThreadGasSmoke, sizeof(stackThreadGasSmoke), THREAD_PRIORITY_MAIN - 1, 0, 
 		threadGasSmoke, NULL, "Thread gas/smoke");
 	printf("Gas/smoke thread created...\n");
 	
-	printf("\n\n");
-	printf("pid temp: %d\n",pid_t_temp);
-	printf("\n\n");
-	printf("pid gas_smoke: %d\n",pid_t_gas_smoke);
-    
     // Protecting threads
     while(1){};
     
