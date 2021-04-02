@@ -244,8 +244,8 @@
 									<tbody>
 										<tr v-for="device in devicesIdTemp" :key="device">
 											<td>{{device}}</td>
-											<td><button @click="buzzerON" type="button" :id="device" class="btn my-buzzer-btn mt-1">Buzzer ON</button></td>
-											<td><button @click="buzzerOFF" type="button" :id="device" class="btn my-buzzer-btn mt-1">Buzzer OFF</button></td>
+											<td><button @click="buzzerTempON" type="button" :id="device" class="btn my-buzzer-btn mt-1">Buzzer ON</button></td>
+											<td><button @click="buzzerTempOFF" type="button" :id="device" class="btn my-buzzer-btn mt-1">Buzzer OFF</button></td>
 											<td><button @click="redLedON" type="button" :id="device" class="btn my-red-btn mt-1">Red led ON</button></td>
 											<td><button @click="redLedOFF" type="button" :id="device" class="btn my-red-btn mt-1">Red led OFF</button></td>
 										    <td><button @click="switchModeManual" type="button" :id="device" class="btn mt-1" style="width:200px;">Manual</button></td>
@@ -469,8 +469,8 @@
 									<tbody>
 										<tr v-for="device in devicesIdGasSmoke" :key="device">
 											<td>{{device}}</td>
-											<td><button @click="buzzerON" type="button" :id="device" class="btn my-buzzer-btn mt-1">Buzzer ON</button></td>
-											<td><button @click="buzzerOFF" type="button" :id="device" class="btn my-buzzer-btn mt-1">Buzzer OFF</button></td>
+											<td><button @click="buzzerGasSmokeON" type="button" :id="device" class="btn my-buzzer-btn mt-1">Buzzer ON</button></td>
+											<td><button @click="buzzerGasSmokeOFF" type="button" :id="device" class="btn my-buzzer-btn mt-1">Buzzer OFF</button></td>
 											<td><button @click="blueLedON" type="button" :id="device" class="btn my-blue-btn mt-1">Blue led ON</button></td>
 											<td><button @click="blueLedOFF" type="button" :id="device" class="btn my-blue-btn mt-1">Blue led OFF</button></td>
 										    <td><button @click="switchModeManual" type="button" :id="device" class="btn mt-1" style="width:200px;">Manual</button></td>
@@ -821,6 +821,190 @@
 					.then(
 						(response) => {
 								alert("Iot device "+id+" passed to automatic mode!");
+						},
+						(response) => {
+							alert("catch!");
+							console.log(response);
+					})
+				},
+				
+				buzzerTempON: function(event){
+					const id = event.target.id;
+					
+					const actuator = "buzzer";
+					const dataType = "temperature";
+					const operation = "ON"; 
+					
+					this.$http.post("http://localhost:8080/manageActuators", {
+						device_id: event.target.id.toString(),
+						actuator: actuator,
+						dataType: dataType,
+						operation: operation
+					})
+					.then(
+						(response) => {
+							alert("Sent indication to turn "+operation+" "+dataType+" "+actuator+" for device "+id+"!");
+						},
+						(response) => {
+							alert("catch!");
+							console.log(response);
+					})
+				},
+				
+				buzzerTempOFF: function(event){
+					const id = event.target.id;
+					
+					const actuator = "buzzer";
+					const dataType = "temperature";
+					const operation = "OFF"; 
+					
+					this.$http.post("http://localhost:8080/manageActuators", {
+						device_id: event.target.id.toString(),
+						actuator: actuator,
+						dataType: dataType,
+						operation: operation
+					})
+					.then(
+						(response) => {
+							alert("Sent indication to turn "+operation+" "+dataType+" "+actuator+" for device "+id+"!");
+						},
+						(response) => {
+							alert("catch!");
+							console.log(response);
+					})
+				},
+				
+				buzzerGasSmokeON: function(event){
+					const id = event.target.id;
+					
+					const actuator = "buzzer";
+					const dataType = "gas_smoke";
+					const operation = "ON"; 
+					
+					this.$http.post("http://localhost:8080/manageActuators", {
+						device_id: event.target.id.toString(),
+						actuator: actuator,
+						dataType: dataType,
+						operation: operation
+					})
+					.then(
+						(response) => {
+							alert("Sent indication to turn "+operation+" "+dataType+" "+actuator+" for device "+id+"!");
+						},
+						(response) => {
+							alert("catch!");
+							console.log(response);
+					})
+				},
+				
+				buzzerGasSmokeOFF: function(event){
+					const id = event.target.id;
+					
+					const actuator = "buzzer";
+					const dataType = "gas_smoke";
+					const operation = "OFF"; 
+					
+					this.$http.post("http://localhost:8080/manageActuators", {
+						device_id: event.target.id.toString(),
+						actuator: actuator,
+						dataType: dataType,
+						operation: operation
+					})
+					.then(
+						(response) => {
+							alert("Sent indication to turn "+operation+" "+dataType+" "+actuator+" for device "+id+"!");
+						},
+						(response) => {
+							alert("catch!");
+							console.log(response);
+					})
+				},
+				
+				redLedON: function(event){
+					const id = event.target.id;
+					
+					const actuator = "red_led";
+					const dataType = "temperature";
+					const operation = "ON"; 
+					
+					this.$http.post("http://localhost:8080/manageActuators", {
+						device_id: event.target.id.toString(),
+						actuator: actuator,
+						dataType: dataType,
+						operation: operation
+					})
+					.then(
+						(response) => {
+							alert("Sent indication to turn "+operation+" "+dataType+" "+actuator+" for device "+id+"!");
+						},
+						(response) => {
+							alert("catch!");
+							console.log(response);
+					})
+				},
+				
+				redLedOFF: function(event){
+					const id = event.target.id;
+					
+					const actuator = "red_led";
+					const dataType = "temperature";
+					const operation = "OFF"; 
+					
+					this.$http.post("http://localhost:8080/manageActuators", {
+						device_id: event.target.id.toString(),
+						actuator: actuator,
+						dataType: dataType,
+						operation: operation
+					})
+					.then(
+						(response) => {
+							alert("Sent indication to turn "+operation+" "+dataType+" "+actuator+" for device "+id+"!");
+						},
+						(response) => {
+							alert("catch!");
+							console.log(response);
+					})
+				},
+				
+				blueLedON: function(event){
+					const id = event.target.id;
+					
+					const actuator = "blue_led";
+					const dataType = "gas_smoke";
+					const operation = "ON"; 
+					
+					this.$http.post("http://localhost:8080/manageActuators", {
+						device_id: event.target.id.toString(),
+						actuator: actuator,
+						dataType: dataType,
+						operation: operation
+					})
+					.then(
+						(response) => {
+							alert("Sent indication to turn "+operation+" "+dataType+" "+actuator+" for device "+id+"!");
+						},
+						(response) => {
+							alert("catch!");
+							console.log(response);
+					})
+				},
+				
+				blueLedOFF: function(event){
+					const id = event.target.id;
+					
+					const actuator = "blue_led";
+					const dataType = "gas_smoke";
+					const operation = "OFF"; 
+					
+					this.$http.post("http://localhost:8080/manageActuators", {
+						device_id: event.target.id.toString(),
+						actuator: actuator,
+						dataType: dataType,
+						operation: operation
+					})
+					.then(
+						(response) => {
+							alert("Sent indication to turn "+operation+" "+dataType+" "+actuator+" for device "+id+"!");
 						},
 						(response) => {
 							alert("catch!");
