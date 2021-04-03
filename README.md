@@ -127,4 +127,4 @@ For this application we will use:
 
 Below we can see the wiring of components:
 
-
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/individual-assign_bb.png)
