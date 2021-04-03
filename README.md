@@ -235,10 +235,10 @@ log_type all
 # ============================================================
 
 #Path to the rootCA
-bridge_cafile /etc/mosquitto/certs/root-CA.crt
+bridge_cafile yourPath/root-CA.crt
 
 # Path to the PEM encoded client certificate
-bridge_certfile /etc/mosquitto/certs/mqtt-bridge.cert.pem
+bridge_certfile yourPath/mqtt-bridge.cert.pem
 
 # Path to the PEM encoded client private key
 bridge_keyfile /etc/mosquitto/certs/mqtt-bridge.private.key
@@ -249,7 +249,7 @@ bridge_keyfile /etc/mosquitto/certs/mqtt-bridge.private.key
 
 Be sure to have the right path and files for the private key, the certificate and the root certificate.
 
-Finally you need to add into the .env file a unique client id, the host address provided on Iot-Core, and the paths for the certificate and the root-certificate, in order to be able to send messagges from the frontend to manage the actuators. At this point the .env file shouls look like this:
+Finally you need to add into the .env file a unique client id, the host address provided on Iot-Core, and the paths for the certificate and the root-certificate, in order to be able to send messagges from the frontend to manage the actuators. At this point the .env file should look like this:
 
 ```
 AWS_ACCESS_KEY_ID=YOUR_AWS_ACCESS_KEY_ID
@@ -263,5 +263,17 @@ HOST=YOUR_AWS_HOST
 
 Be sure to use the same name for the environment variables.
 
-### Laundhing the application
+**NOTE!** The access key id, the secret access key and the session token provided by AWS expire after a while, so you have to manually re-set them in the .env file when this happens.
 
+### Launching the application
+
+- Open a terminal
+- Start the mosquitto broker by launching **service mosquitto start**
+- Now go into the folder where you have your config.conf file, and start the RSMB broker with **./broker_mqtts config.conf**
+- Open another terminal in the dashboard folder
+- Launch the nodeJS server with **node index.js** or **nodemon** (if you installed it)
+- Open another terminal in the root folder of the project
+- Launch the application by flashing the code into the STM-32 board with **make BOARD=nucleo-f401re flash term**
+
+## The code
+All details about the code can be found [here]()
