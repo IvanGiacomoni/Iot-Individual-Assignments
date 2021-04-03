@@ -392,3 +392,15 @@ void publishDataForAws(char* data, emcute_topic_t* topic){
 }
 ```
 
+Leds are turned on and off with these functions (the same can be said for buzzers):
+
+```
+void led_ON(gpio_t led){
+	gpio_set(led);
+}
+
+void led_OFF(gpio_t led){
+	gpio_clear(led);
+}
+```
+
