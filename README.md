@@ -109,3 +109,22 @@ Below I list the main topics used by the system:
 
 ## Setup
 
+### The RIOT operating system
+We need to install the RIOT operating system, [here](https://github.com/RIOT-OS/Tutorials#tutorials-for-riot) you can find a tutorial for the installation.
+
+### The STM32 Nucleo-64 F401RE board
+You need to have available an STM-32 Nucleo-64 F401RE board, [here](https://www.st.com/en/evaluation-tools/nucleo-f401re.html) you can find info about it.
+
+### Wiring of components
+For this application we will use:
+
+- 5 blink leds (red, yellow, green, white and blue)
+- 2 buzzers
+- a DHT-22 sensor
+- an MQ-2 sensor
+- 2 100 Ohm resistors
+- 5 220 Ohm resistors
+
+Below we can see the wiring of components:
+
+
