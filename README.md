@@ -125,6 +125,10 @@ For this application we will use:
 - 2 100 Ohm resistors
 - 5 220 Ohm resistors
 
-Below we can see the wiring of components:
+For each led, we have to use a ballast resistor of 220 Ohm
+
+Below we can see the wiring of components and a picture of the circuit:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/individual-assign_bb.png)
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/circuit_picture.jpeg)
