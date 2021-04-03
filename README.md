@@ -261,3 +261,7 @@ CLIENT_ID=YOUR_UNIQUE_CLIENT_ID
 HOST=YOUR_AWS_HOST
 ```
 
+Be sure to use the same name for the environment variables.
+
+### Laundhing the application
+
