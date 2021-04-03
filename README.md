@@ -125,10 +125,26 @@ For this application we will use:
 - 2 100 Ohm resistors
 - 5 220 Ohm resistors
 
-For each led, we have to use a ballast resistor of 220 Ohm
+For each led, we have to use a ballast resistor of 220 Ohm, and we need to connect the anode of the led to a digital pin of the board, while the cathode will be connected to one side of the resistor, and finally the other side of the resistor will be connected to ground. Below I list the specific digital pin of the board for each led:
+
+- red led -> D4 pin
+- green led -> D7 pin
+- yellow led -> D8 pin
+- blue led -> D10 pin
+- white led -> D12 pin
+
+For each buzzer, we have to use a resistor of 100 Ohm, and we need to connect the positive pin of the buzzer to a digital pin of the board, while the negative pin will be connected to one side of the resistor, and finally the other side of the resistor will be connected to ground. Below I list the specific digital pin of the board for each buzzer:
+
+- temperature buzzer -> D13 pin
+- gas/smoke buzzer -> D9 pin
+
+For the DHT-22 sensor we need to connect the GND pin to ground, the VCC pin to 5V on the breadboard and the out pin to the D2 pin of the board.
+For the MQ-2 sensor we need to connect the GND pin to ground, the VCC pin to 5V on the breadboard and the AOUT pin to the A0 pin of the board.
 
 Below we can see the wiring of components and a picture of the circuit:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/circuit/circuit_bb.png)
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/circuit/circuit_picture.jpeg)
+
+**NOTE!** As you can see from the wiring, I have to point out a few things: the temperature sensor is not the DHT-22 but is an RHT sensor, that works with the same logic; the gas sensor is not an MQ-2 sensor, but also here the logic is the same. For leds they are all red in the picture but, starting from top and going to bottom, we have in the order the red led, the green led, the yellow led, the blue led and the white led; finally for resistors, they are all 220 Ohm resistors in the picture but, as mentioned before, they are clearly distinguished in 220 Ohm for leds and 100 Ohm for buzzers.
