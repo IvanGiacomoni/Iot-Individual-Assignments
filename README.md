@@ -276,4 +276,4 @@ Be sure to use the same name for the environment variables.
 - Launch the application by flashing the code into the STM-32 board with **make BOARD=nucleo-f401re flash term**
 
 ## The code
-All details about the code can be found [here]()
+All details about the code can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/code.md).
