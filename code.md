@@ -1,4 +1,6 @@
 # Code
+
+## Initializing the DHT-22 sensor
 The application starts by initializing the DHT-22 sensor by using the *initializeDHT* function:
 
 ```
@@ -38,6 +40,7 @@ The function assigns the D2 pin for the DHT-22 sensor, and this is done by using
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/conversions.png)
 
+## Initializing leds and buzzers
 By using this picture, we can use the same logic to initialize the pins for leds and buzzers (for more info see [this](https://github.com/IvanGiacomoni/Iot-Individual-Assignments#wiring-of-components), respectively with the *initializeLeds* and the *initializeBuzzers* functions:
 
 ```
@@ -127,6 +130,7 @@ void initializeBuzzers(void){
 }
 ```
 
+## Initializing the ADC line
 After all this, we have also to initialize the ADC line: to do this, we need to include in the Makefile the periph_adc module:
 
 ```
@@ -160,6 +164,7 @@ The ADC line will be exploited for the sampling from the MQ-2 sensor, and given 
 #define ADC_RES     ADC_RES_10BIT
 ```
 
+## MQTT 
 At this point, we have all sensors and actuators ready, so we need to setup MQTT, and to do this I used a *setup_mqtt* function, and then we need to suscribe to our 4 main topics, by using the *mqttSubscribeTo* function, that takes as input the name of the topic and the position of the global array of subscriptions where we will save all info about the new subscription. 
 
 ```
@@ -184,6 +189,7 @@ Obviously we have only one device for now.
 
 For more details you can check the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/main.c) and also this [tutorial](https://github.com/RIOT-OS/RIOT/tree/master/examples/emcute_mqttsn).
 
+## Periodical sampling
 Now we are ready to start sampling from sensors, and given that we need to to periodical sampling, we need to use the xtimer module. So we need to inlude it in the Makefile:
 
 ```
@@ -217,6 +223,7 @@ thread_create(stackThreadGasSmoke, sizeof(stackThreadGasSmoke), THREAD_PRIORITY_
 
 If the actual mode of the system is set on "auto", then both threads will start sampling once they are created.
 
+### Temperature
 For temperature, we need to setup the medium and high threshold in the main.c:
 
 ```
@@ -316,6 +323,7 @@ strcat(data, " }");
 publishDataForAws(data, &subscriptions[0].topic);
 ```
 
+### Gas and smoke
 For gas and smoke, we need to setup only one threshold in the main.c:
 
 ```
@@ -392,6 +400,7 @@ void publishDataForAws(char* data, emcute_topic_t* topic){
 }
 ```
 
+## Turning on and off leds
 Leds are turned on and off with these functions (the same can be said for buzzers):
 
 ```
