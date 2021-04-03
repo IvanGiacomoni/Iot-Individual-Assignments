@@ -42,6 +42,12 @@ For the DHT-22 sensor we have this features:
 - Temperature measurement range: [-40 , 80] ° C
 - Periodicity of the measurements: 10 seconds
 
+The DHT22 is a digital sensor that converts the analog signals to digital so that it can be easily read by the MCU. It is made up of three pins:
+
+- VCC pin for the power supply voltage of 5V
+- out pin for the connection to a digital pin where the signal is taken
+- GND pin for the connection to ground
+
 Below we can see an image of the DHT-22 sensor:
 
 ![img](https://m.media-amazon.com/images/I/61OFHCBgTaL._AC_UL320_.jpg)
@@ -51,6 +57,13 @@ For the MQ-2 sensor we have this features:
 - Unit of measurement: parts per million
 - Temperature measurement range: [100, 10000] ppm 
 - Periodicity of the measurements: 2 seconds
+
+The MQ-2 sensor is an analog sensor, and it is made up of four pins:
+
+- VCC pin for the power supply voltage of 5V
+- AOUT pin for the analog exit
+- DOUT pin for the digital exit (we will not use it)
+- GND pin for the connection to ground
 
 Below we can see an image of the MQ-2 sensor:
 
@@ -88,8 +101,11 @@ This is done because there could be situations in which the manual mode could be
 
 ## Topics
 Below I list the main topics used by the system:
+
 - device/+/temperature: used to publish temperature data from a device with a certain id towards Iot-Core
 - device/+/gas_smoke: used to publish gas/smoke data from a device with a certain id towards Ior-Core
 - switchMode/device/+: used to publish towards a device with a certain id the indication of switching to auto/manual mode
-- controlActuatord/device/+: used to publish towards a device with a certain id the indication of turning on/off a certain actuator
+- controlActuators/device/+: used to publish towards a device with a certain id the indication of turning on/off a certain actuator
+
+## Setup
 
