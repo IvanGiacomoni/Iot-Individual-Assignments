@@ -129,6 +129,6 @@ For each led, we have to use a ballast resistor of 220 Ohm
 
 Below we can see the wiring of components and a picture of the circuit:
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/individual-assign_bb.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/circuit/circuit_bb.png)
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/circuit_picture.jpeg)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/circuit/circuit_picture.jpeg)
