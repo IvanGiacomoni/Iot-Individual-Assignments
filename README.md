@@ -150,7 +150,39 @@ Below we can see the wiring of components and a picture of the circuit:
 **NOTE!** As you can see from the wiring, I have to point out a few things: the temperature sensor is not the DHT-22 in the picture, but is an RHT sensor, that works with the same logic; the gas sensor is not an MQ-2 sensor in the picture, but also here the logic is the same. For leds they are all red in the picture but, starting from top and going to bottom, we have in the order the red led, the green led, the yellow led, the blue led and the white led; finally for resistors, they are all 220 Ohm resistors in the picture but, as mentioned before, they are clearly distinguished in 220 Ohm for leds and 100 Ohm for buzzers.
 
 ## Installing RSBM (MQTT-SN broker)
-You need to install 
+You need to install the RSBM broker, and you can follow this [tutorial](https://github.com/RIOT-OS/RIOT/tree/master/examples/emcute_mqttsn). Particularly, your config.conf file should look like this:
+
+```
+# add some debug output
+trace_output protocol
+
+# listen for MQTT-SN traffic on UDP port 1885
+listener 1885 INADDR_ANY mqtts
+  ipv6 true
+
+# listen to MQTT connections on tcp port 1886
+listener 1886 INADDR_ANY
+  ipv6 true
+```
+
+This because you need to specify which are the topics where the broker could see messages arriving.
+
+### Installing MQTT-cli
+You need also to install this [MQTT-cli](https://www.hivemq.com/blog/mqtt-cli/), in order to do publish/subscribe requests from the command line.
+
+## AWS, Iot-Core and DynamoDB
+Then, you need so sign in in [AWS](https://aws.amazon.com/education/awseducate/), in order to get access to Iot-Core and DynamoDB services. Once you're on Iot-Core, you need to create a thing in order to get your certificate and private key. Here you can find a [tutorial](https://docs.aws.amazon.com/iot/latest/developerguide/iot-moisture-create-thing.html). Then you need to subscribe to all topics I mentioned before by going in the MQTT test client section.
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/subscribe_aws.png)
+
+Then by going in the Rules section you have to create two rules, one for temperature data and one for gas and smoke data, specifying as topics device/+/temperature and device/+/gas_smoke respectively, and as operation you need to choose "Insert a message into a DynamoDB table". Here you can finb a [turorial](https://docs.aws.amazon.com/iot/latest/developerguide/iot-ddb-rule.html).
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temperature_rule.png)
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_rule.png)
+
+### Installing and setup Mosquitto broker
+Now you have to install the Mosquitto broker, more info and details can be found [here](https://aws.amazon.com/it/blogs/iot/how-to-bridge-mosquitto-mqtt-broker-to-aws-iot/). After doing this, bridge.conf
 
 ### Installing NodeJS and preparing the server
 You need to install NodeJS in your operating system in order to have the web dashboard working correctly, [here](https://nodejs.org/en/) you can find details.
