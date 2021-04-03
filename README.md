@@ -72,7 +72,7 @@ Below we can see an image of the MQ-2 sensor:
 I want to notice that gas and smoke will be sampled more often than temperature data, because even if both are important in our scenario, it is clear that the greater danger will come from smoke and gas.
 
 The system will be capable of determining whether the values retrieved by the sensors are dangerous or not, and these observations will be done for the temperature by checking if value is first above a medium threshold, in order to possibly activate the yellow led, and in the worst case above an high threshold, in order to activate the red led and the buzzer, while for gas and smoke concentration there will be a single threshold, so if the value is above that threshold the blue led will flash and the other buzzer will be activated.
-I want to specify that based, on the values of temperature and concentration of gas and smoke, the system will associate a state to that feature in the environment: in particular, for temperature we have 3 states and for gas and smoke 2 states:
+I want to specify that, based on the values of temperature and concentration of gas and smoke, the system will associate a state to that feature in the environment: in particular, for temperature we have 3 states and for gas and smoke 2 states:
 
 Temperature states:
 
@@ -83,7 +83,7 @@ Temperature states:
 Gas/smoke states:
 
 - ALL OK -> white led
-- WARNING -> blue led
+- WARNING -> blue led + buzzer
 
 ## Architecture of the system
 
