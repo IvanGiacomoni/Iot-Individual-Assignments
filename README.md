@@ -194,8 +194,6 @@ Now you have to install the Mosquitto broker, more info and details can be found
 # MQTT-S outgoing local bridge
 connection local_bridge_to_mosquitto
   address 127.0.0.1:1883
-  topic send_temp_data_to_aws both
-  topic send_gas_smoke_data_to_aws both
   topic device/+/temperature both
   topic device/+/gas_smoke both
   topic switchMode/device/+ both
