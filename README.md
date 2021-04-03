@@ -148,3 +148,16 @@ Below we can see the wiring of components and a picture of the circuit:
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/circuit/circuit_picture.jpeg)
 
 **NOTE!** As you can see from the wiring, I have to point out a few things: the temperature sensor is not the DHT-22 in the picture, but is an RHT sensor, that works with the same logic; the gas sensor is not an MQ-2 sensor in the picture, but also here the logic is the same. For leds they are all red in the picture but, starting from top and going to bottom, we have in the order the red led, the green led, the yellow led, the blue led and the white led; finally for resistors, they are all 220 Ohm resistors in the picture but, as mentioned before, they are clearly distinguished in 220 Ohm for leds and 100 Ohm for buzzers.
+
+## Installing RSBM (MQTT-SN broker)
+You need to install 
+
+### Installing NodeJS and preparing the server
+You need to install NodeJS in your operating system in order to have the web dashboard working correctly, [here](https://nodejs.org/en/) you can find details.
+After this, you have to check if you have **npm** installed, otherwise you can install it from [here](https://www.npmjs.com/get-npm).
+You also need to require the .env file, that has to placed in the dashboard directory. More info about the .env file will come later.
+
+### Nodemon
+After doing all this, you can download the zip file from [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments). Then, you need to open a terminal in the dashboard directory, and launch **npm install**. After this, you can install **nodemon** (not mandatory), a very useful package to run our NodeJS server, with this command: **npm install -g nodemon**, or **sudo npm install -g nodemon** if you are on Linux/Ubuntu.
+
+### 
