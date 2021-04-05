@@ -181,7 +181,7 @@ Then, you need so sign in in [AWS](https://aws.amazon.com/education/awseducate/)
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/subscribe_aws.png)
 
-Then by going in the Rules section you have to create two **rules**, one for temperature data and one for gas and smoke data, specifying as topics device/+/temperature and device/+/gas_smoke respectively, and as operation you need to choose "Insert a message into a DynamoDB table". Here you can find a [turorial](https://docs.aws.amazon.com/iot/latest/developerguide/iot-ddb-rule.html).
+Then by going in the Rules section you have to create two **rules**, one for temperature data and one for gas and smoke data, specifying as topics device/+/temperature and device/+/gas_smoke respectively, and as operation you need to choose "Insert a message into a DynamoDB table". Here you can find a [tutorial](https://docs.aws.amazon.com/iot/latest/developerguide/iot-ddb-rule.html).
 
 Temperature rule:
 
@@ -358,19 +358,21 @@ ppm: 67
 
 ```
 On AWS we can see both temperature and gas/smoke values arriving on topics device/1/temperature and device/1/gas_smoke.<br/>
-Temperature:
+Temperature:<br/>
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_topic_aws.png)
+<br/>
 
 Gas/Smoke:
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_topic_aws.png)
+<br/>
 
 As said before, data are saved into DynamoDB into two different tables, one for temperature and the other one for gas and smoke data.<br/>
-Temperature:
+Temperature:<br/>
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_data_dynamoDB.png)
-
-Gas/Smoke:
+<br/>
+Gas/Smoke:<br/>
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_data_dynamoBD.png)
 
