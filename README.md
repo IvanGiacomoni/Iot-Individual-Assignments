@@ -417,8 +417,10 @@ Also, on the console we can see these messages:
 
 ```
 ### got publication for topic 'switchMode/device/1' [3] ###
-received: manual
-Switching to manual...
+received: manual;1
+rcv_mode: manual
+device_id: 1
+[Device 1] Switching to manual...
 
 [GAS/SMOKE] mode: manual
 [GAS/SMOKE] Now in manual mode
@@ -439,10 +441,11 @@ Also, on the console we can see these messages:
 
 ```
 ### got publication for topic 'manageActuators/device/1' [4] ###
-received: red_led;temperature;ON
+received: red_led;temperature;ON;1
 actuator: red_led
 typeData: temperature
 operation: ON
+device_id: 1
 ```
 
 The same logic is applied for gas/smoke actuators.
