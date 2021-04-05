@@ -42,9 +42,9 @@ The DHT22 is a **digital** sensor that converts the analog signals to digital so
 
 It is made up of three pins:
 
-- VCC pin for the power supply voltage of 5V
-- out pin for the connection to a digital pin where the signal is taken
-- GND pin for the connection to ground
+- **VCC pin** for the power supply voltage of 5V
+- **out pin** for the connection to a digital pin where the signal is taken
+- **GND pin** for the connection to ground
 
 Below we can see an image of the DHT-22 sensor:
 
@@ -58,10 +58,10 @@ The MQ-2 sensor is an analog sensor. Features are the following:
 
 It is made up of four pins:
 
-- VCC pin for the power supply voltage of 5V
-- AOUT pin for the analog exit
-- DOUT pin for the digital exit (we will not use it)
-- GND pin for the connection to ground
+- **VCC pin** for the power supply voltage of 5V
+- **AOUT pin** for the analog exit
+- **DOUT pin** for the digital exit (we will not use it)
+- **GND pin** for the connection to ground
 
 Below we can see an image of the MQ-2 sensor:
 
@@ -270,7 +270,7 @@ CLIENT_ID=YOUR_UNIQUE_CLIENT_ID
 HOST=YOUR_AWS_HOST
 ```
 
-Be sure to use the same name as these above for the environment variables.
+Be sure to use same names as these above for the environment variables.
 
 **NOTE!** The access key id, the secret access key and the session token provided by AWS expire after a while, so you have to manually re-set them in the .env file when this happens.
 
