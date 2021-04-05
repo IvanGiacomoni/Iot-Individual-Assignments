@@ -284,5 +284,76 @@ Be sure to use same names as these above for the environment variables.
 - Open another terminal in the root folder of the project
 - Launch the application by flashing the code into the STM-32 board with **make BOARD=nucleo-f401re flash term**
 
+The server will be available at *http://localhost:8080/*, where we can see the homepage:
+
+HOMEPAGE
+
+When we flash the code into the board, on the console we can see these debug prints:
+
+```
+Starting the application...
+DHT sensor connected
+
+Successfully initialized ADC_LINE(0)
+
+Red led ready!
+Green led ready!
+Yellow led ready!
+Blue led ready!
+White led ready!
+
+Gas/Smoke buzzer ready!
+Temperature buzzer ready!
+
+Setting up MQTT-SN.
+Connecting to MQTT-SN broker fe80::1 port 1885.
+Successfully connected to gateway at [fe80::1]:1885
+
+Now subscribed to device/1/temperature
+
+Now subscribed to device/1/gas_smoke
+
+Now subscribed to switchMode/device/1
+
+Now subscribed to manageActuators/device/1
+
+Creating thread for sampling temperature...
+No arguments for thread temp
+I'm temperature thread with pid 6
+Temperature thread created...
+Creating thread for sampling ppm...
+No arguments for thread temp
+I'm gas/smoke thread with pid 7
+Gas/smoke thread created...
+
+[GAS/SMOKE] mode: auto
+ppm: 65
+[GAS/SMOKE] ALL OK!
+### got publication for topic 'device/1/gas_smoke' [2] ###
+{ "ppm": 65, "gas_smoke_state": "ALL_OK!" }
+
+[TEMPERATURE] mode: auto
+temperature: 22°C
+[TEMPERATURE] ALL OK!
+### got publication for topic 'device/1/temperature' [1] ###
+{ "temperature": 22, "temperature_state": "ALL OK!" }
+
+[GAS/SMOKE] mode: auto
+ppm: 66
+[GAS/SMOKE] WARNING!!!
+### got publication for topic 'device/1/gas_smoke' [2] ###
+{ "ppm": 66, "gas_smoke_state": "WARNING!" }
+
+[GAS/SMOKE] mode: auto
+ppm: 67
+[GAS/SMOKE] WARNING!!!
+### got publication for topic 'device/1/gas_smoke' [2] ###
+{ "ppm": 67, "gas_smoke_state": "WARNING!" }
+
+```
+
+
+
 ## The code
 All details about the code can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/code.md).
+
