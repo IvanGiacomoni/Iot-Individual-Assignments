@@ -33,7 +33,7 @@ Speaking about the actuators, their purposes are strictly connected to data retr
 - **buzzer**, used to notify people, together with the blue led, that actual amounts of gas or smoke measured by the MQ-2 sensor are **above the control threshold**
 
 ## Data collected
-The DHT22 is a **digital** sensor that converts the analog signals to digital so that it can be easily read by the MCU. Features are the following:
+The **DHT22** sensor is a **digital** sensor that converts the analog signals to digital so that it can be easily read by the MCU. Features are the following:
 
 - Dimensions: 28mm X 12mm X 10mm
 - Unit of measurement: Celsius degrees
@@ -42,7 +42,7 @@ The DHT22 is a **digital** sensor that converts the analog signals to digital so
 
 More info can be found [here](https://learn.adafruit.com/dht).
 
-It is made up of three pins:
+It is made up of **three pins**:
 
 - **VCC pin** for the power supply voltage of 5V
 - **out pin** for the connection to a digital pin where the signal is taken
@@ -52,7 +52,7 @@ Below we can see an image of the DHT-22 sensor:
 
 ![img](https://m.media-amazon.com/images/I/61OFHCBgTaL._AC_UL320_.jpg)
 
-The MQ-2 sensor is an analog sensor. Features are the following:
+The **MQ-2** sensor is an **analog** sensor. Features are the following:
 
 - Unit of measurement: parts per million
 - Temperature measurement range: [100, 10000] ppm 
