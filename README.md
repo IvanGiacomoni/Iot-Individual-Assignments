@@ -363,7 +363,7 @@ Temperature:<br/><br/>
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_topic_aws.png)
 <br/><br/>
 
-Gas/Smoke:
+Gas/Smoke:<br/><br/>
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_topic_aws.png)
 <br/><br/>
 
