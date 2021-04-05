@@ -290,7 +290,7 @@ Be sure to use same names as these above for the environment variables.
 - Open another terminal in the root folder of the project
 - Launch the application by flashing the code into the STM-32 board with **make BOARD=nucleo-f401re flash term**
 
-Below I show a picture of the three consoles running, on the top left we have the rsbm broker, on the top right we have the nodeJS server, on the bottom we have the STM-32 board:
+Below I show a picture of the three **consoles** running, on the top left we have the rsbm broker, on the top right we have the nodeJS server, on the bottom we have the STM-32 board:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/consoles.png)
 
@@ -357,58 +357,58 @@ ppm: 67
 { "ppm": 67, "gas_smoke_state": "WARNING!" }
 
 ```
-On AWS we can see both temperature and gas/smoke values arriving on topics device/1/temperature and device/1/gas_smoke.<br/><br/>
-Temperature:<br/><br/>
+On AWS we can see both temperature and gas/smoke values arriving on topics **device/1/temperature** and **device/1/gas_smoke**.<br/><br/>
+**Temperature:**<br/><br/>
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_topic_aws.png)
 <br/><br/>
 
-Gas/Smoke:<br/><br/>
+**Gas/Smoke:**<br/><br/>
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_topic_aws.png)
 <br/><br/>
 
-As said before, data are saved into DynamoDB into two different tables, one for temperature and the other one for gas and smoke data.<br/><br/>
-Temperature:<br/><br/>
+As said before, data are saved into **DynamoDB** into **two** different tables**, one for temperature and the other one for gas and smoke data.<br/><br/>
+**Temperature:**<br/><br/>
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_data_dynamoDB.png)
 <br/><br/>
-Gas/Smoke:<br/><br/>
+**Gas/Smoke:**<br/><br/>
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_data_dynamoDB.png)<br/><br/>
 
-The server will be available at *http://localhost:8080/*, where we can see the homepage:
+The server will be available at ***http://localhost:8080/***, where we can see the **homepage**:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/homepage.png)
 
-If we click on *Temperature* we will see the temperature values received during the last hour from the DHT-22 sensor for each device:
+If we click on *Temperature* we will see the **temperature values received during the last hour** from the DHT-22 sensor for each device:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_last_hour_values.png)
 
-By clicking on *Last values*, we will see the latest values received from the DHT-22 sensor for each device.
+By clicking on *Last values*, we will see the **latest values** received from the DHT-22 sensor for each device.
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_latest_values.png)
 
-By clicking on *Back* and then on *Last hour aggregated values*, we will see the aggregated values (average, minimum and maximum) for the DHT-22 sensor during the last hour for each device.
+By clicking on *Back* and then on *Last hour aggregated values*, we will see the **aggregated values (average, minimum and maximum)** for the DHT-22 sensor **retrieved during the last hour** for each device.
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_aggregated.png)
 
-All this could be seen also for gas and smoke values retrieved from the MQ-2 sensor. So below I show the last hour values for each device:
+All this could be seen also for **gas and smoke values** retrieved from the MQ-2 sensor. So below I show the **last hour values** for each device:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_last_hour_values.png)
 
-Below we can see the latest values for each device:
+Below we can see the **latest values** for each device:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_latest_values.png)
 
-Below we can see the aggregated values (average, minimum and maximum) retrieved during the last hour for each device:
+Below we can see the **aggregated values (average, minimum and maximum) retrieved during the last hour** for each device:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_aggregated.png)
 
-If we go back to last hour temperature values, by clicking on *Actuators* we have the possibility to switch mode for the application (auto and manual), and also to manage the red led and the temperature buzzer, for each device. If we consider device 1, by clicking on *Manual*, we will get this message on the website:
+If we go back to last hour temperature values, by clicking on *Actuators* we have the possibility to **switch mode** for the application **(auto and manual)**, and also to **manage** the red led and the temperature buzzer, for each device. If we consider device 1, by clicking on *Manual*, we will get this message on the website:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/switchToManual.png)
 
-On AWS we will get this message under the switchMode/device/1 topic:
+On AWS we will get this message under the **switchMode/device/1 topic**:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/switchMode_topic_aws.png)
 
@@ -431,7 +431,7 @@ At this point, if we click, for example, on *red led ON*, we get this message on
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/red_led_ON.png)
 
-On AWS we will get this message under the manageActuators/device/1 topic, and we got an error for the same reason as before:
+On AWS we will get this message under the **manageActuators/device/1** topic, and we got an error for the same reason as before:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/manageActuators_topic_aws.png)
 
