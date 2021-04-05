@@ -433,7 +433,7 @@ At this point, if we click, for example, on *red led ON*, we get this message on
 
 On AWS we will get this message under the **manageActuators/device/1** topic, and we got an error for the same reason as before:
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/manageActuators_topic_aws.png)
+![img]()
 
 Also, on the console we can see these messages:
 
