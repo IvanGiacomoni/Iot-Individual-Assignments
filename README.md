@@ -367,7 +367,7 @@ On AWS we can see both temperature and gas/smoke values arriving on topics **dev
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_topic_aws.png)
 <br/><br/>
 
-As said before, data are saved into **DynamoDB** into **two** different tables**, one for temperature and the other one for gas and smoke data.<br/><br/>
+As said before, data are saved into **DynamoDB** into **two different tables**, one for temperature and the other one for gas and smoke data.<br/><br/>
 **Temperature:**<br/><br/>
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_data_dynamoDB.png)
