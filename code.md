@@ -171,7 +171,7 @@ At this point, we have all sensors and actuators ready, so we need to setup **MQ
 static emcute_sub_t subscriptions[NUMOFSUBS];
 ```
 
-In the [Makefile](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/Makefile) we specify our MQTT topics:
+In the [Makefile](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/Makefile) we specify our **MQTT topics**:
 
 ```
 MQTT_TOPIC_TEMP = device/1/temperature
