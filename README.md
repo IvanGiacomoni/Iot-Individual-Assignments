@@ -357,7 +357,7 @@ ppm: 67
 { "ppm": 67, "gas_smoke_state": "WARNING!" }
 
 ```
-On AWS we can see both temperature and gas/smoke values arriving on topics device/1/temperature and device/1/gas_smoke.<br/>
+On AWS we can see both temperature and gas/smoke values arriving on topics device/1/temperature and device/1/gas_smoke.<br/><br/>
 Temperature:<br/>
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_topic_aws.png)
@@ -372,9 +372,9 @@ Temperature:<br/>
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_data_dynamoDB.png)
 <br/>
-Gas/Smoke:<br/>
+Gas/Smoke:<br/><br/>
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_data_dynamoBD.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_data_dynamoDB.png)
 
 The server will be available at *http://localhost:8080/*, where we can see the homepage:
 
