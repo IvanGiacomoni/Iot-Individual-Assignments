@@ -284,10 +284,6 @@ Be sure to use same names as these above for the environment variables.
 - Open another terminal in the root folder of the project
 - Launch the application by flashing the code into the STM-32 board with **make BOARD=nucleo-f401re flash term**
 
-The server will be available at *http://localhost:8080/*, where we can see the homepage:
-
-HOMEPAGE
-
 When we flash the code into the board, on the console we can see these debug prints:
 
 ```
@@ -351,8 +347,13 @@ ppm: 67
 { "ppm": 67, "gas_smoke_state": "WARNING!" }
 
 ```
+The server will be available at *http://localhost:8080/*, where we can see the homepage:
 
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/homepage.jpeg)
 
+If we click on *Temperature* we will see the temperature values received during the last hour from the DHT-22 sensor:
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_last_hour_values.jpeg)
 
 ## The code
 All details about the code can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/code.md).
