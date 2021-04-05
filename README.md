@@ -280,7 +280,7 @@ Be sure to use same names as these above for the environment variables.
 
 **NOTE!** The access key id, the secret access key and the session token provided by AWS expire after a while, so you have to manually re-set them in the .env file when this happens.
 
-### Launching the application
+## Launching the application
 
 - Open a terminal
 - Start the mosquitto broker by launching **service mosquitto start**
