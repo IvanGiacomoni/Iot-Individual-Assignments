@@ -243,7 +243,7 @@ We also need to include this **header** in the [main.c](https://github.com/IvanG
 #include "fmt.h"
 ```
 
-Finally, the string value is converted to **integer** by using the *atoi* function of the **stdlib.h** library of C. All is resumed in the *readTemperatureByDHT* function:
+Finally, the string value is converted to **integer** by using the *atoi* function of the **stdlib.h** library of C. All is summarized in the *readTemperatureByDHT* function:
 
 ```
 int readTemperatureByDHT(void){
@@ -329,7 +329,7 @@ For gas and smoke, we need to setup only one threshold in the [main.c](https://g
 ```
 #define PPM_THRESHOLD               60
 ```
-For gas and smoke, we exploit the **ADC line**, and all is resumed in the *readPpmByMQ2* function:
+For gas and smoke, we exploit the **ADC line**, and all is summarized in the *readPpmByMQ2* function:
 
 ```
 int readPpmByMQ2(void){
