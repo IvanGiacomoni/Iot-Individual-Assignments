@@ -357,6 +357,15 @@ On AWS we can see both temperature and gas/smoke values arriving on topics devic
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_topic_aws.png)
 
+As said before, data are saved into DynamoDB into two different tables, one for temperature and the other one for gas and smoke data.<br/>
+Temperature:
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_data_dynamoDB.png)
+
+Gas/Smoke:
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_data_DynamoBD.png)
+
 The server will be available at *http://localhost:8080/*, where we can see the homepage:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/homepage.png)
