@@ -358,14 +358,14 @@ ppm: 67
 
 ```
 On AWS we can see both temperature and gas/smoke values arriving on topics device/1/temperature and device/1/gas_smoke.<br/><br/>
-Temperature:<br/>
+Temperature:<br/><br/>
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_topic_aws.png)
-<br/>
+<br/><br/>
 
 Gas/Smoke:
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_topic_aws.png)
-<br/>
+<br/><br/>
 
 As said before, data are saved into DynamoDB into two different tables, one for temperature and the other one for gas and smoke data.<br/><br/>
 Temperature:<br/><br/>
