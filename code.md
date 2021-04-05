@@ -41,7 +41,7 @@ The function assigns the **D2 pin** for the DHT-22 sensor, and this is done by u
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/conversions.png)
 
 ## Initializing leds and buzzers
-By using this picture, we can use the same logic to **initialize the pins for leds and buzzers** (for more info see [this](https://github.com/IvanGiacomoni/Iot-Individual-Assignments#wiring-of-components), respectively with the *initializeLeds* and the *initializeBuzzers* functions:
+By using this picture, we can use the same logic to **initialize the pins for leds and buzzers**, respectively with the *initializeLeds* and the *initializeBuzzers* functions (for more info see [this](https://github.com/IvanGiacomoni/Iot-Individual-Assignments#wiring-of-components)). Below I show the two functions:
 
 ```
 void initializeLeds(void){
