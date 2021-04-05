@@ -284,7 +284,7 @@ Be sure to use same names as these above for the environment variables.
 - Open another terminal in the root folder of the project
 - Launch the application by flashing the code into the STM-32 board with **make BOARD=nucleo-f401re flash term**
 
-When we flash the code into the board, on the console we can see these debug prints:
+When we flash the code into the board, the application will start in *auto* mode, and on the console we can see these debug prints:
 
 ```
 Starting the application...
@@ -347,6 +347,12 @@ ppm: 67
 { "ppm": 67, "gas_smoke_state": "WARNING!" }
 
 ```
+On AWS we can see both temperature and gas/smoke values arriving on topics device/1/temperature and device/1/gas_smoke:
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_topic_aws.png)
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_topic_aws.png)
+
 The server will be available at *http://localhost:8080/*, where we can see the homepage:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/homepage.png)
@@ -374,6 +380,21 @@ Below we can see the latest values for each device:
 Below we can see the aggregated values (average, minimum and maximum) retrieved during the last hour for each device:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_aggregated.png)
+
+If we go back to last hour temperature values, by clicking on *Actuators* we have the possibility to switch mode for the application (auto and manual), and also to manage the red led and the temperature buzzer, for each device. If we consider device 1, by clicking on *Manual*, we will get this message on the website:
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_actuators.png)
+
+On AWS we will get this message on under the switchMode/device/1 topic:
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/switchMode_topic_aws.png)
+
+Notice that we get an error because we are sending a normal string message, but we can ignore it.
+Also, on the console we can see these messages:
+
+```
+messaggi console
+```
 
 ## The code
 All details about the code can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/code.md).
