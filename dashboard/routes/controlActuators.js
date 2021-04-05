@@ -30,7 +30,7 @@ router.post("/switchMode", async (req, res) => {
 		.on('connect', function() {
 			console.log('connect');
 			device.subscribe(myTopic);
-			device.publish(myTopic, mode+'\0');
+			device.publish(myTopic, mode+";"+device_id+'\0');
 		});
 		
 		device
@@ -66,7 +66,7 @@ router.post("/manageActuators", async (req, res) => {
 		.on('connect', function() {
 			console.log('connect');
 			device.subscribe(myTopic);
-			device.publish(myTopic, actuator+";"+dataType+";"+operation+'\0');
+			device.publish(myTopic, actuator+";"+dataType+";"+operation+";"+device_id+'\0');
 		});
 		
 		device
