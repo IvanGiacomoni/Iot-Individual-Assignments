@@ -40,6 +40,8 @@ The DHT22 is a **digital** sensor that converts the analog signals to digital so
 - Temperature measurement range: [-40 , 80] ° C
 - Periodicity of the measurements: 10 seconds
 
+More info can be found [here](https://learn.adafruit.com/dht).
+
 It is made up of three pins:
 
 - **VCC pin** for the power supply voltage of 5V
@@ -55,6 +57,8 @@ The MQ-2 sensor is an analog sensor. Features are the following:
 - Unit of measurement: parts per million
 - Temperature measurement range: [100, 10000] ppm 
 - Periodicity of the measurements: 2 seconds
+
+More info can be found [here](https://www.az-delivery.de/en/products/gas-sensor-modul).
 
 It is made up of four pins:
 
@@ -100,10 +104,10 @@ This is done because there could be situations in which the manual mode could be
 ## Topics
 Below I list the main topics used by the system:
 
-- **device/+/temperature:** used to publish temperature data from a device with a certain id towards Iot-Core
-- **device/+/gas_smoke:** used to publish gas/smoke data from a device with a certain id towards Ior-Core
-- **switchMode/device/+:** used to publish towards a device with a certain id the indication of switching to auto/manual mode
-- **manageActuators/device/+:** used to publish towards a device with a certain id the indication of turning on/off a certain actuator
+- **device/<device_id>/temperature:** used to publish temperature data from a device with a certain id towards Iot-Core
+- **device/<device_id>/gas_smoke:** used to publish gas/smoke data from a device with a certain id towards Ior-Core
+- **switchMode/device/<device_id>:** used to publish towards a device with a certain id the indication of switching to auto/manual mode
+- **manageActuators/device/<device_id>:** used to publish towards a device with a certain id the indication of turning on/off a certain actuator
 
 ## Setup
 
@@ -181,7 +185,7 @@ Then, you need so sign in in [AWS](https://aws.amazon.com/education/awseducate/)
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/subscribe_aws.png)
 
-Then by going in the Rules section you have to create two **rules**, one for temperature data and one for gas and smoke data, specifying as topics device/+/temperature and device/+/gas_smoke respectively, and as operation you need to choose "Insert a message into a DynamoDB table". Here you can find a [tutorial](https://docs.aws.amazon.com/iot/latest/developerguide/iot-ddb-rule.html).
+Then by going in the Rules section you have to create two **rules**, one for temperature data and one for gas and smoke data, specifying as topics device/<device_id>/temperature and device/<device_id>/gas_smoke respectively, and as operation you need to choose "Insert a message into a DynamoDB table". Here you can find a [tutorial](https://docs.aws.amazon.com/iot/latest/developerguide/iot-ddb-rule.html).
 
 **Temperature rule:**
 
@@ -214,6 +218,8 @@ connection local_bridge_to_mosquitto
   topic switchMode/device/+ both
   topic manageActuators/device/+ both
 ```
+
+**NOTE**: '+' stands for 'at least one character' by the syntax of regular expressions, but in our case it will be filled with the device id.
 
 Also, you need to set up a **bridge.conf** file in order to have the bridging between Iot-Core and RSMB:
 
@@ -283,7 +289,7 @@ Be sure to use same names as these above for the environment variables.
 ## Launching the application
 
 - Open a terminal
-- Start the mosquitto broker by launching **service mosquitto start**
+- Start the mosquitto broker by launching **service mosquitto start** or **service mosquitto restart** 
 - Now go into the folder where you have your config.conf file, and start the RSMB broker with **./broker_mqtts config.conf**
 - Open another terminal in the dashboard folder
 - Launch the nodeJS server with **node index.js** or **nodemon** (if you installed it)
