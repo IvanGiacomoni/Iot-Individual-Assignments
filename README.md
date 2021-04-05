@@ -367,14 +367,14 @@ Gas/Smoke:
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_topic_aws.png)
 <br/>
 
-As said before, data are saved into DynamoDB into two different tables, one for temperature and the other one for gas and smoke data.<br/>
-Temperature:<br/>
+As said before, data are saved into DynamoDB into two different tables, one for temperature and the other one for gas and smoke data.<br/><br/>
+Temperature:<br/><br/>
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_data_dynamoDB.png)
-<br/>
+<br/><br/>
 Gas/Smoke:<br/><br/>
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_data_dynamoDB.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_data_dynamoDB.png)<br/><br/>
 
 The server will be available at *http://localhost:8080/*, where we can see the homepage:
 
