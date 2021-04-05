@@ -284,6 +284,10 @@ Be sure to use same names as these above for the environment variables.
 - Open another terminal in the root folder of the project
 - Launch the application by flashing the code into the STM-32 board with **make BOARD=nucleo-f401re flash term**
 
+Below I show a picture of the three consoles running, on the top left we have the rsbm broker, on the top right we have the nodeJS server, on the bottom we have the STM-32 board:
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/consoles.png)
+
 When we flash the code into the board, the application will start in *auto* mode, and on the console we can see these debug prints:
 
 ```
@@ -383,9 +387,9 @@ Below we can see the aggregated values (average, minimum and maximum) retrieved 
 
 If we go back to last hour temperature values, by clicking on *Actuators* we have the possibility to switch mode for the application (auto and manual), and also to manage the red led and the temperature buzzer, for each device. If we consider device 1, by clicking on *Manual*, we will get this message on the website:
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_actuators.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/switchToManual.png)
 
-On AWS we will get this message on under the switchMode/device/1 topic:
+On AWS we will get this message under the switchMode/device/1 topic:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/switchMode_topic_aws.png)
 
@@ -393,8 +397,36 @@ Notice that we get an error because we are sending a normal string message, but 
 Also, on the console we can see these messages:
 
 ```
-messaggi console
+### got publication for topic 'switchMode/device/1' [3] ###
+received: manual
+Switching to manual...
+
+[GAS/SMOKE] mode: manual
+[GAS/SMOKE] Now in manual mode
+
+[TEMPERATURE] mode: manual
+[TEMPERATURE] Now in manual mode
 ```
+
+At this point, if we click, for example, on *red led ON*, we get this message on the webpage:
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/red_led_ON.png)
+
+On AWS we will get this message under the manageActuators/device/1 topic, and we got an error for the same reason as before:
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/manageActuators_topic_aws.png)
+
+Also, on the console we can see these messages:
+
+```
+### got publication for topic 'manageActuators/device/1' [4] ###
+received: red_led;temperature;ON
+actuator: red_led
+typeData: temperature
+operation: ON
+```
+
+The same logic is applied for gas/smoke actuators.
 
 ## The code
 All details about the code can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/code.md).
