@@ -139,9 +139,11 @@ For each buzzer, we have to use a **resistor of 100 Ohm**, and we need to connec
 For the DHT-22 sensor we need to connect the **GND pin** to ground, the **VCC pin** to 5V on the breadboard and the **out pin** to the D2 pin of the board.
 For the MQ-2 sensor we need to connect the **GND pin** to ground, the **VCC pin** to 5V on the breadboard and the **AOUT pin** to the A0 pin of the board.
 
-Below we can see the wiring of components and a picture of the circuit:
+Below we can see the wiring of components:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/circuit/circuit_bb.png)
+
+Below I show a picture of the circuit:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/circuit/circuit_picture.jpeg)
 
@@ -179,9 +181,13 @@ Then, you need so sign in in [AWS](https://aws.amazon.com/education/awseducate/)
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/subscribe_aws.png)
 
-Then by going in the Rules section you have to create two **rules**, one for temperature data and one for gas and smoke data, specifying as topics device/+/temperature and device/+/gas_smoke respectively, and as operation you need to choose "Insert a message into a DynamoDB table". Here you can finb a [turorial](https://docs.aws.amazon.com/iot/latest/developerguide/iot-ddb-rule.html).
+Then by going in the Rules section you have to create two **rules**, one for temperature data and one for gas and smoke data, specifying as topics device/+/temperature and device/+/gas_smoke respectively, and as operation you need to choose "Insert a message into a DynamoDB table". Here you can find a [turorial](https://docs.aws.amazon.com/iot/latest/developerguide/iot-ddb-rule.html).
+
+Temperature rule:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temperature_rule.png)
+
+Gas/Smoke rule:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_rule.png)
 
