@@ -84,8 +84,8 @@ I want to specify that, based on the values of temperature and concentration of 
 
 **Gas/smoke states:**
 
-- ALL OK -> white led
-- WARNING -> blue led + buzzer
+- ALL OK! -> white led
+- WARNING! -> blue led + buzzer
 
 ## Architecture of the system
 
