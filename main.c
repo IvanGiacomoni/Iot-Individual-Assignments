@@ -53,29 +53,34 @@ gpio_t gas_smoke_buzzer, temp_buzzer;
 // Mode
 char* mode = "auto";
 
-
+// Turns on the led
 void led_ON(gpio_t led){
 	gpio_set(led);
 }
 
+// Turns off the led
 void led_OFF(gpio_t led){
 	gpio_clear(led);
 }
 
+// Turns on the buzzer
 void buzzer_ON(gpio_t buzzer){
 	gpio_set(buzzer);
 }
 
+// Turns off the buzzer
 void buzzer_OFF(gpio_t buzzer){
 	gpio_clear(buzzer);
 }
 
+// Emcute thread
 static void *emcute_thread(void *arg){
     (void)arg;
     emcute_run(CONFIG_EMCUTE_DEFAULT_PORT, EMCUTE_ID);
     return NULL;    /* should never be reached */
 }
 
+// Callback function for MQTT publishing 
 static void on_pub(const emcute_topic_t *topic, void *data, size_t len){
 	
 	fflush(stdout);
@@ -84,6 +89,7 @@ static void on_pub(const emcute_topic_t *topic, void *data, size_t len){
 
 	printf("### got publication for topic '%s' [%i] ###\n", topic->name, (int)topic->id);
     
+    // Switch mode
     if(strcmp(topic->name, SWITCH_MODE_DEVICE_1) == 0){
 		
 		fflush(stdout);
@@ -96,7 +102,7 @@ static void on_pub(const emcute_topic_t *topic, void *data, size_t len){
 		char *device_id = strtok(NULL, ";");
 		printf("device_id: %s\n",device_id);
 		
-		
+		// Manual
 		if(strcmp(rcv_mode, "manual") == 0){
 			if(strcmp(mode, "auto") == 0){
 				printf("[Device %s] Switching to manual...\n",device_id);
@@ -109,6 +115,7 @@ static void on_pub(const emcute_topic_t *topic, void *data, size_t len){
 			}
 		}
 		
+		// Auto
 		else if(strcmp(rcv_mode, "auto") == 0){
 			
 			if(strcmp(mode, "manual") == 0){
@@ -135,6 +142,7 @@ static void on_pub(const emcute_topic_t *topic, void *data, size_t len){
 		fflush(stdout);
 	}
 	
+	// Control state of actuators
 	else if(strcmp(topic->name, MANAGE_ACTUATORS_DEVICE_1) == 0){
 		
 		fflush(stdout);
@@ -262,6 +270,7 @@ int setup_mqtt(void){
     return 1;
 }
 
+// Publish data towards AWS
 void publishDataForAws(char* data, emcute_topic_t* topic){
 	
 	if(emcute_pub(topic, data, strlen(data), EMCUTE_QOS_0) != EMCUTE_OK){
@@ -270,6 +279,7 @@ void publishDataForAws(char* data, emcute_topic_t* topic){
 	} 	
 }
 
+// Initialize leds
 void initializeLeds(void){
 	
 	// Red led initialization
@@ -328,6 +338,7 @@ void initializeLeds(void){
 	}
 }
 
+// Initialize buzzers
 void initializeBuzzers(void){
 	
 	// Gas/Smoke buzzer initialization
@@ -353,6 +364,7 @@ void initializeBuzzers(void){
 	}
 }
 
+// Initialize ADC line
 void initializeADCLine(void){
 	if (adc_init(ADC_IN_USE) < 0) {
         printf("Initialization of ADC_LINE(%u) failed\n", ADC_IN_USE);
@@ -363,6 +375,7 @@ void initializeADCLine(void){
     }
 }
 
+// Initialize DHT sensor
 void initializeDHT(void){
 	
 	// Initializing DHT_22 parameters
@@ -381,6 +394,7 @@ void initializeDHT(void){
 	}
 }
 
+// Reads from MQ-2 sensor
 int readPpmByMQ2(void){
 	
 	int mq2_sample = adc_sample(ADC_IN_USE, ADC_RES);
@@ -394,6 +408,7 @@ int readPpmByMQ2(void){
     return ppm;
 }
 
+// Reads from DHT-22 sensor
 int readTemperatureByDHT(void){
 	int16_t temp, hum;
 	if (dht_read(&dev, &temp, &hum) != DHT_OK) {
@@ -412,6 +427,7 @@ int readTemperatureByDHT(void){
 	return temp_int;
 }
 
+// Subsribes to a topic
 void mqttSubscribeTo(char* topic_name, int pos_into_subscriptions){
 	unsigned flags = EMCUTE_QOS_0;
     subscriptions[pos_into_subscriptions].cb = on_pub;
@@ -431,6 +447,7 @@ void mqttSubscribeTo(char* topic_name, int pos_into_subscriptions){
 static char stackThreadTemp[THREAD_STACKSIZE_DEFAULT];
 static char stackThreadGasSmoke[THREAD_STACKSIZE_DEFAULT];
 
+// Temperature thread
 static void* threadTemp(void *arg){
 	// using arg in order to avoid compilation errors
 	void* args = arg;
@@ -523,6 +540,7 @@ static void* threadTemp(void *arg){
     return NULL;    
 }
 
+// Gas-smoke thread
 static void* threadGasSmoke(void* arg){
     // using arg in order to avoid compilation errors
     void* args = arg;
