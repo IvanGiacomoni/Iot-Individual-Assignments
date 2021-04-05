@@ -103,7 +103,7 @@ Below I list the main topics used by the system:
 - **device/+/temperature:** used to publish temperature data from a device with a certain id towards Iot-Core
 - **device/+/gas_smoke:** used to publish gas/smoke data from a device with a certain id towards Ior-Core
 - **switchMode/device/+:** used to publish towards a device with a certain id the indication of switching to auto/manual mode
-- **controlActuators/device/+:** used to publish towards a device with a certain id the indication of turning on/off a certain actuator
+- **manageActuators/device/+:** used to publish towards a device with a certain id the indication of turning on/off a certain actuator
 
 ## Setup
 
