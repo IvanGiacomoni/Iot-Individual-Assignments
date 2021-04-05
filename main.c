@@ -22,7 +22,7 @@
 #define TEMP_THRESHOLD_MIN          23
 #define TEMP_THRESHOLD_MAX          24
 
-#define PPM_THRESHOLD               54
+#define PPM_THRESHOLD               65
 
 #define EMCUTE_PRIO         (THREAD_PRIORITY_MAIN - 1)
 
@@ -90,22 +90,29 @@ static void on_pub(const emcute_topic_t *topic, void *data, size_t len){
 		
 		printf("received: %s\n",in);
 		
-		if(strcmp(in, "manual") == 0){
+		char* rcv_mode = strtok(in, ";");
+		printf("rcv_mode: %s\n", rcv_mode);
+		
+		char *device_id = strtok(NULL, ";");
+		printf("device_id: %s\n",device_id);
+		
+		
+		if(strcmp(rcv_mode, "manual") == 0){
 			if(strcmp(mode, "auto") == 0){
-				printf("Switching to manual...\n");
+				printf("[Device %s] Switching to manual...\n",device_id);
 				xtimer_sleep(2);
 				
 				mode = "manual";
 			}
 			else if(strcmp(mode, "manual") == 0){
-				printf("Already in manual mode!\n");
+				printf("[Device %s] Already in manual mode!\n", device_id);
 			}
 		}
 		
-		else if(strcmp(in, "auto") == 0){
+		else if(strcmp(rcv_mode, "auto") == 0){
 			
 			if(strcmp(mode, "manual") == 0){
-				printf("Switching to auto...\n");
+				printf("[Device %s] Switching to auto...\n",device_id);
 				
 				led_OFF(red_led);
 				led_OFF(green_led);
@@ -121,7 +128,7 @@ static void on_pub(const emcute_topic_t *topic, void *data, size_t len){
 				
 			}
 			else if(strcmp(mode, "auto") == 0){
-				printf("Already in auto mode!\n");
+				printf("[Device %s] Already in auto mode!\n",device_id);
 			}
 		}
 		printf("\n");
@@ -142,6 +149,9 @@ static void on_pub(const emcute_topic_t *topic, void *data, size_t len){
 		
 		char *operation = strtok(NULL, ";");
 		printf("operation: %s\n", operation);
+		
+		char *device_id = strtok(NULL, ";");
+		printf("device_id: %s\n",device_id);
 		
 		if(strcmp(typeData, "temperature") == 0){
 			
