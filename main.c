@@ -469,7 +469,7 @@ static void* threadTemp(void *arg){
 				led_OFF(yellow_led);
 			
 				led_ON(red_led);
-				//buzzer_ON(temp_buzzer);
+				buzzer_ON(temp_buzzer);
 			}
 		
 			else if (temperature > TEMP_THRESHOLD_MIN && temperature <= TEMP_THRESHOLD_MAX){
@@ -553,7 +553,7 @@ static void* threadGasSmoke(void* arg){
 			
 				led_ON(blue_led);
 				led_OFF(white_led);
-				//buzzer_ON(gas_smoke_buzzer);
+				buzzer_ON(gas_smoke_buzzer);
 			}
 		
 			else if(ppm <= PPM_THRESHOLD){
