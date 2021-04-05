@@ -195,6 +195,8 @@ Then by going in the Rules section you have to create two **rules**, one for tem
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_rule.png)
 
+So it is clear that we will create **two DynamoDb tables**, one for each rule: particularly, each entry of both tables is made up of the **Unix timestamp** associated to the creation of that entry, that will be useful for quering the last hour values of temperature and gas/smoke, the **device_id** of the device who has sampled that value, and the **payload**, which consists of the **value** sampled and the **state** associated to that value. 
+
 ### Installing and setup Mosquitto broker
 Now you have to install the **Mosquitto broker**, more info and details can be found [here](https://aws.amazon.com/it/blogs/iot/how-to-bridge-mosquitto-mqtt-broker-to-aws-iot/). After doing this, you have to modify the previous config.conf file by adding the topics I mentioned before, so at this point the **config.conf** file should look like this:
 
