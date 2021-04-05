@@ -349,11 +349,31 @@ ppm: 67
 ```
 The server will be available at *http://localhost:8080/*, where we can see the homepage:
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/homepage.jpeg)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/homepage.png)
 
-If we click on *Temperature* we will see the temperature values received during the last hour from the DHT-22 sensor:
+If we click on *Temperature* we will see the temperature values received during the last hour from the DHT-22 sensor for each device:
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_last_hour_values.jpeg)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_last_hour_values.png)
+
+By clicking on *Last values*, we will see the latest values received from the DHT-22 sensor for each device.
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_latest_values.png)
+
+By clicking on *Back* and then on *Last hour aggregated values*, we will see the aggregated values (average, minimum and maximum) for the DHT-22 sensor during the last hour for each device.
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_aggregated.png)
+
+All this could be seen also for gas and smoke values retrieved from the MQ-2 sensor. So below I show the last hour values for each device:
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_last_hour_values.png)
+
+Below we can see the latest values for each device:
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_latest_values.png)
+
+Below we can see the aggregated values (average, minimum and maximum) retrieved during the last hour for each device:
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_aggregated.png)
 
 ## The code
 All details about the code can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/code.md).
