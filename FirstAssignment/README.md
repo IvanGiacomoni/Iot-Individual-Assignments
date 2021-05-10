@@ -1,4 +1,4 @@
-# Gas-Leaks-And-Fires-Notifier
+# First assignment
 
 ## Sensors
 The environment will be monitored with the help of **two sensors**, which will help us to retrieve the data that are useful to our analysis:
