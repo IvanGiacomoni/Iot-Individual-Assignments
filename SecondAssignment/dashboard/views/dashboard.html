@@ -168,7 +168,7 @@
 				
 					<div class="card border-success mt-3">
 						<div class="card-body">
-						<h5 class="card-title"><b>LATEST TEMPERATURE AGGREGATED VALUES</b></h5>
+						<h5 class="card-title"><b>LATEST TEMPERATURE AGGREGATED VALUES FOR EACH DEVICE</b></h5>
                 
 							<!--  TABLE  -->
                 
@@ -192,6 +192,50 @@
 											<td>{{device.maxTemp}}</td>
 											<td>{{device.minTemp}}</td>
 											<td>{{device.avgTemp}}</td>
+										</tr>
+                            
+									</tbody>
+								</table>
+							</div>
+							<!--
+							<div class="row">
+								<div class="col">
+									<button @click="backToTempData" type="button" class="btn mt-1">Back</button>
+								</div>
+							</div>
+							-->
+							
+						</div>
+					</div>
+					
+				</center>
+				
+				<center>
+				
+					<div class="card border-success mt-3">
+						<div class="card-body">
+						<h5 class="card-title"><b>LATEST TEMPERATURE AGGREGATED VALUES TOTAL</b></h5>
+                
+							<!--  TABLE  -->
+                
+							<div class="table-responsive table-borderless" style="height:200px">
+								<table class="table">
+                        
+									<!--  TABLE HEADER -->
+									<thead class="thead-light">
+										<tr>
+											<th scope="col">Max value</th>
+											<th scope="col">Min value</th>
+											<th scope="col">Avg value</th>
+										</tr>
+									</thead>
+
+									<!--  TABLE BODY -->
+									<tbody>
+										<tr>
+											<td>{{tempAggregatedTotal.maxTempTotal}}</td>
+											<td>{{tempAggregatedTotal.minTempTotal}}</td>
+											<td>{{tempAggregatedTotal.avgTempTotal}}</td>
 										</tr>
                             
 									</tbody>
@@ -394,7 +438,7 @@
 				
 					<div class="card border-success mt-3">
 						<div class="card-body">
-						<h5 class="card-title"><b>LATEST GAS/SMOKE AGGREGATED VALUES</b></h5>
+						<h5 class="card-title"><b>LATEST GAS/SMOKE AGGREGATED VALUES FOR EACH DEVICE</b></h5>
                 
 							<!--  TABLE  -->
                 
@@ -418,6 +462,51 @@
 											<td>{{device.maxPpm}}</td>
 											<td>{{device.minPpm}}</td>
 											<td>{{device.avgPpm}}</td>
+										</tr>
+                            
+									</tbody>
+								</table>
+							</div>
+							
+							<!--
+							<div class="row">
+								<div class="col">
+									<button @click="backToGasSmokeData" type="button" class="btn mt-1">Back</button>
+								</div>
+							</div>
+							-->
+							
+						</div>
+					</div>
+					
+				</center>
+				
+				<center>
+				
+					<div class="card border-success mt-3">
+						<div class="card-body">
+						<h5 class="card-title"><b>LATEST GAS/SMOKE AGGREGATED VALUES TOTAL</b></h5>
+                
+							<!--  TABLE  -->
+                
+							<div class="table-responsive table-borderless" style="height:200px">
+								<table class="table">
+                        
+									<!--  TABLE HEADER -->
+									<thead class="thead-light">
+										<tr>
+											<th scope="col">Max value</th>
+											<th scope="col">Min value</th>
+											<th scope="col">Avg value</th>
+										</tr>
+									</thead>
+
+									<!--  TABLE BODY -->
+									<tbody>
+										<tr>
+											<td>{{ppmAggregatedTotal.maxPpmTotal}}</td>
+											<td>{{ppmAggregatedTotal.minPpmTotal}}</td>
+											<td>{{ppmAggregatedTotal.avgPpmTotal}}</td>
 										</tr>
                             
 									</tbody>
@@ -534,6 +623,18 @@
                 devicesIdTemp: [],
                 devicesIdGasSmoke: [],
                 
+                tempAggregatedTotal: {
+				    "minTempTotal": 0,
+				    "maxTempTotal": 0,
+				    "avgTempTotal": 0.0	
+				},
+				
+				ppmAggregatedTotal: {
+				    "minPpmTotal": 0,
+				    "maxPpmTotal": 0,
+				    "avgPpmTotal": 0.0
+				},
+                
                 mode: "auto",
             },
             
@@ -614,10 +715,19 @@
 					this.temperatureActuators = false;
 					this.gasSmokeActuators = false;
 					
-					// Getting latest temperature aggregated values
+					// Getting latest temperature aggregated values for each device
 					this.$http.get('http://localhost:8080/getTemperatureAggregatedValues').then(response => {
 					
 						this.temperatureAggregatedValues = response.body;
+
+					}, response => {
+						// error callback
+					})
+					
+					// Getting latest temperature aggregated values total
+					this.$http.get('http://localhost:8080/getTemperatureAggregatedValuesTotal').then(response => {
+					
+						this.tempAggregatedTotal = response.body;
 
 					}, response => {
 						// error callback
@@ -648,10 +758,19 @@
 					this.temperatureActuators = false;
 					this.gasSmokeActuators = false;
 					
-					// Getting latest gas/smoke aggregated values
+					// Getting latest gas/smoke aggregated values for each device
 					this.$http.get('http://localhost:8080/getGasSmokeAggregatedValues').then(response => {
 					
 						this.gasSmokeAggregatedValues = response.body;
+
+					}, response => {
+						// error callback
+					})
+					
+					// Getting latest gas/smoke aggregated values total
+					this.$http.get('http://localhost:8080/getGasSmokeAggregatedValuesTotal').then(response => {
+					
+						this.ppmAggregatedTotal = response.body;
 
 					}, response => {
 						// error callback
