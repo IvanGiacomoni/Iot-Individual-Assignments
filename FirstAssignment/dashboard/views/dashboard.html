@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+
+    <script type="text/javascript" language="javascript">
+  
+    </script>
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css"
+  />
+    <title >Services available</title>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="container">
+        
+
+        <div id="app">
+			
+			<!-- DASHBOARD -->
+			
+			<div v-if="!showTemperature && !showGasSmoke && !showTemperatureAggregatedValues && !showGasSmokeAggregatedValues && !showTemperatureLatestValues && !showGasSmokeLatestValues && !temperatureActuators && !gasSmokeActuators">
+				
+				<center>
+				<div class="container">
+					<h3>Which type of data do you want to see?</h3>
+					
+					
+					<button @click="goToTemperature" class="btn">Temperature</button>
+					<button @click="goToGasSmoke"class="btn">Gas-Smoke</button>
+					
+				</center>
+				
+			</div>
+			
+			<!-- VIEW LATEST TEMPERATURE DATA -->
+			
+			<div v-if="showTemperature">
+				
+				<center>
+				
+					<div class="card border-success mt-3">
+						<div class="card-body">
+						<h5 class="card-title"><b>TEMPERATURE</b></h5>
+                
+							<!--  TABLE  -->
+                
+							<div class="table-responsive table-borderless" style="height:350px">
+								<table class="table">
+                        
+									<!--  TABLE HEADER -->
+									<thead class="thead-light">
+										<tr>
+											<th scope="col">Date</th>
+											<th scope="col">Device id</th>
+											<th scope="col">Value</th>
+											<th scope="col">State</th>
+										</tr>
+									</thead>
+
+									<!--  TABLE BODY -->
+									<tbody>
+										<tr v-for="entry in temperatureData" :key="entry.sample_time" :class="changeClassTemp(entry.device_data.temperature_state)">
+											<td>{{entry.sample_time}}</td>
+											<td>{{entry.device_id}}</td>
+											<td>{{entry.device_data.temperature}}</td>
+											<td>{{entry.device_data.temperature_state}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							
+							<div class="row">
+								<div class="col">
+									<button @click="backToStart" type="button" class="btn mt-1">Back</button>
+								</div>
+								
+								<div class="col">
+									<button @click="goToLatestTempValues" type="button" class="btn mt-1">Last values</button>
+								</div>
+								
+								<div class="col">
+									<button @click="goToTempAggregatedValues" type="button" class="btn mt-1">Last hour aggregated values</button>
+								</div>
+								
+								<div class="col">
+									<button @click="goToTempActuators" type="button" class="btn mt-1">Actuators</button>
+								</div>
+							</div>
+							
+							
+						</div>
+					</div>
+					
+				</center>
+				
+			</div> <!-- v-if="showTemperatureLatestValues" CLOSED -->
+			
+			<!-- VIEW LATEST TEMPERATURE DATA -->
+			
+			<div v-if="showTemperatureLatestValues">
+				
+				<center>
+				
+					<div class="card border-success mt-3">
+						<div class="card-body">
+						<h5 class="card-title"><b>TEMPERATURE LATEST VALUES</b></h5>
+                
+							<!--  TABLE  -->
+                
+							<div class="table-responsive table-borderless" style="height:200px">
+								<table class="table">
+                        
+									<!--  TABLE HEADER -->
+									<thead class="thead-light">
+										<tr>
+											<th scope="col">Device id</th>
+											<th scope="col">Date</th>
+											<th scope="col">Value</th>
+											<th scope="col">State</th>
+										</tr>
+									</thead>
+
+									<!--  TABLE BODY -->
+									<tbody>
+										<tr v-for="device in temperatureLatestValues" :key="device.device_id" :class="changeClassTemp(device.state)">
+											<td>{{device.device_id}}</td>
+											<td>{{device.sample_time}}</td>
+											<td>{{device.value}}</td>
+											<td>{{device.state}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							
+							<div class="row">
+								<div class="col">
+									<button @click="backToTempData" type="button" class="btn mt-1">Back</button>
+								</div>
+							</div>
+							
+							
+						</div>
+					</div>
+					
+				</center>
+				
+			</div> <!-- v-if="showTemperatureLatestValues" CLOSED -->
+			
+			<!-- VIEW LATEST TEMPERATURE AGGREGATED VALUES -->
+			
+			<div v-if="showTemperatureAggregatedValues">
+				
+				<center>
+				
+					<div class="card border-success mt-3">
+						<div class="card-body">
+						<h5 class="card-title"><b>LATEST TEMPERATURE AGGREGATED VALUES</b></h5>
+                
+							<!--  TABLE  -->
+                
+							<div class="table-responsive table-borderless" style="height:200px">
+								<table class="table">
+                        
+									<!--  TABLE HEADER -->
+									<thead class="thead-light">
+										<tr>
+											<th scope="col">Device id</th>
+											<th scope="col">Max value</th>
+											<th scope="col">Min value</th>
+											<th scope="col">Avg value</th>
+										</tr>
+									</thead>
+
+									<!--  TABLE BODY -->
+									<tbody>
+										<tr v-for="device in temperatureAggregatedValues" :key="device.device_id">
+											<td>{{device.device_id}}</td>
+											<td>{{device.maxTemp}}</td>
+											<td>{{device.minTemp}}</td>
+											<td>{{device.avgTemp}}</td>
+										</tr>
+                            
+									</tbody>
+								</table>
+							</div>
+							
+							<div class="row">
+								<div class="col">
+									<button @click="backToTempData" type="button" class="btn mt-1">Back</button>
+								</div>
+							</div>
+							
+							
+						</div>
+					</div>
+					
+				</center>
+				
+			</div> <!-- v-if="showTemperatureAggregatedValues" CLOSED -->
+			
+			<!-- TEMPERATURE ACTUATORS -->
+			
+			<div v-if="temperatureActuators">
+				
+				<center>
+				
+					<div class="card border-success mt-3">
+						<div class="card-body">
+						<h5 class="card-title"><b>TEMPERATURE ACTUATORS</b></h5>
+                
+							<!--  TABLE  -->
+                
+							<div class="table table-borderless" style="height:350px">
+								<table class="table">
+									
+									<!--  TABLE HEADER -->
+									<thead class="thead-light">
+										<tr>
+											<th scope="col">Device id</th>
+											<th scope="col"></th>
+											<th scope="col"></th>
+											<th scope="col"></th>
+											<th scope="col"></th>
+											<th scope="col"></th>
+											<th scope="col"></th>
+										</tr>
+									</thead>
+									
+									<!--  TABLE BODY -->
+									<tbody>
+										<tr v-for="device in devicesIdTemp" :key="device">
+											<td>{{device}}</td>
+											<td><button @click="buzzerTempON" type="button" :id="device" class="btn my-buzzer-btn mt-1">Buzzer ON</button></td>
+											<td><button @click="buzzerTempOFF" type="button" :id="device" class="btn my-buzzer-btn mt-1">Buzzer OFF</button></td>
+											<td><button @click="redLedON" type="button" :id="device" class="btn my-red-btn mt-1">Red led ON</button></td>
+											<td><button @click="redLedOFF" type="button" :id="device" class="btn my-red-btn mt-1">Red led OFF</button></td>
+										    <td><button @click="switchModeManual" type="button" :id="device" class="btn mt-1" style="width:200px;">Manual</button></td>
+										    <td><button @click="switchModeAuto" type="button" :id="device" class="btn mt-1" style="width:200px;">Auto</button></td>
+										</tr>
+                            
+									</tbody>
+								</table>
+							</div>
+							
+							<div class="row">
+									<div class="col">
+										<button @click="backToTempData()" type="button" class="btn mt-1" style="width:200px;">Back</button>
+									</div>
+							</div>
+							
+						</div>
+					</div>
+					
+				</center>
+				
+			</div> <!-- v-if="temperatureActuators" CLOSED -->
+			
+			
+			<!-- VIEW LATEST GAS/SMOKE DATA -->
+			
+			<div v-if="showGasSmoke">
+				
+				<center>
+				
+					<div class="card border-success mt-3">
+						<div class="card-body">
+						<h5 class="card-title"><b>GAS/SMOKE</b></h5>
+                
+							<!--  TABLE  -->
+                
+							<div class="table-responsive table-borderless" style="height:350px">
+								<table class="table">
+                        
+									<!--  TABLE HEADER -->
+									<thead class="thead-light">
+										<tr>
+											<th scope="col">Date</th>
+											<th scope="col">Device id</th>
+											<th scope="col">Value</th>
+											<th scope="col">State</th>
+										</tr>
+									</thead>
+
+									<!--  TABLE BODY -->
+									<tbody>
+										<tr v-for="entry in gasSmokeData" :key="entry.sample_time" :class="changeClassGasSmoke(entry.device_data.gas_smoke_state)">
+											<td>{{entry.sample_time}}</td>
+											<td>{{entry.device_id}}</td>
+											<td>{{entry.device_data.ppm}}</td>
+											<td>{{entry.device_data.gas_smoke_state}}</td>
+										</tr>
+                            
+									</tbody>
+								</table>
+							</div>
+							
+							<div class="row">
+								<div class="col">
+									<button @click="backToStart" type="button" class="btn mt-1">Back</button>
+								</div>
+								
+								<div class="col">
+									<button @click="goToGasSmokeLatestValues" type="button" class="btn mt-1">Last values</button>
+								</div>
+								
+								<div class="col">
+									<button @click="goToGasSmokeAggregatedValues" type="button" class="btn mt-1">Last hour aggregated values</button>
+								</div>
+								
+								<div class="col">
+									<button @click="goToGasSmokeActuators" type="button" class="btn mt-1">Actuators</button>
+								</div>
+							</div>
+							
+							
+						</div>
+					</div>
+					
+				</center>
+				
+			</div> <!-- v-if="showGasSmoke" CLOSED -->
+			
+			<!-- VIEW LATEST GAS/SMOKE DATA -->
+			
+			<div v-if="showGasSmokeLatestValues">
+				
+				<center>
+				
+					<div class="card border-success mt-3">
+						<div class="card-body">
+						<h5 class="card-title"><b>GAS SMOKE LATEST VALUES</b></h5>
+                
+							<!--  TABLE  -->
+                
+							<div class="table-responsive table-borderless" style="height:200px">
+								<table class="table">
+                        
+									<!--  TABLE HEADER -->
+									<thead class="thead-light">
+										<tr>
+											<th scope="col">Device id</th>
+											<th scope="col">Date</th>
+											<th scope="col">Value</th>
+											<th scope="col">State</th>
+										</tr>
+									</thead>
+
+									<!--  TABLE BODY -->
+									<tbody>
+										<tr v-for="device in gasSmokeLatestValues" :key="device.device_id" :class="changeClassGasSmoke(device.state)">
+											<td>{{device.device_id}}</td>
+											<td>{{device.sample_time}}</td>
+											<td>{{device.value}}</td>
+											<td>{{device.state}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							
+							<div class="row">
+								<div class="col">
+									<button @click="backToGasSmokeData" type="button" class="btn mt-1">Back</button>
+								</div>
+							</div>
+							
+							
+						</div>
+					</div>
+					
+				</center>
+				
+			</div> <!-- v-if="showGasSmokeLatestValues" CLOSED -->
+			
+			
+			<!-- VIEW LATEST GAS/SMOKE AGGREGATED VALUES -->
+			
+			<div v-if="showGasSmokeAggregatedValues">
+				
+				<center>
+				
+					<div class="card border-success mt-3">
+						<div class="card-body">
+						<h5 class="card-title"><b>LATEST GAS/SMOKE AGGREGATED VALUES</b></h5>
+                
+							<!--  TABLE  -->
+                
+							<div class="table-responsive table-borderless" style="height:200px">
+								<table class="table">
+                        
+									<!--  TABLE HEADER -->
+									<thead class="thead-light">
+										<tr>
+											<th scope="col">Device id</th>
+											<th scope="col">Max value</th>
+											<th scope="col">Min value</th>
+											<th scope="col">Avg value</th>
+										</tr>
+									</thead>
+
+									<!--  TABLE BODY -->
+									<tbody>
+										<tr v-for="device in gasSmokeAggregatedValues" :key="device.device_id">
+											<td>{{device.device_id}}</td>
+											<td>{{device.maxPpm}}</td>
+											<td>{{device.minPpm}}</td>
+											<td>{{device.avgPpm}}</td>
+										</tr>
+                            
+									</tbody>
+								</table>
+							</div>
+							
+							<div class="row">
+								<div class="col">
+									<button @click="backToGasSmokeData" type="button" class="btn mt-1">Back</button>
+								</div>
+							</div>
+							
+							
+						</div>
+					</div>
+					
+				</center>
+				
+			</div> <!-- v-if="showGasSmokeAggregatedValues" CLOSED -->
+			
+			<!-- GAS/SMOKE ACTUATORS -->
+			
+			<div v-if="gasSmokeActuators">
+				
+				<center>
+				
+					<div class="card border-success mt-3">
+						<div class="card-body">
+						<h5 class="card-title"><b>GAS/SMOKE ACTUATORS</b></h5>
+                
+							<!--  TABLE  -->
+                
+							<div class="table table-borderless" style="height:350px">
+								<table class="table">		
+									<!--  TABLE HEADER -->
+									<thead class="thead-light">
+										<tr>
+											<th scope="col">Device id</th>
+											<th scope="col"></th>
+											<th scope="col"></th>
+											<th scope="col"></th>
+											<th scope="col"></th>
+											<th scope="col"></th>
+											<th scope="col"></th>
+										</tr>
+									</thead>
+									
+									<!--  TABLE BODY -->
+									<tbody>
+										<tr v-for="device in devicesIdGasSmoke" :key="device">
+											<td>{{device}}</td>
+											<td><button @click="buzzerGasSmokeON" type="button" :id="device" class="btn my-buzzer-btn mt-1">Buzzer ON</button></td>
+											<td><button @click="buzzerGasSmokeOFF" type="button" :id="device" class="btn my-buzzer-btn mt-1">Buzzer OFF</button></td>
+											<td><button @click="blueLedON" type="button" :id="device" class="btn my-blue-btn mt-1">Blue led ON</button></td>
+											<td><button @click="blueLedOFF" type="button" :id="device" class="btn my-blue-btn mt-1">Blue led OFF</button></td>
+										    <td><button @click="switchModeManual" type="button" :id="device" class="btn mt-1" style="width:200px;">Manual</button></td>
+										    <td><button @click="switchModeAuto" type="button" :id="device" class="btn mt-1" style="width:200px;">Auto</button></td>   
+										</tr>
+                            
+									</tbody>
+									
+								</table>
+							</div>
+							
+							<div class="row">
+										
+								<div class="col">
+									<button @click="backToGasSmokeData" type="button" class="btn mt-1" style="width:200px;">Back</button>
+								</div>
+										
+							</div>
+							
+						</div>
+					</div>
+					
+				</center>
+				
+			</div> <!-- v-if="gasSmokeActuators" CLOSED -->
+			
+						
+                    
+        </div>   <!-- APP CLOSED -->
+
+      </div>     <!-- CONTAINER CLOSED -->
+    </div>       <!-- CONTAINER FLUID CLOSED -->
+ 
+<script>
+
+
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                temperatureData : [],
+                temperatureAggregatedValues: [],
+                temperatureLatestValues: [],
+                gasSmokeLatestValues: [],
+                gasSmokeData : [],
+                gasSmokeAggregatedValues: [],
+                showTemperature: false,
+                showGasSmoke: false,
+                showTemperatureAggregatedValues: false,
+                showGasSmokeAggregatedValues: false,
+                showTemperatureLatestValues: false,
+                showGasSmokeLatestValues: false,
+                temperatureActuators: false,
+                gasSmokeActuators: false,
+                tempMaxValue: 0,
+                tempMinValue: 0,
+                tempAvgValue: 0.0,
+                gasSmokeMaxValue: 0,
+                gasSmokeMinValue: 0,
+                gasSmokeAvgValue: 0.0,
+                devicesIdTemp: [],
+                devicesIdGasSmoke: [],
+                
+                mode: "auto",
+            },
+            
+            beforeCreate: function(){
+                // Getting temperature data
+			    this.$http.get('http://localhost:8080/getLatestData/temperature').then(response => {
+					
+					response.body.forEach(device => {
+						device.latest.forEach(entry => {
+							this.temperatureData.push(entry);
+						});
+					});
+					
+			    }, response => {
+					// error callback
+				})
+              
+				// Getting gas/smoke data
+				this.$http.get('http://localhost:8080/getLatestData/gasSmoke').then(response => {
+					
+					response.body.forEach(device => {
+						device.latest.forEach(entry => {
+							this.gasSmokeData.push(entry);
+						});
+					});
+
+				}, response => {
+					// error callback
+				})
+                
+            },
+
+            methods: {
+				goToTemperature: function(){
+					this.updateLatestData();
+					
+					this.showTemperature = true;
+					this.showGasSmoke = false;
+					this.showTemperatureAggregatedValues = false;
+					this.showGasSmokeAggregatedValues = false;
+					this.showTemperatureLatestValues = false;
+					this.showGasSmokeLatestValues = false;
+					this.temperatureActuators = false;
+					this.gasSmokeActuators = false;
+				},
+				
+				goToGasSmoke: function(){
+					this.updateLatestData();
+					
+					this.showTemperature = false;
+					this.showGasSmoke = true;
+					this.showTemperatureAggregatedValues = false;
+					this.showGasSmokeAggregatedValues = false;
+					this.showTemperatureLatestValues = false;
+					this.showGasSmokeLatestValues = false;
+					this.temperatureActuators = false;
+					this.gasSmokeActuators = false;
+				},
+				
+				backToStart: function(){
+					this.showTemperature = false;
+					this.showGasSmoke = false;
+					this.showTemperatureAggregatedValues = false;
+					this.showGasSmokeAggregatedValues = false;
+					this.showTemperatureLatestValues = false;
+					this.showGasSmokeLatestValues = false;
+					this.temperatureActuators = false;
+					this.gasSmokeActuators = false;
+				},
+				
+				goToTempAggregatedValues: function(){
+					this.showTemperature = false;
+					this.showGasSmoke = false;
+					this.showTemperatureAggregatedValues = true;
+					this.showGasSmokeAggregatedValues = false;
+					this.showTemperatureLatestValues = false;
+					this.showGasSmokeLatestValues = false;
+					this.temperatureActuators = false;
+					this.gasSmokeActuators = false;
+					
+					// Getting latest temperature aggregated values
+					this.$http.get('http://localhost:8080/getTemperatureAggregatedValues').then(response => {
+					
+						this.temperatureAggregatedValues = response.body;
+
+					}, response => {
+						// error callback
+					})
+				},
+				
+				backToTempData : function(){
+					this.showTemperature = true;
+					this.showGasSmoke = false;
+					this.showTemperatureAggregatedValues = false;
+					this.showGasSmokeAggregatedValues = false;
+					this.showTemperatureLatestValues = false;
+					this.showGasSmokeLatestValues = false;
+					this.temperatureActuators = false;
+					this.gasSmokeActuators = false;
+					
+					this.updateLatestData();
+				},
+				
+				goToGasSmokeAggregatedValues: function(){
+					
+					this.showTemperature = false;
+					this.showGasSmoke = false;
+					this.showTemperatureAggregatedValues = false;
+					this.showGasSmokeAggregatedValues = true;
+					this.showTemperatureLatestValues = false;
+					this.showGasSmokeLatestValues = false;
+					this.temperatureActuators = false;
+					this.gasSmokeActuators = false;
+					
+					// Getting latest gas/smoke aggregated values
+					this.$http.get('http://localhost:8080/getGasSmokeAggregatedValues').then(response => {
+					
+						this.gasSmokeAggregatedValues = response.body;
+
+					}, response => {
+						// error callback
+					})
+				},
+				
+				backToGasSmokeData : function(){
+					
+					this.showTemperature = false;
+					this.showGasSmoke = true;
+					this.showTemperatureAggregatedValues = false;
+					this.showGasSmokeAggregatedValues = false;
+					this.showTemperatureLatestValues = false;
+					this.showGasSmokeLatestValues = false;
+					this.temperatureActuators = false;
+					this.gasSmokeActuators = false;
+					
+					this.updateLatestData();
+				},
+				
+				goToLatestTempValues: function(){
+					this.showTemperature = false;
+					this.showGasSmoke = false;
+					this.showTemperatureAggregatedValues = false;
+					this.showGasSmokeAggregatedValues = false;
+					this.showTemperatureLatestValues = true;
+					this.showGasSmokeLatestValues = false;
+					this.temperatureActuators = false;
+					this.gasSmokeActuators = false;
+					
+					// Getting temperature data
+					this.$http.get('http://localhost:8080/getTemperatureLatestValues').then(response => {
+					
+						this.temperatureLatestValues = response.body;
+					}, response => {
+						// error callback
+					})
+				},
+				
+				goToGasSmokeLatestValues: function(){
+					this.showTemperature = false;
+					this.showGasSmoke = false;
+					this.showTemperatureAggregatedValues = false;
+					this.showGasSmokeAggregatedValues = false;
+					this.showTemperatureLatestValues = false;
+					this.showGasSmokeLatestValues = true;
+					this.temperatureActuators = false;
+					this.gasSmokeActuators = false;
+					
+					// Getting temperature data
+					this.$http.get('http://localhost:8080/getGasSmokeLatestValues').then(response => {
+					
+						this.gasSmokeLatestValues = response.body;
+					}, response => {
+						// error callback
+					})
+				},
+				
+				goToTempActuators: function(){
+					
+					// Getting devices id for temperature
+					this.$http.get('http://localhost:8080/getDevices/temperature').then(response => {
+						
+						this.showTemperature = false;
+						this.showGasSmoke = false;
+						this.showTemperatureAggregatedValues = false;
+						this.showGasSmokeAggregatedValues = false;
+						this.showTemperatureLatestValues = false;
+						this.showGasSmokeLatestValues = false;
+						this.gasSmokeActuators = false;
+						this.temperatureActuators = true;
+						
+						this.devicesIdTemp = response.body;
+					}, response => {
+						// error callback
+					})
+				},
+				
+				goToGasSmokeActuators: function(){
+					
+					// Getting devices id for gas/smoke
+					this.$http.get('http://localhost:8080/getDevices/gasSmoke').then(response => {
+						this.showTemperature = false;
+						this.showGasSmoke = false;
+						this.showTemperatureAggregatedValues = false;
+						this.showGasSmokeAggregatedValues = false;
+						this.showTemperatureLatestValues = false;
+						this.showGasSmokeLatestValues = false;
+						this.temperatureActuators = false;
+						this.gasSmokeActuators = true;
+					
+						this.devicesIdGasSmoke = response.body;
+					}, response => {
+						// error callback
+					})
+				},
+			
+				changeClassTemp : function(state){
+					if(state == "ALL OK!")
+						return "bg-success"
+					else if(state == "GROWING!")
+						return "bg-warning"
+					else if(state == "WARNING!")
+						return "bg-danger"
+				},
+				
+				changeClassGasSmoke: function(state){
+					if(state == "ALL_OK!")
+						return "bg-light"
+					else if(state == "WARNING!")
+						return "bg-primary"
+				},
+				
+				updateLatestData : function(){
+					// Getting temperature data
+					this.$http.get('http://localhost:8080/getLatestData/temperature').then(response => {
+					
+						response.body.forEach(device => {
+							device.latest.forEach(entry => {
+								this.temperatureData.push(entry);
+							});
+						});
+					
+					}, response => {
+						// error callback
+					})
+              
+					// Getting gas/smoke data
+					this.$http.get('http://localhost:8080/getLatestData/gasSmoke').then(response => {
+					
+						response.body.forEach(device => {
+							device.latest.forEach(entry => {
+								this.gasSmokeData.push(entry);
+							});
+						});
+
+					}, response => {
+						// error callback
+					})
+				},
+				
+				switchModeManual: function(event){
+					
+					const id = event.target.id;
+					
+					this.$http.post("http://localhost:8080/switchMode", {
+						device_id: event.target.id.toString(),
+						mode: "manual",
+					})
+					.then(
+						(response) => {
+							alert("Iot device "+id+" passed to manual mode!");
+						},
+						(response) => {
+							alert("catch!");
+						    console.log(response);
+					    })
+				},
+				
+				switchModeAuto: function(event){
+					const id = event.target.id;
+					
+					this.$http.post("http://localhost:8080/switchMode", {
+						device_id: event.target.id.toString(),
+						mode: "auto",
+					})
+					.then(
+						(response) => {
+								alert("Iot device "+id+" passed to automatic mode!");
+						},
+						(response) => {
+							alert("catch!");
+							console.log(response);
+					})
+				},
+				
+				buzzerTempON: function(event){
+					const id = event.target.id;
+					
+					const actuator = "temp_buzzer";
+					const dataType = "temperature";
+					const operation = "ON"; 
+					
+					this.$http.post("http://localhost:8080/manageActuators", {
+						device_id: event.target.id.toString(),
+						actuator: actuator,
+						dataType: dataType,
+						operation: operation
+					})
+					.then(
+						(response) => {
+							alert("Sent indication to turn "+operation+" "+dataType+" "+actuator+" for device "+id+"!");
+						},
+						(response) => {
+							alert("catch!");
+							console.log(response);
+					})
+				},
+				
+				buzzerTempOFF: function(event){
+					const id = event.target.id;
+					
+					const actuator = "temp_buzzer";
+					const dataType = "temperature";
+					const operation = "OFF"; 
+					
+					this.$http.post("http://localhost:8080/manageActuators", {
+						device_id: event.target.id.toString(),
+						actuator: actuator,
+						dataType: dataType,
+						operation: operation
+					})
+					.then(
+						(response) => {
+							alert("Sent indication to turn "+operation+" "+dataType+" "+actuator+" for device "+id+"!");
+						},
+						(response) => {
+							alert("catch!");
+							console.log(response);
+					})
+				},
+				
+				buzzerGasSmokeON: function(event){
+					const id = event.target.id;
+					
+					const actuator = "gas_smoke_buzzer";
+					const dataType = "gas_smoke";
+					const operation = "ON"; 
+					
+					this.$http.post("http://localhost:8080/manageActuators", {
+						device_id: event.target.id.toString(),
+						actuator: actuator,
+						dataType: dataType,
+						operation: operation
+					})
+					.then(
+						(response) => {
+							alert("Sent indication to turn "+operation+" "+dataType+" "+actuator+" for device "+id+"!");
+						},
+						(response) => {
+							alert("catch!");
+							console.log(response);
+					})
+				},
+				
+				buzzerGasSmokeOFF: function(event){
+					const id = event.target.id;
+					
+					const actuator = "gas_smoke_buzzer";
+					const dataType = "gas_smoke";
+					const operation = "OFF"; 
+					
+					this.$http.post("http://localhost:8080/manageActuators", {
+						device_id: event.target.id.toString(),
+						actuator: actuator,
+						dataType: dataType,
+						operation: operation
+					})
+					.then(
+						(response) => {
+							alert("Sent indication to turn "+operation+" "+dataType+" "+actuator+" for device "+id+"!");
+						},
+						(response) => {
+							alert("catch!");
+							console.log(response);
+					})
+				},
+				
+				redLedON: function(event){
+					const id = event.target.id;
+					
+					const actuator = "red_led";
+					const dataType = "temperature";
+					const operation = "ON"; 
+					
+					this.$http.post("http://localhost:8080/manageActuators", {
+						device_id: event.target.id.toString(),
+						actuator: actuator,
+						dataType: dataType,
+						operation: operation
+					})
+					.then(
+						(response) => {
+							alert("Sent indication to turn "+operation+" "+dataType+" "+actuator+" for device "+id+"!");
+						},
+						(response) => {
+							alert("catch!");
+							console.log(response);
+					})
+				},
+				
+				redLedOFF: function(event){
+					const id = event.target.id;
+					
+					const actuator = "red_led";
+					const dataType = "temperature";
+					const operation = "OFF"; 
+					
+					this.$http.post("http://localhost:8080/manageActuators", {
+						device_id: event.target.id.toString(),
+						actuator: actuator,
+						dataType: dataType,
+						operation: operation
+					})
+					.then(
+						(response) => {
+							alert("Sent indication to turn "+operation+" "+dataType+" "+actuator+" for device "+id+"!");
+						},
+						(response) => {
+							alert("catch!");
+							console.log(response);
+					})
+				},
+				
+				blueLedON: function(event){
+					const id = event.target.id;
+					
+					const actuator = "blue_led";
+					const dataType = "gas_smoke";
+					const operation = "ON"; 
+					
+					this.$http.post("http://localhost:8080/manageActuators", {
+						device_id: event.target.id.toString(),
+						actuator: actuator,
+						dataType: dataType,
+						operation: operation
+					})
+					.then(
+						(response) => {
+							alert("Sent indication to turn "+operation+" "+dataType+" "+actuator+" for device "+id+"!");
+						},
+						(response) => {
+							alert("catch!");
+							console.log(response);
+					})
+				},
+				
+				blueLedOFF: function(event){
+					const id = event.target.id;
+					
+					const actuator = "blue_led";
+					const dataType = "gas_smoke";
+					const operation = "OFF"; 
+					
+					this.$http.post("http://localhost:8080/manageActuators", {
+						device_id: event.target.id.toString(),
+						actuator: actuator,
+						dataType: dataType,
+						operation: operation
+					})
+					.then(
+						(response) => {
+							alert("Sent indication to turn "+operation+" "+dataType+" "+actuator+" for device "+id+"!");
+						},
+						(response) => {
+							alert("catch!");
+							console.log(response);
+					})
+				},
+            }
+    })
+    </script>
+
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+      integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+      integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
+
+<style>
+
+.btn {
+  display: inline-block;
+  weight: 50px;
+  height: 50px;
+  padding: 3px 6px;
+  background-color: #444;
+  color: #FFF;
+  border: 1px solid #222;
+  border-radius: 3px;
+  text-decoration: none;
+  font-family: arial, verdana, sans-serif;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.my-green-btn {
+	display: inline-block;
+	weight: 55px;
+	height: 55px;
+	padding: 3px 6px;
+	background-color: green;
+	color: #FFF;
+	border: 1px solid #222;
+	border-radius: 3px;
+	text-decoration: none;
+	font-family: arial, verdana, sans-serif;
+	font-size: 18px;
+	cursor: pointer;
+}
+
+.my-red-btn {
+	display: inline-block;
+	weight: 55px;
+	height: 55px;
+	padding: 3px 6px;
+	background-color: red;
+	color: #FFF;
+	border: 1px solid #222;
+	border-radius: 3px;
+	text-decoration: none;
+	font-family: arial, verdana, sans-serif;
+	font-size: 18px;
+	cursor: pointer;
+}
+
+.my-yellow-btn {
+	display: inline-block;
+	weight: 55px;
+	height: 55px;
+	padding: 3px 6px;
+	background-color: yellow;
+	color: #FFF;
+	border: 1px solid #222;
+	border-radius: 3px;
+	text-decoration: none;
+	font-family: arial, verdana, sans-serif;
+	font-size: 18px;
+	cursor: pointer;
+}
+
+.my-white-btn {
+	display: inline-block;
+	weight: 55px;
+	height: 55px;
+	padding: 3px 6px;
+	background-color: #ffe6e6;
+	color: #FFF;
+	border: 1px solid #222;
+	border-radius: 3px;
+	text-decoration: none;
+	font-family: arial, verdana, sans-serif;
+	font-size: 18px;
+	cursor: pointer;
+}
+
+.my-blue-btn {
+	display: inline-block;
+	weight: 55px;
+	height: 55px;
+	padding: 3px 6px;
+	background-color: blue;
+	color: #FFF;
+	border: 1px solid #222;
+	border-radius: 3px;
+	text-decoration: none;
+	font-family: arial, verdana, sans-serif;
+	font-size: 18px;
+	cursor: pointer;
+}
+
+.my-buzzer-btn {
+	display: inline-block;
+	weight: 55px;
+	height: 55px;
+	padding: 3px 6px;
+	background-color: violet;
+	color: #FFF;
+	border: 1px solid #222;
+	border-radius: 3px;
+	text-decoration: none;
+	font-family: arial, verdana, sans-serif;
+	font-size: 18px;
+	cursor: pointer;
+}
+
+.card{
+    border-color: green;
+    border-radius: 10px 10px 10px 10px;
+}
+
+</style>
