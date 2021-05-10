@@ -1,8 +1,5 @@
 # Gas-Leaks-And-Fires-Notifier
 
-## Scenario
-The problem I took into consideration is that of **gas leaks** and **fires** that usually occur in home environments. This problem is very huge, because of the serious injuries and deaths it causes, especially from the fires that are generated after the explosion. Iot is very helpful when we can prevent these terrible situations, for example by using a notification system: the main **goal** of Gas-Leaks-And-Fires-Notifier is that of **preventing the outbreak of fires** by a constant monitoring of the home environment, in particular those points of the house where it is more probable for a gas leak to occur, such as the kitchen.
-
 ## Sensors
 The environment will be monitored with the help of **two sensors**, which will help us to retrieve the data that are useful to our analysis:
 
@@ -91,7 +88,7 @@ I want to specify that, based on the values of temperature and concentration of 
 
 Our system is thought to be used by several **devices**. For this first assignment we used the **STM32 Nucleo F401RE board**, where all the code needed to retrieve data from sensors and to manage the actuators will be flashed. The next step is that of saving the obtained values into the cloud, in particular using **Amazon Web Services**. In order to do this, we need to use **MQTT**, that is a communication protocol based on **topics**: the key is that every device that is subscribed to a certain topic will receive messages published on that topic. In particular, when we will publish the data from the device, those data will be sent to an **MQTT-SN Broker**, in this case **RSMB**, and then from RSMB they will be sent to the **Mosquitto broker**, which is the **transparent bridge** between RSMB and **Iot-Core**, that is a service provided by AWS that uses MQTT and that we can exploit to receive data coming from our device. So, after Mosquitto redirects our data to Iot-Core, there is the needing to save them in the cloud: my choice was **DynamoDB**, a noSQL database provided by AWS. Once data are stored in the db, we can query them using an appropriate **server** in order to finally show them on the **front-end** side: my choice for the back-end side was **NodeJS**, while for the front-end side I used **HTML, Bootstrap, Javascript and Vue-js**. The frontend and the backend will create the **Web Dashboard**. Finally, the frontend will be used also to **control the state of actuators**. Below I show an image that higlights all the connected components of the application:
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/architecture_indiv_assign.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/images/architecture_indiv_assign.png)
 
 ## Manual and automatic mode
 The system is capable of switching between two modes through the interaction by the front-end:
@@ -145,11 +142,11 @@ For the MQ-2 sensor we need to connect the **GND pin** to ground, the **VCC pin*
 
 Below we can see the **wiring of components**:
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/circuit/circuit_bb.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/circuit/circuit_bb.png)
 
 Below I show a **picture of the circuit**:
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/circuit/circuit_picture.jpeg)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/circuit/circuit_picture.jpeg)
 
 **NOTE!** As you can see from the wiring, I have to point out a few things: the temperature sensor is not the DHT-22 in the picture, but is an RHT sensor, that works with the same logic; the gas sensor is not an MQ-2 sensor in the picture, but also here the logic is the same. For leds they are all red in the picture but, starting from top and going to bottom, we have in the order the red led, the green led, the yellow led, the blue led and the white led; finally for resistors, they are all 220 Ohm resistors in the picture but, as mentioned before, they are clearly distinguished in 220 Ohm for leds and 100 Ohm for buzzers.
 
@@ -183,17 +180,17 @@ You need also to install this [MQTT-cli](https://www.hivemq.com/blog/mqtt-cli/),
 ### AWS, Iot-Core and DynamoDB
 Then, you need so sign in in [AWS](https://aws.amazon.com/education/awseducate/), in order to get access to **Iot-Core** and **DynamoDB** services. Once you're on Iot-Core, you need to create a **thing** in order to get your certificate, root certificate and private key. Here you can find a [tutorial](https://docs.aws.amazon.com/iot/latest/developerguide/iot-moisture-create-thing.html). Then you need to add into the **.env** file **the access key id, the secret access key and the session token** provided by AWS, to be able to receive messages from the devices. Then you need to **subscribe** to all **topics** I mentioned before by going in the MQTT test client section.
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/subscribe_aws.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/images/subscribe_aws.png)
 
 Then by going in the Rules section you have to create two **rules**, one for temperature data and one for gas and smoke data, specifying as topics device/<device_id>/temperature and device/<device_id>/gas_smoke respectively, and as operation you need to choose "Insert a message into a DynamoDB table". Here you can find a [tutorial](https://docs.aws.amazon.com/iot/latest/developerguide/iot-ddb-rule.html).
 
 **Temperature rule:**
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temperature_rule.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/images/temperature_rule.png)
 
 **Gas/Smoke rule:**
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_rule.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/images/gas_smoke_rule.png)
 
 So it is clear that we will create **two DynamoDb tables**, one for each rule: particularly, each entry of both tables is made up of the **Unix timestamp** associated to the creation of that entry, that will be useful for quering the last hour values of temperature and gas/smoke, the **device_id** of the device who has sampled that value, and the **device_data**, which consists of the **value** sampled and the **state** associated to that value. 
 
@@ -300,7 +297,7 @@ Be sure to use same names as these above for the environment variables.
 
 Below I show a picture of the three **consoles** running, on the top left we have the rsbm broker, on the top right we have the nodeJS server, on the bottom we have the STM-32 board:
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/consoles.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/images/consoles.png)
 
 When we flash the code into the board, the application will start in *auto* mode, and on the console we can see these debug prints:
 
@@ -368,57 +365,57 @@ ppm: 67
 On AWS we can see both temperature and gas/smoke values arriving on topics **device/1/temperature** and **device/1/gas_smoke**.<br/><br/>
 **Temperature:**<br/><br/>
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_topic_aws.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/images/temp_topic_aws.png)
 <br/><br/>
 
 **Gas/Smoke:**<br/><br/>
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_topic_aws.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/images/gas_smoke_topic_aws.png)
 <br/><br/>
 
 As said before, data are saved into **DynamoDB** into **two different tables**, one for temperature and the other one for gas and smoke data.<br/><br/>
 **Temperature:**<br/><br/>
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_data_dynamoDB.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/images/temp_data_dynamoDB.png)
 <br/><br/>
 **Gas/Smoke:**<br/><br/>
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_data_dynamoDB.png)<br/><br/>
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/images/gas_smoke_data_dynamoDB.png)<br/><br/>
 
 The server will be available at ***http://localhost:8080/***, where we can see the **homepage**:
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/homepage.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/images/homepage.png)
 
 If we click on *Temperature* we will see the **temperature values received during the last hour** from the DHT-22 sensor for each device:
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_last_hour_values.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/images/temp_last_hour_values.png)
 
 By clicking on *Last values*, we will see the **latest values** received from the DHT-22 sensor for each device.
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_latest_values.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/images/temp_latest_values.png)
 
 By clicking on *Back* and then on *Last hour aggregated values*, we will see the **aggregated values (average, minimum and maximum)** for the DHT-22 sensor **retrieved during the last hour** for each device.
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/temp_aggregated.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/images/temp_aggregated.png)
 
 All this could be seen also for **gas and smoke values** retrieved from the MQ-2 sensor. So below I show the **last hour values** for each device:
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_last_hour_values.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/images/gas_smoke_last_hour_values.png)
 
 Below we can see the **latest values** for each device:
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_latest_values.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/images/gas_smoke_latest_values.png)
 
 Below we can see the **aggregated values (average, minimum and maximum) retrieved during the last hour** for each device:
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/gas_smoke_aggregated.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/images/gas_smoke_aggregated.png)
 
 If we go back to last hour temperature values, by clicking on *Actuators* we have the possibility to **switch mode** for the application **(auto and manual)**, and also to **manage** the red led and the temperature buzzer, for each device. If we consider device 1, by clicking on *Manual*, we will get this message on the website:
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/switchToManual.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/images/switchToManual.png)
 
 On AWS we will get this message under the **switchMode/device/1 topic**:
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/switchMode_topic_aws.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/images/switchMode_topic_aws.png)
 
 Notice that we get an error because we are sending a normal string message, but we can ignore it.
 Also, on the console we can see these messages:
@@ -439,11 +436,11 @@ device_id: 1
 
 At this point, if we click, for example, on *Red led ON*, we get this message on the webpage:
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/red_led_ON.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/images/red_led_ON.png)
 
 On AWS we will get this message under the **manageActuators/device/1** topic, and we got an error for the same reason as before:
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/manageActuators_topic_aws.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/images/manageActuators_topic_aws.png)
 
 Also, on the console we can see these messages:
 
@@ -459,5 +456,5 @@ device_id: 1
 The same logic is applied for gas/smoke actuators.
 
 ## The code
-All details about the code can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/code.md).
+All details about the code can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/nucleo_code/code.md).
 
