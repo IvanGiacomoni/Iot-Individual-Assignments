@@ -4,8 +4,8 @@
 The problem I took into consideration is that of **gas leaks** and **fires** that usually occur in home environments. This problem is very huge, because of the serious injuries and deaths it causes, especially from the fires that are generated after the explosion. Iot is very helpful when we can prevent these terrible situations, for example by using a notification system: the main **goal** of Gas-Leaks-And-Fires-Notifier is that of **preventing the outbreak of fires** by a constant monitoring of the home environment, in particular those points of the house where it is more probable for a gas leak to occur, such as the kitchen.
 
 ## Assignments
-- **First assignment**: more info about the first assignment can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstDelivery/README.md)
-- **Second assignment**: more info about the second assignment can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondDelivery/README.md)
+- **First assignment**: more info about the first assignment can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/README.md)
+- **Second assignment**: more info about the second assignment can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/README.md)
 
 ## Sensors
 The environment will be monitored with the help of **two sensors**, which will help us to retrieve the data that are useful to our analysis:
