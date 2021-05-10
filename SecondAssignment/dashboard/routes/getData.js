@@ -270,6 +270,63 @@ router.get("/getTemperatureAggregatedValues", async (req, res) => {
 	});
 });
 
+router.get("/getTemperatureAggregatedValuesTotal", async (req, res) => {
+	
+	let options = {
+		method: 'get',
+		url: 'http://localhost:8080/getLatestData/temperature'
+    };
+    
+    axios(options)
+    .then(response => {
+		
+		const temperatureData = response.data;
+		
+		console.log(temperatureData);
+		
+		let maxTempTotal = 0, minTempTotal = 1000, avgTempTotal = 0.0;
+		let sumTempValues = 0;
+		let numValues = 0;
+		
+		temperatureData.forEach(device => {
+			
+			if(device.latest.length != 0){
+				
+				numValues += device.latest.length;
+			    
+			    device.latest.forEach(elem => {
+				
+					if (elem.device_data.temperature > maxTempTotal)
+						maxTempTotal = elem.device_data.temperature;
+				
+					if (elem.device_data.temperature < minTempTotal)
+						minTempTotal = elem.device_data.temperature;			
+				
+					sumTempValues += elem.device_data.temperature;
+				});
+			       	
+			}   
+			
+		});
+		
+		if(numValues > 0){
+		    avgTempTotal = (sumTempValues / numValues).toFixed(2);   	
+		}
+		
+		const toReturn = {
+		    "minTempTotal": minTempTotal,
+			"maxTempTotal": maxTempTotal,
+			"avgTempTotal": avgTempTotal
+		}
+		
+		res.status(200).send(toReturn);
+		
+	})
+	.catch(error => {
+		console.log(error);
+	});
+});
+
 router.get("/getGasSmokeAggregatedValues", async (req, res) => {
 	
 	let options = {
@@ -323,6 +380,63 @@ router.get("/getGasSmokeAggregatedValues", async (req, res) => {
 			}
 			
 		});
+		
+		res.status(200).send(toReturn);
+		
+	})
+	.catch(error => {
+		console.log(error);
+	});
+});
+
+router.get("/getGasSmokeAggregatedValuesTotal", async (req, res) => {
+	
+	let options = {
+		method: 'get',
+		url: 'http://localhost:8080/getLatestData/gasSmoke'
+    };
+    
+    axios(options)
+    .then(response => {
+		
+		const gasSmokeData = response.data;
+		
+		console.log(gasSmokeData);
+		
+		let maxPpmTotal = 0, minPpmTotal = 1000, avgPpmTotal = 0.0;
+		let sumPpmValues = 0;
+		let numValues = 0;
+		
+		gasSmokeData.forEach(device => {
+			
+			if(device.latest.length != 0){
+				
+				numValues += device.latest.length;
+			    
+			    device.latest.forEach(elem => {
+				
+					if (elem.device_data.ppm > maxPpmTotal)
+						maxPpmTotal = elem.device_data.ppm;
+				
+					if (elem.device_data.ppm < minPpmTotal)
+						minPpmTotal = elem.device_data.ppm;			
+				
+					sumPpmValues += elem.device_data.ppm;
+				});
+			       	
+			}   
+			
+		});
+		
+		if(numValues > 0){
+		    avgPpmTotal = (sumPpmValues / numValues).toFixed(2);   	
+		}
+		
+		const toReturn = {
+		    "minPpmTotal": minPpmTotal,
+			"maxPpmTotal": maxPpmTotal,
+			"avgPpmTotal": avgPpmTotal
+		}
 		
 		res.status(200).send(toReturn);
 		
