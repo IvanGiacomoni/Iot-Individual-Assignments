@@ -6,3 +6,4 @@ The problem I took into consideration is that of **gas leaks** and **fires** tha
 ## Assignments
 - **First assignment**: more info about the first assignment can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/README.md)
 - **Second assignment**: more info about the second assignment can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/README.md)
+- **Third assignment**: more info about the third assignment can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/ThirdAssignment/README.md)
