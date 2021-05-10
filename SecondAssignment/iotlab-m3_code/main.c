@@ -39,8 +39,8 @@
 
 #define SERVER_PORT                 1885
 
-#define GAS_SMOKE_DELAY             60
-#define TEMP_DELAY                  60
+#define GAS_SMOKE_DELAY             2
+#define TEMP_DELAY                  10
 
 #define TEMP_THRESHOLD_MIN          23
 #define TEMP_THRESHOLD_MAX          24
