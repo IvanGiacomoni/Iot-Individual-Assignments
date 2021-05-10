@@ -23,13 +23,13 @@ void initializeDHT(void){
 }
 ```
 
-We need to include the DHT module in the [Makefile](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/Makefile):
+We need to include the DHT module in the [Makefile](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/nucleo_code/Makefile):
 
 ```c
 USEMODULE += dht
 ```
 
-We need to include the following **headers** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/main.c):
+We need to include the following **headers** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/nucleo_code/main.c):
 
 ```c
 #include "dht.h"
@@ -38,10 +38,10 @@ We need to include the following **headers** in the [main.c](https://github.com/
 
 The function assigns the **D2 pin** for the DHT-22 sensor, and this is done by using the **GPIO peripheral driver**, that maps each pin to a **port** with a certain **port number**, in this case the D2 pin is connected to the **PB port** of the MCU at **pin number 10**. Below we can see all mappings:
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/images/conversions.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/images/conversions.png)
 
 ## Initializing leds and buzzers
-By using this picture, we can use the same logic to **initialize the pins for leds and buzzers**, respectively with the *initializeLeds* and the *initializeBuzzers* functions (for more info see [this](https://github.com/IvanGiacomoni/Iot-Individual-Assignments#wiring-of-components)). Below I show the two functions:
+By using this picture, we can use the same logic to **initialize the pins for leds and buzzers**, respectively with the *initializeLeds* and the *initializeBuzzers* functions (for more info see [this](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/tree/main/FirstAssignment#wiring-of-components)). Below I show the two functions:
 
 ```c
 void initializeLeds(void){
@@ -131,13 +131,13 @@ void initializeBuzzers(void){
 ```
 
 ## Initializing the ADC line
-After all this, we have also to **initialize the ADC line**: to do this, we need to include in the [Makefile](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/Makefile) the **periph_adc module**:
+After all this, we have also to **initialize the ADC line**: to do this, we need to include in the [Makefile](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/nucleo_code/Makefile) the **periph_adc module**:
 
 ```c
 FEATURES_REQUIRED += periph_adc
 ```
 
-Also we need to include these **headers** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/main.c):
+Also we need to include these **headers** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/nucleo_code/main.c):
 
 ```c
 #include "periph/adc.h"
@@ -171,7 +171,7 @@ At this point, we have all sensors and actuators ready, so we need to setup **MQ
 static emcute_sub_t subscriptions[NUMOFSUBS];
 ```
 
-In the [Makefile](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/Makefile) we specify our **MQTT topics**:
+In the [Makefile](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/nucleo_code/Makefile) we specify our **MQTT topics**:
 
 ```c
 MQTT_TOPIC_TEMP = device/1/temperature
@@ -187,22 +187,22 @@ CFLAGS += -DMANAGE_ACTUATORS_DEVICE_1='"$(MANAGE_ACTUATORS_DEVICE_1)"'
 
 Obviously we have only one device for now.
 
-For more details you can check the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/main.c) and also this [tutorial](https://github.com/RIOT-OS/RIOT/tree/master/examples/emcute_mqttsn).
+For more details you can check the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/nucleo_code/main.c) and also this [tutorial](https://github.com/RIOT-OS/RIOT/tree/master/examples/emcute_mqttsn).
 
 ## Periodical sampling
-Now we are ready to start sampling from sensors, and given that we need to to **periodical sampling**, we need to use the **xtimer module**. So we need to inlude it in the [Makefile](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/Makefile):
+Now we are ready to start sampling from sensors, and given that we need to to **periodical sampling**, we need to use the **xtimer module**. So we need to inlude it in the [Makefile](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/nucleo_code/Makefile):
 
 ```c
 USEMODULE += xtimer
 ```
 
-Also, we need to include this **header** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/main.c):
+Also, we need to include this **header** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/nucleo_code/main.c):
 
 ```c
 #include "xtimer.h"
 ```
 
-The **sampling period** will be different for the two sensors, so we define **two different constants** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/main.c):
+The **sampling period** will be different for the two sensors, so we define **two different constants** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/nucleo_code/main.c):
 
 ```c
 #define GAS_SMOKE_DELAY             2
@@ -224,20 +224,20 @@ thread_create(stackThreadGasSmoke, sizeof(stackThreadGasSmoke), THREAD_PRIORITY_
 If the actual mode of the system is set on "auto", then both threads will start sampling once they are created.
 
 ### Temperature
-For temperature, we need to setup the **medium and high threshold** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/main.c):
+For temperature, we need to setup the **medium and high threshold** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/nucleo_code/main.c):
 
 ```c
 #define TEMP_THRESHOLD_MIN          32
 #define TEMP_THRESHOLD_MAX          40
 ```
 
-The **dht module** encodes the sensor values using **16bit integers**, so we can use the **fmt module** of RIOT in order to format the 16bit integers into **formatted strings**. To do this, we need to specify it in the [Makefile](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/Makefile):
+The **dht module** encodes the sensor values using **16bit integers**, so we can use the **fmt module** of RIOT in order to format the 16bit integers into **formatted strings**. To do this, we need to specify it in the [Makefile](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/nucleo_code/Makefile):
 
 ```c
 USEMODULE += fmt
 ```
 
-We also need to include this **header** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/main.c):
+We also need to include this **header** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/nucleo_code/main.c):
 
 ```c
 #include "fmt.h"
@@ -324,7 +324,7 @@ publishDataForAws(data, &subscriptions[0].topic);
 ```
 
 ### Gas and smoke
-For gas and smoke, we need to setup only one threshold in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/main.c):
+For gas and smoke, we need to setup only one threshold in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/nucleo_code/main.c):
 
 ```c
 #define PPM_THRESHOLD               60
