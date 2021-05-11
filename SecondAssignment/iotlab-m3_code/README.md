@@ -4,6 +4,8 @@
 The base code is that of the RIOT [gnrc_networking example](https://github.com/RIOT-OS/RIOT/blob/master/examples/gnrc_networking/main.c).
 
 ## Shell
+
+### Shell initialization
 The application starts by initializing a **message queue** for the thread running the shell, and then runs the shell, that will be useful for launching the application on the various M3-nodes:
 
 ```c
@@ -35,7 +37,7 @@ static const shell_command_t shell_commands[] = {
     { NULL, NULL, NULL }
 };
 ```
-
+### cmd_handler
 As we can see, we only have one command, that is **start**, which is responsible of starting the application by invoking the *cmd_handler* function, that I report below:
 
 ```c
@@ -102,6 +104,7 @@ The **port** for the MQTT communication with the MQTT-SN broker is stored locall
 #define SERVER_PORT                 1885
 ```
 
+### MQTT topics
 Topics are evaluated by the *getTopic* function, which simply concatenates the **base of the topic** with the device id. So, in the [Makefile](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/iotlab-m3_code/Makefile), we need to define the **base** fo all **topics**:
 
 ```c
@@ -148,6 +151,7 @@ char* topic_switch_mode = "";
 char* topic_manage_actuators = "";
 ```
 
+### MQTT connection setup
 At this point, we need to setup the MQTT connection with the MQTT-SN broker, and we do this by using the *setup_mqtt* function, that takes as input the **MQTT-SN broker address** and the **server port**. For more details you can check the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/iotlab-m3_code/main.c) and also the RIOT [emcute_mqttsn](https://github.com/RIOT-OS/RIOT/tree/master/examples/emcute_mqttsn) example. I only want to show the *emcute_thread* function, because here we need to build the unique **MQTT id** for the communication with the MQTT-SN broker by using the *getEmcuteId* function, that simply concatenates the **base** of the **MQTT id** with the device id:
 
 ```c
@@ -196,6 +200,7 @@ char* getEmcuteId(char* mqtt_id_base, char* device_idd){
 }
 ```
 
+### MQTT topics' subscriptions
 At this point we need to **subscribe** to our **4 main topics**, by using the *mqttSubscribeTo* function, that takes as input the name of the topic and the position of the global array of subscriptions where we will save all info about the new subscription. We need to define the **subscriptions array** as well as the **number of subscriptions** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/iotlab-m3_code/main.c):
 
 ```c
@@ -224,6 +229,7 @@ void mqttSubscribeTo(char* topic_name, int pos_into_subscriptions){
 }
 ```
 
+### Threads' creation
 Finally, I create **two threads**, one for managing the sampling from the MQ-2 sensor and the other one for sampling from the DHT-22 sensor: the main reason is given by the different sampling periods, so with threads we are able to manage both samplings in parallel. If the actual **mode** of the system is set on "auto", then both threads will start sampling once they are created.
 
 In order to use threads, we need to include this **header** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/iotlab-m3_code/main.c):
@@ -238,3 +244,4 @@ Also, we need to define the mode in the [main.c](https://github.com/IvanGiacomon
 // Mode
 char* mode = "auto";   // auto || manual
 ```
+
