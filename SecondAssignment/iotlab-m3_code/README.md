@@ -1,7 +1,7 @@
 # Iotlab-m3 code
 
 ## Introduction
-The base code is that of the RIOT [gnrc_networking example](https://github.com/RIOT-OS/RIOT/blob/master/examples/gnrc_networking/main.c).
+The base code is that of the RIOT [gnrc_networking example](https://github.com/RIOT-OS/RIOT/tree/master/examples/gnrc_networking).
 
 ## Shell
 
