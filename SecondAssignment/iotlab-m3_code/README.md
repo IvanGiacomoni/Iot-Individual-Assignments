@@ -20,7 +20,7 @@ In order to do this, we need to include these **headers** in the [main.c](https:
 #include "msg.h"
 ```
 
-Then we need to define the **message queue** together with its size in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/iotlab-m3_code/main.c):
+Then we need to define the **message queue** together with its **size** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/iotlab-m3_code/main.c):
 
 ```c
 #define MAIN_QUEUE_SIZE     (8)
