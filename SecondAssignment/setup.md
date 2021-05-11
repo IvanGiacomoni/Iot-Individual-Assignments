@@ -138,7 +138,7 @@ bridge_keyfile /etc/mosquitto/certs/mqtt-bridge.private.key
 #END of bridge.conf
 ```
 
-Be sure to have the right path and files for the private key, the certificate and the root certificate.
+Be sure to have the right path and files for the private key, the certificate and the root certificate, and, if you copied this file from another site, be sure to change the clientid.
 
 Finally you need to add into the **.env** file **a unique client id, the host address provided on Iot-Core, and the paths for the certificate and the root-certificate**, in order to be able to send messagges from the frontend to manage the actuators. At this point the **.env** file should look like this:
 
@@ -152,7 +152,7 @@ CLIENT_ID=YOUR_UNIQUE_CLIENT_ID
 HOST=YOUR_AWS_HOST
 ```
 
-Be sure to use same names as these above for the environment variables, and be sure to change the clientid.
+Be sure to use same names as these above for the environment variables.
 
 **NOTE!** The access key id, the secret access key and the session token provided by AWS expire after a while, so you have to manually re-set them in the .env file when this happens.
 
