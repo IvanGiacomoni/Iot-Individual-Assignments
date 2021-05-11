@@ -11,7 +11,7 @@ The server will be available at ***http://localhost:8080/***, where we can see t
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/homepage.png)
 
-If we click on *Temperature* we will see the **temperature values received during the last hour from all environmental station**:
+If we click on *Temperature* we will see the **temperature values received during the last hour from all environmental stations**:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/temperature_last_hour.png)
 
@@ -23,7 +23,7 @@ By clicking on *Back* and then on *Last hour aggregated values*, we will see the
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/temperature_aggregated_values.png)
 
-All this could be seen also for **gas and smoke values**. So below I show the **gas/smoke values received during the last hour from all environmental station**:
+All this could be seen also for **gas and smoke values**. So below I show the **gas/smoke values received during the last hour from all environmental stations**:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/gas_smoke_last_hour.png)
 
