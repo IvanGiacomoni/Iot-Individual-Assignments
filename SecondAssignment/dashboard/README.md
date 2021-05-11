@@ -74,4 +74,4 @@ device_id: 1
 The same logic is applied for gas/smoke actuators.
 
 ## Code
-More informations about the code can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/dashboard/dashboard_code.md)
+More informations about the code can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/dashboard/dashboard_code.md).
