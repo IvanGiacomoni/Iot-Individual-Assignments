@@ -21,10 +21,6 @@ AWS_SECRET_ACCESS_KEY=YOUR_AWS_SECRET_ACCESS_KEY
 AWS_SESSION_TOKEN=YOUR_AWS_SESSION_TOKEN
 ```
 
-Then you need to **subscribe** to all **topics** I mentioned [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/tree/main/SecondAssignment#mqtt-topics) by going in the MQTT test client section.
-
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/subscribe_aws.png)
-
 Then by going in the Rules section you have to create two **rules**, one for temperature data and one for gas and smoke data, specifying as topics temperature/device/<device_id> and gas_smoke/device/<device_id> respectively, and as operation you need to choose "Insert a message into a DynamoDB table". Here you can find a [tutorial](https://docs.aws.amazon.com/iot/latest/developerguide/iot-ddb-rule.html).
 
 **Temperature rule:**
