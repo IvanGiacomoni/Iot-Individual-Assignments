@@ -105,7 +105,7 @@ The **port** for the MQTT communication with the MQTT-SN broker is stored locall
 ```
 
 ### MQTT topics
-Topics are evaluated by the *getTopic* function, which simply concatenates the **base of the topic** with the device id. So, in the [Makefile](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/iotlab-m3_code/Makefile), we need to define the **base** fo all **topics**:
+Topics are evaluated by the *getTopic* function, which simply concatenates the **base of the topic** with the device id. So, in the [Makefile](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/iotlab-m3_code/Makefile), we need to define the **base** for all **topics**:
 
 ```c
 MQTT_TOPIC_TEMP = temperature/device/
