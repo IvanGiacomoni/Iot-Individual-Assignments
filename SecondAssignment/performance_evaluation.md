@@ -13,7 +13,7 @@ In order to do a performance evaluation, we need to create a **monitoring profil
 
 As we can see, for the experiment I used the **Saclay** frontend, where I reserved **4 M3-nodes** (**M3-6** as the **border router**, **M3-7**, **M3-8** and **M3-11** as nodes for my **application**).
 
-The monitoring profile will allow us to measure consumption in terms of **power, voltage and current**, and the performance of the network in terms of **throughput and end-to-end latency**. In particular, the metrics used are the following:
+The monitoring profile will allow us to measure consumption in terms of **power, voltage and current**, and the performance of the network in terms of **throughput** and **end-to-end latency**. In particular, the metrics used are the following:
 
 - **Power consumption: Watt (W)**
 - **Voltage consumption: Volt (V)**
