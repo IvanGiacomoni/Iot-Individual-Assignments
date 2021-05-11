@@ -175,7 +175,7 @@ Now you have to do the following steps:
 - Open another terminal in the A8-node of your experiment, and then go in the A8 folder with **cd A8**
 - Start the Mosquitto broker with **mosquitto -c bridge.conf**
 - In the Saclay frontend, open a number of terminal equal to the **number of M3-nodes of your experiment - 1**
-- In each one, launch the application with **nc m3-'node_id' 20000**, where 'node_id' is the id of the M3-node
+- In each one, launch the application with **nc m3-'node_id' 20000**, where 'node_id' is the id of the M3-node, and then, in the shell that you have in each terminal, type the command **start 'MQTT-SN-broker-address' 'device_id'**, where 'MQTT-SN-broker-address' is the address of the MQTT-SN broker, and 'device_id' must be **unique** for each node.
 
 The server will be available at http://localhost:8080/.
 
