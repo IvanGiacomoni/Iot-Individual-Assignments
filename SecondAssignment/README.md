@@ -21,10 +21,10 @@ The performance of the system will be carried out with the tools provided by [Io
 ## More details
 
 ### Manual and automatic mode
-The system is capable of switching between two modes through the interaction by the front-end:
+The system is capable of **switching** between two **modes** through the interaction by the front-end:
 
-- auto: data from both sensors are periodically sampled and published by MQTT towards Iot-Core, actuators are automatically controlled
-- manual: the periodical sample of data is stopped in order to allow the user to manually control the actuators
+- **auto**: data from both sensors are periodically sampled and published by MQTT towards Iot-Core, actuators are automatically controlled
+- **manual**: the periodical sample of data is stopped in order to allow the user to manually control the actuators
 
 This is done because there could be situations in which the manual mode could be useful, for example when sensors wrongly sample values and detect a danger, so I need to stop the auto mode in order to activate the manual mode, and then deactivate the actuators.
 
