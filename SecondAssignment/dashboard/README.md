@@ -23,15 +23,15 @@ By clicking on *Back* and then on *Last hour aggregated values*, we will see the
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/temperature_aggregated_values.png)
 
-All this could be seen also for **gas and smoke values**. So below I show the **gas/smoke values received during the last hour from all environmental stations**:
+All this could be seen also for **gas and smoke values**. So below I show the **gas and smoke values received during the last hour from all environmental stations**:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/gas_smoke_last_hour.png)
 
-Below we can see the **latest values** received for each device:
+Below we can see the **gas and smoke latest values** received for each device:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/gas_smoke_latest.png)
 
-Below we can see the **gas/smoke aggregated values (average, minimum and maximum) retrieved during the last hour for each device**, and **gas/smoke aggregated values (average, minimum and maximum) retrieved from all sensor devices during the last hour**:
+Below we can see the **gas and smoke aggregated values (average, minimum and maximum) retrieved during the last hour for each device**, and **gas and smoke aggregated values (average, minimum and maximum) retrieved from all sensor devices during the last hour**:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/gas_smoke_aggregated_values.png)
 
