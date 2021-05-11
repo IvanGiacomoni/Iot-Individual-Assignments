@@ -65,7 +65,7 @@ listener 1886 INADDR_ANY
 ```
 
 ### Configuring Mosquitto
-For the configuration of the **Mosquitto broker** we have to copy the **certificate**, **root certificate** and **private key** from our local machine into the A8 folder of the A8-node: particularly, if the you followed correctly the steps from the previous assignment, you can do this by executing the command **scp -r /etc/mosquitto/certs/ 'username'@saclay.iot-lab.info:~/A8/** in a terminal opened in the root folder of your local machine, where 'username' is your Iot-lab username.
+For the configuration of the **Mosquitto broker** we have to copy the **certificate**, **root certificate** and **private key** from our local machine into the A8 folder of the A8-node: particularly, if you followed correctly the steps from the previous assignment, you can do this by executing the command **scp -r /etc/mosquitto/certs/ 'username'@saclay.iot-lab.info:~/A8/** in a terminal opened in the root folder of your local machine, where 'username' is your Iot-lab username.
 Then, by going in the A8 folder of the A8 node with **cd A8**, you need to copy them in the /etc/mosquitto directory of the A8-node with the command **cp -r certs/ /etc/mosquitto**. Then you need to modify the **config.conf** file:
 
 ```
