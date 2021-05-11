@@ -179,3 +179,20 @@ Now you have to do the following steps:
 
 The server will be available at http://localhost:8080/.
 
+## Consoles
+
+### Mosquitto broker
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/mosquitto.png)
+
+### RSMB broker
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/rsmb.png)
+
+### Application on three M3-nodes
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/m3-nodes.png)
+
+### NodeJS server
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/server.png)
