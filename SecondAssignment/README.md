@@ -31,7 +31,7 @@ This is done because there could be situations in which the manual mode could be
 ### MQTT topics
 Below I list the main topics used by the system:
 
-- temperature/device/<device_id>e: used to publish temperature data from a device with a certain id towards Iot-Core
+- temperature/device/<device_id>: used to publish temperature data from a device with a certain id towards Iot-Core
 - gas_smoke/device/<device_id: used to publish gas/smoke data from a device with a certain id towards Ior-Core
 - switchMode/device/<device_id>: used to publish towards a device with a certain id the indication of switching to auto/manual mode
 - manageActuators/device/<device_id>: used to publish towards a device with a certain id the indication of turning on/off a certain actuator
