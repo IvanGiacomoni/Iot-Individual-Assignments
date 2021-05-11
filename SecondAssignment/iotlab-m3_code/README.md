@@ -475,3 +475,37 @@ void publishDataForAws(char* data, emcute_topic_t* topic){
 }
 ```
 
+## Switching mode (auto and manual)
+When the user send through the **frontend** the indication to **switch mode**, this indication is published on the **switchMode/device/'device_id'** MQTT topic, and then received by our device. If we have to switch to **manual** mode, the periodical sampling is blocked and we are ready to receive indications related to actuators, otherwise if we are switching to **auto**, the periodical sampling is resumed.
+
+## Controlling the state of actuators
+In order to control the state of actuators, we can receive the indication from the **frontend** through the **magageActuators/device/'device_id'** MQTT topic. What we are going to receive is the **name of the actuator**, the **type of data** it is related to (temperature or gas/smoke) and the **action** we need to do, so ON or OFF. Particularly, the idea is that of only controlling buzzers, the red led and the blue led, because these are the actuators related to dangerous situations. All this code is managed in the *on_pub* function, and below I only report the part of code related to temperature, because the remaining part is very similar:
+
+```c
+if(strcmp(typeData, "temperature") == 0){
+			
+			if(strcmp(actuator, "temp_buzzer") == 0){
+				
+				if(strcmp(operation, "ON") == 0){
+					printf("[Device %s] Turning ON temperature buzzer...\n",device_id);
+				}
+				
+				else if(strcmp(operation, "OFF") == 0){
+					printf("[Device %s] Turning OFF temperature buzzer...\n",device_id);
+				}
+			
+			}
+			
+			else if(strcmp(actuator, "red_led") == 0){
+				
+				if(strcmp(operation, "ON") == 0){
+					printf("[Device %s] Turning ON red led...\n",device_id);
+				}
+				
+				else if(strcmp(operation, "OFF") == 0){
+					printf("[Device %s] Turning OFF red led...\n",device_id);
+				} 
+			
+			}
+}
+```
