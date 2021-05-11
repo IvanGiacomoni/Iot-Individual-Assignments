@@ -246,7 +246,7 @@ char* mode = "auto";   // auto || manual
 ```
 
 ## Definition of sampling rates
-Given that we need to do **periodical sampling**, we need to use the **xtimer module**. So we need to inlude it in the [Makefile](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/iotlab-m3_code/Makefile):
+Given that we need to do **periodical sampling**, we need to use the **xtimer module**. So we need to include it in the [Makefile](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/iotlab-m3_code/Makefile):
 
 ```c
 USEMODULE += xtimer
