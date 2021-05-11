@@ -11,7 +11,15 @@ The main idea of a Wireless Sensor Network is that of **helping human beings** t
 ## Performance of the system
 The performance of the system will be carried out with the tools provided by [Iot-lab](https://www.iot-lab.info/). In particular, we will measure and evaluate:
 
-- the performance of the wireless sensor networ in terms of end-to-end latency and throughput
-- the performance of the system as the number of wireless elements increases
-- the energy consumption and duty cycling of the nodes
+- the performance of the wireless sensor networ in terms of **end-to-end latency** and **throughput**
+- the performance of the system as the **number of wireless elements** increases
+- the **energy consumption** and **duty cycling** of the nodes
 
+## Setup
+More informations about the **setup** of this assignment can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/setup.md).
+
+## Iotlab-m3 code
+More informations about the **iotlab-m3 code** of this assignment can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/iotlab-m3_code/code.md).
+
+## Web dashboard
+More informations about the **dashboard** can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/dashboard/README.md).
