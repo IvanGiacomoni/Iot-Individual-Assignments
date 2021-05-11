@@ -245,3 +245,233 @@ Also, we need to define the mode in the [main.c](https://github.com/IvanGiacomon
 char* mode = "auto";   // auto || manual
 ```
 
+## Definition of sampling rates
+Given that we need to to **periodical sampling**, we need to use the **xtimer module**. So we need to inlude it in the [Makefile](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/iotlab-m3_code/Makefile):
+
+```c
+USEMODULE += xtimer
+```
+
+Also, we need to include this **header** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/iotlab-m3_code/main.c):
+
+```c
+#include "xtimer.h"
+```
+
+The **sampling period** will be different for the two type of data, so we define **two different constants** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/iotlab-m3_code/main.c):
+
+```c
+#define GAS_SMOKE_DELAY             2
+#define TEMP_DELAY                  10
+```
+
+## Data sampling
+The logic of the application has not changed from the previous assignment, so for all details you can check the [previous assignment](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/nucleo_code/code.md). The main differences are the following:
+- **there aren't actuators**, so they are 'managed' locally and remotely from the dashboard with some **debug prints**
+- **there aren't sensors**, so the value are generated **randomly** with the **generateRandomTemperature** and the **generateRandomPpm** functions
+
+Below I report the two threads:
+
+**Temperature thread**:
+
+```c
+static void* threadTemp(void *arg){
+	(void)arg;
+	
+	printf("THREAD TEMPERATURE\n");
+	
+	srand(time(NULL));
+    
+    char* temperature_state = "";
+    
+    // Periodic sampling of temperature
+    while(1){
+		
+		printf("[TEMPERATURE] mode: %s\n", mode);
+		
+		if(strcmp(mode, "auto") == 0){
+			
+			int rand_state_temp = rand() % 3;
+			
+			// Reading temperature values by DHT-22 sensor
+			int temperature = generateRandomTemperature(rand_state_temp);
+        
+			if(temperature < 0){
+				continue;
+			}
+	  
+			printf("temperature: %d°C\n", temperature);
+		
+			// Preprocessing data
+		
+			if (temperature > TEMP_THRESHOLD_MAX){
+				printf("[TEMPERATURE] WARNING!!\n");
+				temperature_state = "WARNING!";
+			}
+		
+			else if (temperature > TEMP_THRESHOLD_MIN && temperature <= TEMP_THRESHOLD_MAX){
+				printf("[TEMPERATURE] BE CAREFUL TO THE TEMPERATURE!\n");
+				temperature_state = "GROWING!";
+			}
+		
+			else if(temperature <= TEMP_THRESHOLD_MIN){
+				printf("[TEMPERATURE] ALL OK!\n");
+				temperature_state = "ALL OK!";
+			}
+		
+			// Formatting all data into a string for mqtt publishing
+			char temp_s[5];
+			sprintf(temp_s, "%d", temperature);
+		
+			char data[64] = "{ ";
+			strcat(data, "\"temperature\": ");
+			strcat(data, temp_s);
+			strcat(data, ", \"temperature_state\": \"");
+			strcat(data, temperature_state);
+			strcat(data, "\"");
+			strcat(data, " }");
+        
+			// Publishing temperature data to MQTT_TOPIC_TEMP
+			publishDataForAws(data, &subscriptions[0].topic);
+			
+			xtimer_sleep(TEMP_DELAY);
+			printf("\n");
+		}
+		
+		else{
+			printf("[TEMPERATURE] Now in manual mode\n");
+			xtimer_sleep(5);
+		}
+		
+	}
+    
+    return NULL;    
+}
+```
+
+**Gas/smoke thread**:
+
+```c
+static void* threadGasSmoke(void* arg){
+    (void)arg;
+    
+    printf("THREAD GAS SMOKE\n");
+    
+    srand(time(NULL));
+    
+    char* gas_smoke_state = "";
+    
+    // Periodical sampling of ppm
+    while(1){
+		
+		printf("[GAS/SMOKE] mode: %s\n", mode);
+		
+		if(strcmp(mode, "auto") == 0){
+			
+			int rand_state_gas_smoke = rand() % 2;
+			
+			// Reading ppm values by MQ-2 sensor
+			int ppm = generateRandomPpm(rand_state_gas_smoke);
+			printf("ppm: %d\n", ppm);
+		
+			// Preprocessing data
+			if(ppm > PPM_THRESHOLD){
+				printf("[GAS/SMOKE] WARNING!!!\n");
+				gas_smoke_state = "WARNING!";
+			}
+		
+			else if(ppm <= PPM_THRESHOLD){
+				printf("[GAS/SMOKE] ALL OK!\n");
+				gas_smoke_state = "ALL_OK!";
+			}
+		
+			// Formatting data into a string for mqtt publishing
+			char ppm_s[5];
+			sprintf(ppm_s, "%d", ppm);
+		
+			char data[64] = "{ ";
+			strcat(data, "\"ppm\": ");
+			strcat(data, ppm_s);
+			strcat(data, ", \"gas_smoke_state\": \"");
+			strcat(data, gas_smoke_state);
+			strcat(data, "\"");
+			strcat(data, " }");
+        
+			// Publishing temperature data to MQTT_TOPIC_GAS_SMOKE
+			publishDataForAws(data, &subscriptions[1].topic);
+		
+			xtimer_sleep(GAS_SMOKE_DELAY);
+			printf("\n");
+		}
+		
+		else{
+			printf("[GAS/SMOKE] Now in manual mode\n");
+			xtimer_sleep(5);
+		}
+	}
+    
+    return NULL;    
+}
+```
+
+In order to generate **random** we need to include this **header** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/iotlab-m3_code/main.c):
+
+```c
+#include <time.h>
+```
+
+Below I report the *generateRandomTemperature* and the *generateRandomPpm* functions:
+
+```c
+int generateRandomTemperature(int rand_state_temp){
+    
+    int rand_temp = 0;
+    
+    if(rand_state_temp == 0){
+	    rand_temp = rand() % TEMP_THRESHOLD_MIN + 1;	
+	}
+	
+	else if(rand_state_temp == 1){
+	    rand_temp = (rand() % (TEMP_THRESHOLD_MAX - (TEMP_THRESHOLD_MIN+1) + 1)) + TEMP_THRESHOLD_MIN+1;	
+	}
+	
+	else if(rand_state_temp == 2){
+	    rand_temp = (rand() % ((TEMP_THRESHOLD_MAX + 6) - (TEMP_THRESHOLD_MAX+1) + 1)) + TEMP_THRESHOLD_MAX+1;	
+	}
+    
+    return rand_temp;
+    
+}
+```
+
+```c
+int generateRandomPpm(int rand_state_gas_smoke){
+	
+	int rand_ppm = 0;
+    
+    if(rand_state_gas_smoke == 0){
+	    rand_ppm = rand() % PPM_THRESHOLD + 1;	
+	}
+	
+	else if(rand_state_gas_smoke == 1){
+	    rand_ppm = (rand() % ((PPM_THRESHOLD + 6) - (PPM_THRESHOLD+1) + 1)) + PPM_THRESHOLD+1;	
+	}
+    
+    return rand_ppm;
+	
+}
+```
+
+As in the previous assignment, data are sent to **AWS** by using a *publishDataForAws* function, that takes as input the data and the topic where data are published. Obviously, data are formatted in **JSON**, in order to make the things work for storing them into **DynamoDB**. Below I report the *publishDataForAws* function:
+
+```c
+// Publish data towards AWS
+void publishDataForAws(char* data, emcute_topic_t* topic){
+	
+	if(emcute_pub(topic, data, strlen(data), EMCUTE_QOS_0) != EMCUTE_OK){
+		printf("error: unable to publish to %s\n", topic->name);
+		exit(EXIT_FAILURE);
+	} 	
+}
+```
+
