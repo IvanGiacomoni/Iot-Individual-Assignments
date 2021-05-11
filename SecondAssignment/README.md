@@ -39,6 +39,9 @@ Below I list the main topics used by the system:
 ## Setup
 More informations about the **setup** of this assignment can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/setup.md).
 
+## Performance evaluation
+More informations about the **performance evaluation** conducted can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/performance_evaluation.md).
+
 ## Iotlab-m3 code
 More informations about the **iotlab-m3 code** of this assignment can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/iotlab-m3_code/README.md).
 
