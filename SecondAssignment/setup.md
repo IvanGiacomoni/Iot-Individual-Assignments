@@ -4,7 +4,7 @@
 We need to install the **RIOT operating system**, [here](https://github.com/RIOT-OS/Tutorials#tutorials-for-riot) you can find a tutorial for the installation.
 
 ## Installing NodeJS and preparing the server
-You need to install **NodeJS** in your operating system in order to have the web dashboard working correctly, [here](https://nodejs.org/en/) you can find details. After this, you have to check if you have **npm** installed, otherwise you can install it from [here](https://www.npmjs.com/get-npm). You also need to require the **.env** file, that has to placed in the dashboard directory. More info about the .env file will come later.
+You need to install **NodeJS** in your operating system in order to have the web dashboard working correctly, [here](https://nodejs.org/en/) you can find details. After this, you have to check if you have **npm** installed, otherwise you can install it from [here](https://www.npmjs.com/get-npm). You also need to require the **.env** file, that has to be placed in the dashboard directory. More info about the .env file will come later.
 
 ## Nodemon (not mandatory)
 Now you can install **nodemon**, a very useful package to run our NodeJS server, with this command: **npm install -g nodemon** of you are on Windows, or **sudo npm install -g nodemon** if you are on Linux/Ubuntu.
