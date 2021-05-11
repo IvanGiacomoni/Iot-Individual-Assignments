@@ -94,7 +94,7 @@ int cmd_handler(int argc, char **argv){
 
 The cmd_handler takes as input the **number of arguments** of the program and the **effective arguments**. The arguments are only 2:
 - the **MQTT-SN broker address**, because it changes every time the Iot-lab experiment finishes
-- the **device id of the M3-node running the application**: this has to be unique for each M3-node, because we need to have unique **MQTT topics** as well as unique **MQTT id** for the communication with the MQTT-SN broker.
+- the **device id of the M3-node running the application**: this has to be unique for each M3-node, because we need to have unique **MQTT topics** as well as a unique **MQTT id** for the communication with the MQTT-SN broker.
 
 The **port** for the MQTT communication with the MQTT-SN broker is stored locally in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/iotlab-m3_code/main.c):
 
