@@ -34,7 +34,7 @@ Below I list the main **MQTT topics** used by the system:
 - **temperature/device/'device_id'**: used to publish temperature data from a device with a certain id towards Iot-Core
 - **gas_smoke/device/'device_id'**: used to publish gas/smoke data from a device with a certain id towards Ior-Core
 - **switchMode/device/'device_id'**: used to publish towards a device with a certain id the indication of switching to auto/manual mode
-- **manageActuators/device/'device_id**: used to publish towards a device with a certain id the indication of turning on/off a certain actuator
+- **manageActuators/device/'device_id'**: used to publish towards a device with a certain id the indication of turning on/off a certain actuator
 
 ## Setup
 More informations about the **setup** of this assignment can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/setup.md).
