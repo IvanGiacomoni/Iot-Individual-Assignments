@@ -53,7 +53,7 @@ Then you need to create the **IPv6 network** in Iot-LAB, and in order to do this
 Then you need to setup the **A8-node** for **MQTT** communication.
 
 ### Configuring RSBM (MQTT-SN broker)
-For the configuration of the **MQTT-SN broker** you can follow this [tutorial](https://www.iot-lab.info/learn/tutorials/riot/riot-mqtt-sn-a8-m3/) by looking at the **step 9**. Particularly, at this point the config.conf file should look like this:
+For the configuration of the **MQTT-SN broker** you can follow this [tutorial](https://www.iot-lab.info/learn/tutorials/riot/riot-mqtt-sn-a8-m3/) by looking at the **step 9**. Particularly, at this point the **config.conf** file should look like this:
 
 ```
 # add some debug output
@@ -69,4 +69,92 @@ listener 1886 INADDR_ANY
 ```
 
 ### Configuring Mosquitto
-For the configuration of the **Mosquitto broker** we have to copy 
+For the configuration of the **Mosquitto broker** we have to copy the **certificate**, **root certificate** and **private key** from our local machine into the A8 folder of the A8-node: particularly, if the you followed correctly the steps from the previous assignment, you can do this by executing the command **scp -r /etc/mosquitto/certs/ 'username'@saclay.iot-lab.info:~/A8/** in a terminal opened in the root folder of your local machine, where 'username' is your Iot-lab username.
+Then, by going in the A8 folder of the A8 node with **cd A8**, you need to copy them in the /etc/mosquitto directory of the A8-node with the command **cp -r certs/ /etc/mosquitto**. Then you need to modify the **config.conf** file:
+
+```
+# add some debug output
+trace_output protocol
+
+# listen for MQTT-SN traffic on UDP port 1885
+listener 1885 INADDR_ANY mqtts
+  ipv6 true
+
+# listen to MQTT connections on tcp port 1886
+listener 1886 INADDR_ANY
+  ipv6 true
+
+# MQTT-S outgoing local bridge
+connection local_bridge_to_mosquitto
+  address [MQTT-SN-broker-address]:1883
+  topic temperature/device/+ both
+  topic gas_smoke/device/+ both
+  topic switchMode/device/+ both
+  topic manageActuators/device/+ both
+```
+
+**NOTE**: '+' stands for 'at least one character' by the syntax of regular expressions, but in our case it will be filled with the device id.
+
+Finally, you need to setup a **bridge.conf** file in the root directory of the node in order to have the bridging between Iot-Core and RSMB:
+
+```
+# ============================================================
+# Bridge to AWS IOT
+# ============================================================
+
+connection awsiot
+
+#<Paste your AWS IoT Core ATS endpoint retrieved from the AWS CLI in the form of xxxxxxxxxxxxxxx-ats.iot.<region>.amazonaws.com:8883
+
+address yourAWSIotCoreEndopoint.com:8883
+
+# Specifying which topics are bridged and in what fashion
+topic temperature/device/+ both 1
+topic gas_smoke/device/+ both 1
+topic switchMode/device/+ both 1
+topic manageActuators/device/+ both 1
+
+# Setting protocol version explicitly
+bridge_protocol_version mqttv311
+bridge_insecure false
+
+# Bridge connection name and MQTT client Id, enabling the connection automatically when the broker starts.
+cleansession true
+clientid myclientid
+start_type automatic
+notifications false
+log_type all
+
+# ============================================================
+# Certificate based SSL/TLS support
+# ============================================================
+
+#Path to the rootCA
+bridge_cafile yourPath/root-CA.crt
+
+# Path to the PEM encoded client certificate
+bridge_certfile yourPath/mqtt-bridge.cert.pem
+
+# Path to the PEM encoded client private key
+bridge_keyfile /etc/mosquitto/certs/mqtt-bridge.private.key
+
+#END of bridge.conf
+```
+
+Be sure to have the right path and files for the private key, the certificate and the root certificate.
+
+Finally you need to add into the **.env** file **a unique client id, the host address provided on Iot-Core, and the paths for the certificate and the root-certificate**, in order to be able to send messagges from the frontend to manage the actuators. At this point the **.env** file should look like this:
+
+```
+AWS_ACCESS_KEY_ID=YOUR_AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY=YOUR_AWS_SECRET_ACCESS_KEY
+AWS_SESSION_TOKEN=YOUR_AWS_SESSION_TOKEN
+CERT=path/certificate.cert.pem
+ROOT_CA=path/root-CA.crt
+CLIENT_ID=YOUR_UNIQUE_CLIENT_ID
+HOST=YOUR_AWS_HOST
+```
+
+Be sure to use same names as these above for the environment variables, and be sure to changhe the clientid.
+
+**NOTE!** The access key id, the secret access key and the session token provided by AWS expire after a while, so you have to manually re-set them in the .env file when this happens.
