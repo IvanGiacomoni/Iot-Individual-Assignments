@@ -94,6 +94,7 @@ connection local_bridge_to_mosquitto
 ```
 
 **NOTE**: '+' stands for 'at least one character' by the syntax of regular expressions, but in our case it will be filled with the device id.
+Be sure to insert the correct address of the MQTT-SN broker.
 
 Finally, you need to setup a **bridge.conf** file in the root directory of the node in order to have the bridging between Iot-Core and RSMB:
 
