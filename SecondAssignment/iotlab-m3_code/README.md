@@ -414,7 +414,7 @@ static void* threadGasSmoke(void* arg){
 }
 ```
 
-In order to generate **random** we need to include this **header** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/iotlab-m3_code/main.c):
+In order to generate **random** data we need to include this **header** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/iotlab-m3_code/main.c):
 
 ```c
 #include <time.h>
