@@ -23,7 +23,7 @@ The monitoring profile will allow us to measure consumption in terms of **power,
 ## Power, voltage and current consumption
 
 ### M3-node: the application
-I analyzed the power, voltage and current consumption of the single **M3-nodes** where my application was running. Below I report the results of the **M3-11** node of the Saclay frontend that I was testing in one of my experiments as a node for my application:
+I analyzed the power, voltage and current consumption of the single **M3-nodes** where my application was running. Below I report the results of the **M3-11** node of the Saclay frontend that I was testing as a node for my application:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/m3-node-power_consumption.png)
 
@@ -33,7 +33,7 @@ I don't report the plots for the other nodes of the application because they are
 
 ### M3-node: the border router
 
-I analyzed the power, voltage and current consumption of the **border router**. Below I report the results of the **M3-6** node of the Saclay frontend that I was testing in one of my experiments as my border router:
+I analyzed the power, voltage and current consumption of the **border router**. Below I report the results of the **M3-6** node of the Saclay frontend that I was testing as my border router:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/border_router_power_consumption.png)
 
