@@ -27,7 +27,7 @@ I analyzed the power, voltage and current consumption of the single **M3-nodes**
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/m3-node-power_consumption.png)
 
-As we can see, in some points we have some consumption **peaks**, corresponding to the **sampling** of values, while in other points we have some **flat lines**, corresponding to the delay **periods**. Obviously, as the number of wireless node increases, the performance of one of this nodes remain almost **similar**, because they are executing the same code application.
+As we can see, in some points we have some consumption **peaks**, corresponding to the **sampling** of values, while in other points we have some **flat lines**, corresponding to the delay **periods**. Obviously, as the number of wireless node increases, the performance of one of this nodes remain almost **similar**, because they are executing the same application code.
 
 I don't report the plots for the other nodes of the application because they are very similar.
 
