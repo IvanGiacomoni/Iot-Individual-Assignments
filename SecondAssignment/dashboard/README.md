@@ -9,23 +9,23 @@ The **Web Dashboard** is composed by two parts:
 ## Overview
 The server will be available at ***http://localhost:8080/***, where we can see the **homepage**:
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/images/homepage.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/homepage.png)
 
-If we click on *Temperature* we will see the **temperature values received during the last hour** from the DHT-22 sensor for each device:
+If we click on *Temperature* we will see the **temperature values received during the last hour from all environmental station**:
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/images/temp_last_hour_values.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/temperature_last_hour.png)
 
-By clicking on *Last values*, we will see the **latest values** received from the DHT-22 sensor for each device.
+By clicking on *Last values*, we will see the **latest temperature values** received for each device:
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/images/temp_latest_values.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/temperature_latest.png)
 
-By clicking on *Back* and then on *Last hour aggregated values*, we will see the **aggregated values (average, minimum and maximum)** for the DHT-22 sensor **retrieved during the last hour** for each device.
+By clicking on *Back* and then on *Last hour aggregated values*, we will see the **temperature aggregated values (average, minimum and maximum) retrieved during the last hour for each device**, and **temperature aggregated values (average, minimum and maximum) retrieved from all sensor devices during the last hour**:
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/images/temp_aggregated.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/temperature_aggregated_values.png)
 
-All this could be seen also for **gas and smoke values** retrieved from the MQ-2 sensor. So below I show the **last hour values** for each device:
+All this could be seen also for **gas and smoke values**. So below I show the **gas/smoke values received during the last hour from all environmental station**:
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/images/gas_smoke_last_hour_values.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/gas_smoke_last_hour.png)
 
 Below we can see the **latest values** for each device:
 
