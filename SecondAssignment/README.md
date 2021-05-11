@@ -29,12 +29,12 @@ The system is capable of **switching** between two **modes** through the interac
 This is done because there could be situations in which the manual mode could be useful, for example when sensors wrongly sample values and detect a danger, so I need to stop the auto mode in order to activate the manual mode, and then deactivate the actuators.
 
 ### MQTT topics
-Below I list the main topics used by the system:
+Below I list the main **MQTT topics** used by the system:
 
-- temperature/device/<device_id>: used to publish temperature data from a device with a certain id towards Iot-Core
-- gas_smoke/device/<device_id: used to publish gas/smoke data from a device with a certain id towards Ior-Core
-- switchMode/device/<device_id>: used to publish towards a device with a certain id the indication of switching to auto/manual mode
-- manageActuators/device/<device_id>: used to publish towards a device with a certain id the indication of turning on/off a certain actuator
+- **temperature/device/'device_id'**: used to publish temperature data from a device with a certain id towards Iot-Core
+- **gas_smoke/device/'device_id'**: used to publish gas/smoke data from a device with a certain id towards Ior-Core
+- **switchMode/device/'device_id'**: used to publish towards a device with a certain id the indication of switching to auto/manual mode
+- **manageActuators/device/'device_id**: used to publish towards a device with a certain id the indication of turning on/off a certain actuator
 
 ## Setup
 More informations about the **setup** of this assignment can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/setup.md).
