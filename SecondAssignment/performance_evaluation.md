@@ -20,6 +20,8 @@ The monitoring profile will allow us to measure consumption in terms of **power,
 - **Current consumption: Ampere (A)**
 - **Performance of the network: Received signal strength indication (rssi)**
 
+The **channels** for which I measured the performance are the **11** and the **26**.
+
 ## Power, voltage and current consumption
 
 ### M3-node: the application
