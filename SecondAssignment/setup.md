@@ -159,3 +159,23 @@ HOST=YOUR_AWS_HOST
 Be sure to use same names as these above for the environment variables, and be sure to change the clientid.
 
 **NOTE!** The access key id, the secret access key and the session token provided by AWS expire after a while, so you have to manually re-set them in the .env file when this happens.
+
+## Launching the application
+At this point you should already have a terminal on the Saclay frontend with the border router running, and below I show a picture of it:
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/border_router.png)
+
+Now you have to do the following steps:
+- Download the repository from [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/archive/refs/heads/main.zip), or clone it with **git clone https://github.com/IvanGiacomoni/Iot-Individual-Assignments.git**
+- Open a terminal in the dashboard folder
+- Launch npm install
+- Launch the nodeJS server with **node index.js** or **nodemon** (if you installed it)
+- Open a terminal in the A8-node of your experiment
+- Start the RSMB broker with **broker_mqtts config.conf**
+- Open another terminal in the A8-node of your experiment, and then go in the A8 folder with **cd A8**
+- Start the Mosquitto broker with **mosquitto -c bridge.conf**
+- In the Saclay frontend, open a number of terminal equal to the **number of M3-nodes of your experiment - 1**
+- In each one, launch the application with **nc m3-'node_id' 20000**, where 'node_id' is the id of the M3-node
+
+The server will be available at http://localhost:8080/.
+
