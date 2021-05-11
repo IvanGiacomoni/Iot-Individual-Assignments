@@ -18,7 +18,7 @@ The monitoring profile will allow us to measure consumption in terms of **power,
 - **Power consumption: Watt (W)**
 - **Voltage consumption: Volt (V)**
 - **Current consumption: Ampere (A)**
-- **Latency: Received signal strength indication (rssi)**
+- **Performance of the network: Received signal strength indication (rssi)**
 
 ## Power, voltage and current consumption
 
