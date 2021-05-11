@@ -230,7 +230,7 @@ void mqttSubscribeTo(char* topic_name, int pos_into_subscriptions){
 ```
 
 ### Threads' creation
-Finally, I create **two threads**, one for managing the sampling from the MQ-2 sensor and the other one for sampling from the DHT-22 sensor: the main reason is given by the different sampling periods, so with threads we are able to manage both samplings in parallel. If the actual **mode** of the system is set on "auto", then both threads will start sampling once they are created.
+Finally, I create **two threads**, one for managing the sampling of **temperature** data and the other one for sampling **gas/smoke** data: the main reason is given by the different sampling periods, so with threads we are able to manage both samplings in parallel. If the actual **mode** of the system is set on "auto", then both threads will start sampling once they are created.
 
 In order to use threads, we need to include this **header** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/iotlab-m3_code/main.c):
 
