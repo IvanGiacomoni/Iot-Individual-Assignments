@@ -1,7 +1,10 @@
 # Setup
 
+## AWS, Iot-Core and DynamoDB
+Then, you need so sign in in [AWS](https://aws.amazon.com/education/awseducate/), in order to get access to **Iot-Core** and **DynamoDB** services. Once you're on Iot-Core, you need to create a **thing** in order to get your certificate, root certificate and private key. Here you can find a [tutorial](https://docs.aws.amazon.com/iot/latest/developerguide/iot-moisture-create-thing.html). Then you need to add into the **.env** file the **access key id**, the **secret access key** and the **session token** provided by AWS, to be able to receive messages from the devices. Then you need to **subscribe** to all **topics** I mentioned [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/tree/main/SecondAssignment#mqtt-topics) by going in the MQTT test client section.
+
 ## Iot-lab experiment
-The first thing you need to do is to submit an **experiment** on the [Iot-lab testbed](https://www.iot-lab.info/testbed/dashboard) with **one A8-node** at least **2 M3-nodes** on the same **frontend**, between those offered by Iot-lab: for our purposes, the recommended choice is the **Saclay** frontend. In particular, you need to add a **monitoring profile** for each of the M3-nodes, in order to evaluate the performances next. Below I show a picture of the monitoring profile I used:
+Then you need to submit an **experiment** on the [Iot-lab testbed](https://www.iot-lab.info/testbed/dashboard) with **one A8-node** at least **2 M3-nodes** on the same **frontend**, between those offered by Iot-lab: for our purposes, the recommended choice is the **Saclay** frontend. In particular, you need to add a **monitoring profile** for each of the M3-nodes, in order to evaluate the performances next. Below I show a picture of the monitoring profile I used:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/iot-lab-monitoring-profile.png)
 
