@@ -13,7 +13,29 @@ Now you can install **nodemon**, a very useful package to run our NodeJS server,
 You need also to install this [MQTT-cli](https://www.hivemq.com/blog/mqtt-cli/), in order to do publish/subscribe requests from the command line.
 
 ## AWS, Iot-Core and DynamoDB
-Then, you need so sign in in [AWS](https://aws.amazon.com/education/awseducate/), in order to get access to **Iot-Core** and **DynamoDB** services. Once you're on Iot-Core, you need to create a **thing** in order to get your certificate, root certificate and private key. Here you can find a [tutorial](https://docs.aws.amazon.com/iot/latest/developerguide/iot-moisture-create-thing.html). Then you need to add into the **.env** file the **access key id**, the **secret access key** and the **session token** provided by AWS, to be able to receive messages from the devices. Then you need to **subscribe** to all **topics** I mentioned [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/tree/main/SecondAssignment#mqtt-topics) by going in the MQTT test client section.
+Then, you need so sign in in [AWS](https://aws.amazon.com/education/awseducate/), in order to get access to **Iot-Core** and **DynamoDB** services. Once you're on Iot-Core, you need to create a **thing** in order to get your **certificate**, **root certificate** and **private key**. Here you can find a [tutorial](https://docs.aws.amazon.com/iot/latest/developerguide/iot-moisture-create-thing.html). Then you need to add into the **.env** file the **access key id**, the **secret access key** and the **session token** provided by AWS, to be able to receive messages from the devices. At this point the .env file sholud look like this:
+
+```
+AWS_ACCESS_KEY_ID=YOUR_AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY=YOUR_AWS_SECRET_ACCESS_KEY
+AWS_SESSION_TOKEN=YOUR_AWS_SESSION_TOKEN
+```
+
+Then you need to **subscribe** to all **topics** I mentioned [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/tree/main/SecondAssignment#mqtt-topics) by going in the MQTT test client section.
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/subscribe_aws.png)
+
+Then by going in the Rules section you have to create two **rules**, one for temperature data and one for gas and smoke data, specifying as topics temperature/device/<device_id> and gas_smoke/device/<device_id> respectively, and as operation you need to choose "Insert a message into a DynamoDB table". Here you can find a [tutorial](https://docs.aws.amazon.com/iot/latest/developerguide/iot-ddb-rule.html).
+
+**Temperature rule:**
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/temperature_rule.png)
+
+**Gas/Smoke rule:**
+
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/gas_smoke_rule.png)
+
+So it is clear that we will create **two DynamoDb tables**, one for each rule: particularly, each entry of both tables is made up of the **Unix timestamp** associated to the creation of that entry, that will be useful for quering the last hour values of temperature and gas/smoke, the **device_id** of the device who has sampled that value, and the **device_data**, which consists of the **value** sampled and the **state** associated to that value. 
 
 ## Iot-lab experiment
 Then you need to submit an **experiment** on the [Iot-lab testbed](https://www.iot-lab.info/testbed/dashboard) with **one A8-node** at least **2 M3-nodes** on the same **frontend**, between those offered by Iot-lab: for our purposes, the recommended choice is the **Saclay** frontend. In particular, you need to add a **monitoring profile** for each of the M3-nodes, in order to evaluate the performances next. Below I show a picture of the monitoring profile I used:
