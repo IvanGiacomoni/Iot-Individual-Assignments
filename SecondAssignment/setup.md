@@ -1,5 +1,11 @@
 # Setup
 
+## Installing NodeJS and preparing the server
+You need to install **NodeJS** in your operating system in order to have the web dashboard working correctly, [here](https://nodejs.org/en/) you can find details. After this, you have to check if you have **npm** installed, otherwise you can install it from [here](https://www.npmjs.com/get-npm). You also need to require the **.env** file, that has to placed in the dashboard directory. More info about the .env file will come later.
+
+## Nodemon (not mandatory)
+Now you can install **nodemon**, a very useful package to run our NodeJS server, with this command: **npm install -g nodemon** of you are on Windows, or **sudo npm install -g nodemon** if you are on Linux/Ubuntu.
+
 ## AWS, Iot-Core and DynamoDB
 Then, you need so sign in in [AWS](https://aws.amazon.com/education/awseducate/), in order to get access to **Iot-Core** and **DynamoDB** services. Once you're on Iot-Core, you need to create a **thing** in order to get your certificate, root certificate and private key. Here you can find a [tutorial](https://docs.aws.amazon.com/iot/latest/developerguide/iot-moisture-create-thing.html). Then you need to add into the **.env** file the **access key id**, the **secret access key** and the **session token** provided by AWS, to be able to receive messages from the devices. Then you need to **subscribe** to all **topics** I mentioned [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/tree/main/SecondAssignment#mqtt-topics) by going in the MQTT test client section.
 
