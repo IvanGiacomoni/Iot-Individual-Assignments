@@ -107,6 +107,15 @@ Below I list the main topics used by the system:
 - **manageActuators/device/<device_id>:** used to publish towards a device with a certain id the indication of turning on/off a certain actuator
 
 ## Setup
+More informations about the **setup** of this assignment can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/setup.md).
+
+## Nucleo code
+More informations about the **iotlab-m3 code** of this assignment can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/nucleo_code/code.md).
+
+## Web dashboard
+More informations about the **dashboard** can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/dashboard/README.md).
+
+## Setup
 
 ### The RIOT operating system
 We need to install the **RIOT operating system**, [here](https://github.com/RIOT-OS/Tutorials#tutorials-for-riot) you can find a tutorial for the installation.
