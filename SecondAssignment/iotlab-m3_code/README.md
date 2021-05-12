@@ -38,7 +38,7 @@ static const shell_command_t shell_commands[] = {
 };
 ```
 ### cmd_handler
-As we can see, we only have one command, that is **start**, which is responsible of starting the application by invoking the *cmd_handler* function, that I report below:
+As we can see, we only have one customized command, that is **start**, which is responsible of starting the application by invoking the *cmd_handler* function, that I report below:
 
 ```c
 int cmd_handler(int argc, char **argv){
