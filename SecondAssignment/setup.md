@@ -164,7 +164,7 @@ At this point you should already have a terminal on the Saclay frontend with the
 Now you have to do the following steps:
 - Download the repository from [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/archive/refs/heads/main.zip), or clone it with **git clone https://github.com/IvanGiacomoni/Iot-Individual-Assignments.git**
 - Open a terminal in the SecondAssignment/dashboard folder
-- Launch npm install
+- Launch **npm install**
 - Launch the nodeJS server with **node index.js** or **nodemon** (if you installed it)
 - Open a terminal in the A8-node of your experiment
 - Start the RSMB broker with **broker_mqtts config.conf**
