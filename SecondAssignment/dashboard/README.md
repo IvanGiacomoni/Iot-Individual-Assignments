@@ -15,11 +15,11 @@ If we click on *Temperature* we will see the **temperature values received durin
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/temperature_last_hour.png)
 
-By clicking on *Last values*, we will see the **latest temperature values** received for each device:
+By clicking on *Last values*, we will see the **latest temperature values** received from each device:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/temperature_latest.png)
 
-By clicking on *Back* and then on *Last hour aggregated values*, we will see the **temperature aggregated values (average, minimum and maximum) retrieved during the last hour for each device**, and **temperature aggregated values (average, minimum and maximum) retrieved from all sensor devices during the last hour**:
+By clicking on *Back* and then on *Last hour aggregated values*, we will see the **temperature aggregated values (average, minimum and maximum) retrieved during the last hour from each device**, and **temperature aggregated values (average, minimum and maximum) retrieved from all sensor devices during the last hour**:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/temperature_aggregated_values.png)
 
@@ -27,11 +27,11 @@ All this could be seen also for **gas and smoke values**. So below I show the **
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/gas_smoke_last_hour.png)
 
-Below we can see the **gas and smoke latest values** received for each device:
+Below we can see the **gas and smoke latest values** received from each device:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/gas_smoke_latest.png)
 
-Below we can see the **gas and smoke aggregated values (average, minimum and maximum) retrieved during the last hour for each device**, and **gas and smoke aggregated values (average, minimum and maximum) retrieved from all sensor devices during the last hour**:
+Below we can see the **gas and smoke aggregated values (average, minimum and maximum) retrieved during the last hour from each device**, and **gas and smoke aggregated values (average, minimum and maximum) retrieved from all sensor devices during the last hour**:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/gas_smoke_aggregated_values.png)
 
