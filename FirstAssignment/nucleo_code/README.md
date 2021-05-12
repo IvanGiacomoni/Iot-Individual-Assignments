@@ -1,4 +1,4 @@
-# Code
+# Nucleo code
 
 ## Initializing the DHT-22 sensor
 The application starts by **initializing the DHT-22 sensor** by using the *initializeDHT* function:
