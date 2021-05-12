@@ -4,16 +4,13 @@
 We need to install the **RIOT operating system**, [here](https://github.com/RIOT-OS/Tutorials#tutorials-for-riot) you can find a tutorial for the installation.
 
 ## Installing NodeJS and preparing the server
-You need to install **NodeJS** in your operating system in order to have the web dashboard working correctly, [here](https://nodejs.org/en/) you can find details. After this, you have to check if you have **npm** installed, otherwise you can install it from [here](https://www.npmjs.com/get-npm). You also need to require the **.env** file, that has to be placed in the dashboard directory. More info about the .env file will come later.
+You need to install **NodeJS** in your operating system in order to have the web dashboard working correctly, [here](https://nodejs.org/en/) you can find all the details. After this, you have to check if you have **npm** installed, otherwise you can install it from [here](https://www.npmjs.com/get-npm). You also need to require the **.env** file, that has to be placed in the dashboard directory. More info about the .env file will come later.
 
 ## Nodemon (not mandatory)
 Now you can install **nodemon**, a very useful package to run our NodeJS server, with this command: **npm install -g nodemon** if you are on Windows, or **sudo npm install -g nodemon** if you are on Linux/Ubuntu.
 
-## Installing MQTT-cli (not mandatory)
-You can also install this [MQTT-cli](https://www.hivemq.com/blog/mqtt-cli/), in order to do publish/subscribe requests from the command line.
-
 ## AWS, Iot-Core and DynamoDB
-Then, you need so sign in in [AWS](https://aws.amazon.com/education/awseducate/), in order to get access to **Iot-Core** and **DynamoDB** services. Once you're on Iot-Core, you need to create a **thing** in order to get your **certificate**, **root certificate** and **private key**. Here you can find a [tutorial](https://docs.aws.amazon.com/iot/latest/developerguide/iot-moisture-create-thing.html). Then you need to add into the **.env** file the **access key id**, the **secret access key** and the **session token** provided by AWS, to be able to receive messages from the devices. At this point the .env file sholud look like this:
+Then, you need so sign in [AWS](https://aws.amazon.com/education/awseducate/), in order to get access to **Iot-Core** and **DynamoDB** services. Once you're on Iot-Core, you need to create a **thing** in order to get your **certificate**, **root certificate** and **private key**. Here you can find a [tutorial](https://docs.aws.amazon.com/iot/latest/developerguide/iot-moisture-create-thing.html). Then you need to add into the **.env** file the **access key id**, the **secret access key** and the **session token** provided by AWS, to be able to receive messages from the devices. At this point the .env file sholud look like this:
 
 ```
 AWS_ACCESS_KEY_ID=YOUR_AWS_ACCESS_KEY_ID
@@ -37,7 +34,7 @@ So it is clear that we will create **two DynamoDb tables**, one for each rule: p
 Before starting an [Iot-lab](https://www.iot-lab.info/) experiment, you need to configure an SSH access key, and in order to do this you can follow this [tutorial](https://www.iot-lab.info/docs/getting-started/ssh-access/).
 
 ## Iot-lab experiment
-Then you need to submit an **experiment** on the [Iot-lab testbed](https://www.iot-lab.info/testbed/dashboard) with **one A8-node** and at least **2 M3-nodes** on the same **frontend**, between those offered by Iot-lab: for our purposes, the recommended choice is the **Saclay** frontend. In particular, you need to add a **monitoring profile** for each of the M3-nodes, in order to evaluate the performances next. Below I show a picture of the monitoring profile I used:
+Then you need to submit an **experiment** on the [Iot-lab testbed](https://www.iot-lab.info/testbed/dashboard) with **one A8-node** and at least **2 M3-nodes** on the same **frontend**, between those offered by Iot-lab: for our purposes, the recommended choice is the **Saclay** frontend. In particular, you need to add a **monitoring profile** for each M3-node, in order to evaluate the performances next. Below I show a picture of the monitoring profile I used:
 
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/iot-lab-monitoring-profile.png)
 
