@@ -34,7 +34,7 @@ This is done because there could be situations in which the manual mode could be
 More informations about the **setup** of this assignment can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/ThirdAssignment/setup.md).
 
 ## Iotlab-St-Lrwan1 code
-More informations about the **iotlab-m3 code** of this assignment can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/ThirdAssignment/iotlab-St-Lrwan1_code/README.md).
+More informations about the **iotlab-St-Lrwan1 code** of this assignment can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/ThirdAssignment/iotlab-St-Lrwan1_code/README.md).
 
 ## Web dashboard
 More informations about the **dashboard** can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/ThirdAssignment/dashboard/README.md).
