@@ -16,7 +16,7 @@ Below we can see a picture that highlights all the connected components:
 The long-range low-power wide area network will be simulated on [Iot-lab](https://www.iot-lab.info/), where we need to setup at least one **B-L072Z-LRWAN1-node** for running our **application**. From each device on Iot-lab we will send the data to [TheThingsNetwork](https://www.thethingsnetwork.org/), which is a public Lora network, that can be exploited to connect the devices on Iot-lab to a gateway (potentially owned by another person) on this network where **Iot-Core** by **MQTT**, that is a service provided by AWS that uses MQTT and that we can exploit to receive data coming from our devices. Then there is the needing to save them in the cloud: my choice was **DynamoDB**, a noSQL database provided by AWS. Once data are stored in the db, we can query them using an appropriate server in order to finally show them on the **front-end** side. My choice for the back-end side was **NodeJS**, while for the front-end side I used **HTML, Bootstrap, Javascript and Vue-js**. The frontend and the backend will create the **Web Dashboard**. Finally, the frontend will be used also to **control the state of actuators**.
 
 ## Performance evaluation
-It was not possible to perfrom a performance evaluation because of several issues in the [IoT-Lab](https://www.iot-lab.info/) system.
+It was not possible to perfrom a performance evaluation because of several issues affecting the **B-L072Z-LRWAN1 nodes** in the [IoT-Lab](https://www.iot-lab.info/) system.
 
 ## Manual and automatic mode
 The system is capable of **switching** between two **modes** through the interaction by the front-end:
