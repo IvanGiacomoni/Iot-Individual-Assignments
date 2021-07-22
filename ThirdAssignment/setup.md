@@ -22,11 +22,11 @@ Then by going in the Rules section you have to create two **rules**, one for tem
 
 **Temperature rule:**
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/temperature_rule.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/ThirdAssignment/images/temperature_rule.png)
 
 **Gas/Smoke rule:**
 
-![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/images/gas_smoke_rule.png)
+![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/ThirdAssignment/images/gas_smoke_rule.png)
 
 So it is clear that we will create **two DynamoDb tables**, one for each rule: particularly, each entry of both tables is made up of the **Unix timestamp** associated to the creation of that entry, that will be useful for quering the last hour values of temperature and gas/smoke, the **device_id** of the device who has sampled that value, and the **device_data**, which consists of the **value** sampled and the **state** associated to that value. 
 
