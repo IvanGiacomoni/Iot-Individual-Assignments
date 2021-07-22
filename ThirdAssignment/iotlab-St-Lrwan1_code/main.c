@@ -332,28 +332,23 @@ static void* threadTemp(void *arg){
 				printf("[TEMPERATURE] ALL OK!\n");
 				temperature_state = "ALL OK!";
 			}
-			
-			// Sending to the cloud only if the current situation is not ok 
-			if(strcmp(temperature_state, "ALL OK!") != 0){
 				
-				// Formatting all data into a string for mqtt publishing
-				char temp_s[5];
-				sprintf(temp_s, "%d", temperature);
+			// Formatting all data into a string for mqtt publishing
+			char temp_s[5];
+			sprintf(temp_s, "%d", temperature);
 		
-				char data[64] = "{ ";
-				strcat(data, "\"temperature\": ");
-				strcat(data, temp_s);
-				strcat(data, ", \"device_id\": \"");
-				strcat(data, dev_id);
-				strcat(data, ", \"temperature_state\": \"");
-				strcat(data, temperature_state);
-				strcat(data, "\"");
-				strcat(data, " }");
+			char data[64] = "{ ";
+			strcat(data, "\"temperature\": ");
+			strcat(data, temp_s);
+			strcat(data, ", \"device_id\": \"");
+			strcat(data, dev_id);
+			strcat(data, ", \"temperature_state\": \"");
+			strcat(data, temperature_state);
+			strcat(data, "\"");
+			strcat(data, " }");
         
-				// Publishing temperature data towards AWS
-				send(data);
-			
-			}
+			// Publishing temperature data towards AWS
+			send(data);
 			
 			xtimer_sleep(TEMP_DELAY);
 			printf("\n");
@@ -403,28 +398,23 @@ static void* threadGasSmoke(void* arg){
 				printf("[GAS/SMOKE] ALL OK!\n");
 				gas_smoke_state = "ALL_OK!";
 			}
-			
-			// Sending to the cloud only if the current situation is not ok 
-			if(strcmp(gas_smoke_state, "ALL OK!") != 0){
 				
-				// Formatting data into a string for mqtt publishing
-				char ppm_s[5];
-				sprintf(ppm_s, "%d", ppm);
+			// Formatting data into a string for mqtt publishing
+			char ppm_s[5];
+			sprintf(ppm_s, "%d", ppm);
 		
-				char data[64] = "{ ";
-				strcat(data, "\"ppm\": ");
-				strcat(data, ppm_s);
-				strcat(data, ", \"device_id\": \"");
-				strcat(data, dev_id);
-				strcat(data, ", \"gas_smoke_state\": \"");
-				strcat(data, gas_smoke_state);
-				strcat(data, "\"");
-				strcat(data, " }");
+			char data[64] = "{ ";
+			strcat(data, "\"ppm\": ");
+			strcat(data, ppm_s);
+			strcat(data, ", \"device_id\": \"");
+			strcat(data, dev_id);
+			strcat(data, ", \"gas_smoke_state\": \"");
+			strcat(data, gas_smoke_state);
+			strcat(data, "\"");
+			strcat(data, " }");
         
-				// Publishing gas/smoke data towards AWS
-				send(data);
-			
-			}
+			// Publishing gas/smoke data towards AWS
+			send(data);
 		
 			xtimer_sleep(GAS_SMOKE_DELAY);
 			printf("\n");
