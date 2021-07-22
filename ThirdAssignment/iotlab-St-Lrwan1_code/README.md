@@ -316,3 +316,161 @@ In order to generate **random** data we need to include this **header** in the [
 ```
 
 Below I report the *generateRandomTemperature* and the *generateRandomPpm* functions:
+
+```c
+int generateRandomTemperature(int rand_state_temp){
+    
+    int rand_temp = 0;
+    
+    if(rand_state_temp == 0){
+	    rand_temp = rand() % TEMP_THRESHOLD_MIN + 1;	
+	}
+	
+	else if(rand_state_temp == 1){
+	    rand_temp = (rand() % (TEMP_THRESHOLD_MAX - (TEMP_THRESHOLD_MIN+1) + 1)) + TEMP_THRESHOLD_MIN+1;	
+	}
+	
+	else if(rand_state_temp == 2){
+	    rand_temp = (rand() % ((TEMP_THRESHOLD_MAX + 6) - (TEMP_THRESHOLD_MAX+1) + 1)) + TEMP_THRESHOLD_MAX+1;	
+	}
+    
+    return rand_temp;
+    
+}
+```
+
+```c
+int generateRandomPpm(int rand_state_gas_smoke){
+	
+	int rand_ppm = 0;
+    
+    if(rand_state_gas_smoke == 0){
+	    rand_ppm = rand() % PPM_THRESHOLD + 1;	
+	}
+	
+	else if(rand_state_gas_smoke == 1){
+	    rand_ppm = (rand() % ((PPM_THRESHOLD + 6) - (PPM_THRESHOLD+1) + 1)) + PPM_THRESHOLD+1;	
+	}
+    
+    return rand_ppm;
+	
+}
+```
+
+As in the previous assignments, data are sent to **AWS**. Obviously, data are formatted in **JSON**, in order to make the things work for storing them into **DynamoDB**, but this time we will use LoraWAN, in order to first send the data to [TheThingsNetwork](https://www.thethingsnetwork.org/), and then to **AWS** (by **MQTT**) by using the integration available on [TheThingsNetwork](https://www.thethingsnetwork.org/). A difference is also that I send the **device id** inserted into the shell, because given that we will not use MQTT at the Edge, we can't to an immediate assignment of the device id on **Iot Core**. All this is achieved with the *send* function that I report below:
+
+```c
+void send(const char* message){
+    printf("Sending message '%s'\n", message);
+
+    size_t inl = strlen(message);
+    size_t output;
+
+    char *encoded = base64_encode(message, inl, &output);
+   
+    uint8_t status = semtech_loramac_send(&loramac, (uint8_t *)message, strlen(message));
+  
+    if (status != SEMTECH_LORAMAC_TX_DONE) {
+        printf("Cannot send message '%s'\n", message);
+    } else {
+        printf("Successfully sent message: %s\n", message);
+    }
+}
+```
+
+## Switching mode (auto and manual)
+When the user sends through the **frontend** the indication to **switch mode**, an indication is sent and then received by our device by **LoraWAN** through the *_recv* function. If we have to switch to **manual** mode, the periodical sampling is blocked and we are ready to receive indications related to actuators, otherwise if we are switching to **auto**, the periodical sampling is resumed. Below I report the code snippet related to the **switching mode management**:
+
+```c
+printf("received: %s\n",msg);
+		
+		char* firstWord = strtok(msg, ";");
+		
+		// Check if I have to switch mode 
+		if(strcmp(firstWord,"manual")==0 || strcmp(firstWord,"auto")==0){
+			
+			char* rcv_mode = firstWord;
+			
+			printf("rcv_mode: %s\n", firstWord);
+			
+			char *device_id = strtok(NULL, ";");
+		    printf("device_id: %s\n",device_id);
+			
+			// Manual
+			if(strcmp(rcv_mode, "manual") == 0){
+				if(strcmp(mode, "auto") == 0){
+					printf("[Device %s] Switching to manual...\n",device_id);
+					xtimer_sleep(2);
+				
+					mode = "manual";
+				}
+				else if(strcmp(mode, "manual") == 0){
+					printf("[Device %s] Already in manual mode!\n", device_id);
+				}
+			}
+		
+			// Auto
+			else if(strcmp(rcv_mode, "auto") == 0){
+			
+				if(strcmp(mode, "manual") == 0){
+					printf("[Device %s] Switching to auto...\n",device_id);
+				
+					xtimer_sleep(2);
+				
+					mode = "auto";
+				
+				}
+				else if(strcmp(mode, "auto") == 0){
+					printf("[Device %s] Already in auto mode!\n",device_id);
+				}
+			}
+			printf("\n");
+			
+		}
+```
+
+## Controlling the state of actuators
+In order to control the state of actuators, we can receive the indication from the **frontend** by **LoraWAN** through the *_recv* function. What we are going to receive is the **name of the actuator**, the **type of data** it is related to (temperature or gas/smoke) and the **action** we need to do, so ON or OFF. Particularly, the idea is that of only controlling buzzers, the red led and the blue led, because these are the actuators related to dangerous situations. Below I only report the part of code related to temperature, because the remaining part is very similar:
+
+```c
+printf("received: %s\n",msg);
+		
+			char* actuator = strtok(msg, ";");
+			printf("actuator: %s\n",actuator);
+		
+			char *typeData = strtok(NULL, ";");
+			printf("typeData: %s\n",typeData);
+		
+			char *operation = strtok(NULL, ";");
+			printf("operation: %s\n", operation);
+		
+			char *device_id = strtok(NULL, ";");
+			printf("device_id: %s\n",device_id);
+		
+			if(strcmp(typeData, "temperature") == 0){
+				
+				if(strcmp(actuator, "temp_buzzer") == 0){
+				
+					if(strcmp(operation, "ON") == 0){
+						printf("[Device %s] Turning ON temperature buzzer...\n",device_id);
+					}
+				
+					else if(strcmp(operation, "OFF") == 0){
+						printf("[Device %s] Turning OFF temperature buzzer...\n",device_id);
+					}
+			
+				}
+			
+				else if(strcmp(actuator, "red_led") == 0){
+				
+					if(strcmp(operation, "ON") == 0){
+						printf("[Device %s] Turning ON red led...\n",device_id);
+					}
+				
+					else if(strcmp(operation, "OFF") == 0){
+						printf("[Device %s] Turning OFF red led...\n",device_id);
+					} 
+			
+				}
+			}
+```
