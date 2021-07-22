@@ -6,7 +6,7 @@ The base code is that of the RIOT [pkg_semtech-loramac test](https://github.com/
 ## Shell
 
 ### Shell initialization
-The application starts by initializing a **message queue** for the thread running the shell, and then runs the shell, that will be useful for launching the application on the various M3-nodes:
+The application starts by initializing a **message queue** for the thread running the shell, and then runs the shell, that will be useful for launching the application on the various St-Lrwan1-nodes:
 
 ```c
 msg_init_queue(_main_msg_queue, MAIN_QUEUE_SIZE);
@@ -15,14 +15,14 @@ char line_buf[SHELL_DEFAULT_BUFSIZE];
 shell_run(shell_commands, line_buf, SHELL_DEFAULT_BUFSIZE);
 ```
 
-In order to do this, we need to include these **headers** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/iotlab-m3_code/main.c):
+In order to do this, we need to include these **headers** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/ThirdAssignment/iotlab-St-Lrwan1_code/main.c):
 
 ```c
 #include "shell.h"
 #include "msg.h"
 ```
 
-Then we need to define the **message queue** together with its **size** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/SecondAssignment/iotlab-m3_code/main.c):
+Then we need to define the **message queue** together with its **size** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/ThirdAssignment/iotlab-St-Lrwan1_code/main.c):
 
 ```c
 #define MAIN_QUEUE_SIZE     (8)
@@ -33,8 +33,8 @@ Then, we need to define the **shell_commands** in the [main.c](https://github.co
 
 ```c
 static const shell_command_t shell_commands[] = {
-    { "start", "connect to the RSMB broker and starts sending data to AWS", cmd_handler},
-    { NULL, NULL, NULL }
+    { "start", "initialize LoraWAN and starts sending data to AWS", cmd_handler},
+    { NULL, NULL, NULL}
 };
 ```
 
