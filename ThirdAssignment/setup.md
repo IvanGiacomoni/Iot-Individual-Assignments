@@ -43,4 +43,4 @@ Then we have to integrate our application with **AWS** in order to store our dat
 Before starting an [Iot-lab](https://www.iot-lab.info/) experiment, you need to configure an SSH access key, and in order to do this you can follow this [tutorial](https://www.iot-lab.info/docs/getting-started/ssh-access/).
 
 ## Iot-lab experiment
-Then you need to submit an **experiment** on the [Iot-lab testbed](https://www.iot-lab.info/testbed/dashboard) with at least **1 St-Lrwan1-node** on the same **frontend**, between those offered by Iot-lab: for our purposes, the recommended choice is the **Saclay** frontend. In general, you can also follow this [tutorial](https://www.iot-lab.info/legacy/tutorials/riot-ttn/index.html).
+Then you need to submit an **experiment** on the [Iot-lab testbed](https://www.iot-lab.info/testbed/dashboard) with at least **1 St-Lrwan1-node** on some of the **frontends** offered by Iot-lab: for our purposes, the recommended choice is the **Saclay** frontend. In general, you can also follow this [tutorial](https://www.iot-lab.info/legacy/tutorials/riot-ttn/index.html).
