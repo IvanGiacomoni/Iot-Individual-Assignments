@@ -14,3 +14,27 @@ Below we can see a picture that highlights all the connected components:
 ![img](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/ThirdAssignment/images/architecture-hw-3.png)
 
 The long-range low-power wide area network will be simulated on [Iot-lab](https://www.iot-lab.info/), where we need to setup at least one **B-L072Z-LRWAN1-node** for running our **application**. From each device on Iot-lab we will send the data to [TheThingsNetwork](https://www.thethingsnetwork.org/), which is a public Lora network, that can be exploited to connect the devices on Iot-lab to a gateway (potentially owned by another person) on this network where **Iot-Core** by **MQTT**, that is a service provided by AWS that uses MQTT and that we can exploit to receive data coming from our devices. Then there is the needing to save them in the cloud: my choice was **DynamoDB**, a noSQL database provided by AWS. Once data are stored in the db, we can query them using an appropriate server in order to finally show them on the **front-end** side. My choice for the back-end side was **NodeJS**, while for the front-end side I used **HTML, Bootstrap, Javascript and Vue-js**. The frontend and the backend will create the **Web Dashboard**. Finally, the frontend will be used also to **control the state of actuators**.
+
+## Performance of the system
+The performance of the system will be carried out with the tools provided by [Iot-lab](https://www.iot-lab.info/). In particular, we will measure and evaluate:
+
+- the performance of the wireless sensor networ in terms of **end-to-end latency** and **throughput**
+- the performance of the system as the **number of wireless elements** increases
+- the **energy consumption** of the nodes
+
+## Manual and automatic mode
+The system is capable of **switching** between two **modes** through the interaction by the front-end:
+
+- **auto**: data from both sensors are periodically sampled and published by MQTT towards Iot-Core, actuators are automatically controlled
+- **manual**: the periodical sample of data is stopped in order to allow the user to manually control the actuators
+
+This is done because there could be situations in which the manual mode could be useful, for example when sensors wrongly sample values and detect a danger, so I need to stop the auto mode in order to activate the manual mode, and then deactivate the actuators.
+
+## Setup
+More informations about the **setup** of this assignment can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/ThirdAssignment/setup.md).
+
+## Iotlab-St-Lrwan1 code
+More informations about the **iotlab-m3 code** of this assignment can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/ThirdAssignment/iotlab-St-Lrwan1_code/README.md).
+
+## Web dashboard
+More informations about the **dashboard** can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/ThirdAssignment/dashboard/README.md).
