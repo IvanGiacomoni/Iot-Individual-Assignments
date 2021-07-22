@@ -2,7 +2,7 @@
 The goal of this assignment is to replace the wireless mesh network with a **long-range low-power wide area network**: in particular we will focus on the development of IoT Edge Analytics.
 
 ## Motivations
-These networks are used because, at some point, we have to connect a lot of devices to the Internet and so, even we have Bluetooth or Wifi, we need some other better technologies with a **wider range** for the networking. **Endpoints costs** need to be low, and also we need to send a **small amount of data**. The **energy consumption** must be low.
+These networks are used because, at some point, we have to connect a lot of devices to the Internet and so, even if we have Bluetooth or Wifi, we need some other better technologies with a **wider range** for the networking. **Endpoints costs** need to be low, and also we need to send a **small amount of data**. The **energy consumption** must be low.
 In a **LPWAN**, the data rate is selected by a **tradeoff** between the **communication range** and the **duration of the message**. What is very important is the **battery life**, and also the **range**, which has to be about **2-5 km** of coverage range in **urban perimeters** and about **45 km** in **rural areas**. We also have to consider the **latency** and the **throughput** (data rates between **290 bps** and **50 kbps**).
 
 ## How is the long-range low-power wide are network going to affect the IoT platform?
