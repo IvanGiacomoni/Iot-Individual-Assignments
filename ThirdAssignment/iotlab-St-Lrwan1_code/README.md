@@ -22,6 +22,13 @@ In order to do this, we need to include these **headers** in the [main.c](https:
 #include "msg.h"
 ```
 
+Also, we need to use these modules in the [Makefile](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/ThirdAssignment/iotlab-St-Lrwan1_code/Makefile):
+
+```c
+USEMODULE += shell
+USEMODULE += ps
+```
+
 Then we need to define the **message queue** together with its **size** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/ThirdAssignment/iotlab-St-Lrwan1_code/main.c):
 
 ```c
