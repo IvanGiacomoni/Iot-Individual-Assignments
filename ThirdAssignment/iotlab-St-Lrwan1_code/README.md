@@ -164,7 +164,7 @@ The **sampling period** will be different for the two type of data, so we define
 ```
 
 ## Data sampling
-The logic of the application has not changed from the previous assignment, so for all details you can check the [first assignment](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/nucleo_code/README.md). The main differences are the following:
+The logic of the application has not changed from the first assignment, so for all details you can check the [first assignment](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/nucleo_code/README.md). The main differences are the following:
 - **there aren't actuators**, so they are 'managed' locally and remotely from the dashboard with some **debug prints**
 - **there aren't sensors**, so the value are generated **randomly** with the **generateRandomTemperature** and the **generateRandomPpm** functions
 
