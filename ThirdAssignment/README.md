@@ -1,5 +1,5 @@
 # Third assignment
-The goal of this assignment is to replace the wireless mesh network with a **long-range low-power wide area network**: in particular we will focus on the development of IoT Edge Analytics.
+The goal of this assignment is to replace the wireless mesh network with a **long-range low-power network**: in particular we will focus on the development of **IoT Edge Analytics**.
 
 ## Motivations
 These networks are used because, at some point, we have to connect a lot of devices to the Internet and so, even if we have Bluetooth or Wifi, we need some other better technologies with a **wider range** for the networking. **Endpoints costs** need to be low, and also we need to send a **small amount of data**. The **energy consumption** must be low.
