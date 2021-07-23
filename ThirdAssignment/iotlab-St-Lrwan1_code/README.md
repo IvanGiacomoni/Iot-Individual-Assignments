@@ -364,7 +364,7 @@ int generateRandomPpm(int rand_state_gas_smoke){
 }
 ```
 
-As in the previous assignments, data are sent to **AWS**. Obviously, data are formatted in **JSON**, in order to make the things work for storing them into **DynamoDB**, but this time we will use **LoraWAN**, in order to first send the data to [TheThingsNetwork](https://www.thethingsnetwork.org/), and then to **AWS** (by **MQTT**) by using the integration available on [TheThingsNetwork](https://www.thethingsnetwork.org/). A difference is also that I send the **device id** inserted into the shell, because given that we will not use MQTT at the Edge, we can't to an immediate assignment of the device id on **Iot Core**. All this is achieved with the *send* function that I report below:
+As in the previous assignments, data are sent to **AWS**. Obviously, data are formatted in **JSON**, in order to make the things work for storing them into **DynamoDB**, but this time we will use **LoraWAN**, in order to first send the data to [TheThingsNetwork](https://www.thethingsnetwork.org/), and then to **AWS** (by **MQTT**) by using the integration available on [TheThingsNetwork](https://www.thethingsnetwork.org/). A difference is also that I send the **device id** inserted into the shell, because given that we will not use MQTT at the Edge, we can't do an immediate assignment of the device id on **Iot Core**. All this is achieved with the *send* function that I report below:
 
 ```c
 void send(const char* message){
