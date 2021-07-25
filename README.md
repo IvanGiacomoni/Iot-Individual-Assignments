@@ -5,7 +5,7 @@ The problem I took into consideration is that of **gas leaks** and **fires** tha
 
 ## Blog post and demo
 - [**Blog post**]()
-- [**Demo**]()
+- [**Demo**](https://youtu.be/RiObsdiJypw)
 
 ## Assignments
 - **First assignment**: more info about the first assignment can be found [here](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/FirstAssignment/README.md)
