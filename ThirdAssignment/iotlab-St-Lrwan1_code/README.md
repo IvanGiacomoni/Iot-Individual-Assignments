@@ -125,7 +125,7 @@ int lora_init(void){
 }
 ```
 
-In particular, we can see the creation of the thread responsible for **receiving** data by LoraWAN, which invokes the *_recv* function, which we will discuss later. Details can be found in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/ThirdAssignment/iotlab-St-Lrwan1_code/main.c).
+In particular, we can see the creation of the thread responsible for **receiving** data by LoraWAN, which invokes the *_recv* function, which we will discuss later. More details can be found in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/ThirdAssignment/iotlab-St-Lrwan1_code/main.c).
 
 ### Threads' creation
 Finally, I create **two threads**, one for managing the sampling of **temperature** data and the other one for sampling **gas/smoke** data: the main reason is given by the different sampling periods, so with threads we are able to manage both samplings in parallel. If the actual **mode** of the system is set on "auto", then both threads will start sampling once they are created.
