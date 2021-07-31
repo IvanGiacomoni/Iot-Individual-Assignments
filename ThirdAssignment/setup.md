@@ -31,7 +31,7 @@ Then by going in the Rules section you have to create two **rules**, one for tem
 So it is clear that we will create **two DynamoDb tables**, one for each rule: particularly, each entry of both tables is made up of the **Unix timestamp** associated to the creation of that entry, that will be useful for quering the last hour values of temperature and gas/smoke, the **device_id** of the device who has sampled that value, and the **device_data**, which consists of the **value** sampled and the **state** associated to that value. 
 
 ## TheThingsNetwork
-Now we have to setup an **application** on [TheThingsNetwork](https://www.thethingsnetwork.org/), and after that we have to associate at least one **end device** to that application, and we have to make sure that all settings are correcly set, in particular:
+Now we have to setup an **application** on [TheThingsNetwork](https://www.thethingsnetwork.org/), and in order to do this we can follow this [tutorial](https://www.thethingsnetwork.org/docs/applications/add/). After that, we have to associate at least one **end device** to that application, and we can follow this other [tutorial](https://www.thethingsnetwork.org/docs/devices/registration/), and we have to make sure that all settings are correcly set, in particular:
 - **Activation mode -> Over The Air Activation (OTAA)**
 - **LoraWAN version -> MAC V1.0.2**
 - **Frequency plan -> Europe 863-870MHz (SF9 for RX2)**
