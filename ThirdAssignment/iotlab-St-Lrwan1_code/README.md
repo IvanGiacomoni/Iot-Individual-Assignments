@@ -99,7 +99,7 @@ uint8_t* appeui = "";
 uint8_t* appkey = "";
 ```
 
-### Initializing Lora
+### Initialization of Lora
 Then we need to initialize Lora by using the *lora_init* function, and I report it below:
 
 ```c
@@ -364,6 +364,7 @@ int generateRandomPpm(int rand_state_gas_smoke){
 }
 ```
 
+### Sending data
 As in the previous assignments, data are sent to **AWS**. Obviously, data are formatted in **JSON**, in order to make the things work for storing them into **DynamoDB**, but this time we will use **LoraWAN**, in order to first send the data to [TheThingsNetwork](https://www.thethingsnetwork.org/), and then to **AWS** (by **MQTT**) by using the integration available on [TheThingsNetwork](https://www.thethingsnetwork.org/). A difference is also that I send the **device id** inserted into the shell, because given that we will not use MQTT at the Edge, we can't do an immediate assignment of the device id on **Iot Core**. All this is achieved with the *send* function that I report below:
 
 ```c
@@ -383,6 +384,50 @@ void send(const char* message){
         printf("Successfully sent message: %s\n", message);
     }
 }
+```
+
+As we can see, data needs to be encoded in **base64**, and the encoding is done by the *base64_encode* function, that I report below:
+
+```c
+char *base64_encode(const char *data, size_t input_length, size_t *output_length){
+    *output_length = 4 * ((input_length + 2) / 3);
+
+    char *encoded_data = malloc(*output_length);
+    if(encoded_data == NULL) return NULL;
+
+    for(size_t i = 0, j = 0; i < input_length;){
+        uint32_t octet_a = i < input_length ? (unsigned char)data[i++] : 0;
+        uint32_t octet_b = i < input_length ? (unsigned char)data[i++] : 0;
+        uint32_t octet_c = i < input_length ? (unsigned char)data[i++] : 0;
+
+        uint32_t triple = (octet_a << 0x10) + (octet_b << 0x08) + octet_c;
+
+        encoded_data[j++] = encoding_table[(triple >> 3 * 6) & 0x3F];
+        encoded_data[j++] = encoding_table[(triple >> 2 * 6) & 0x3F];
+        encoded_data[j++] = encoding_table[(triple >> 1 * 6) & 0x3F];
+        encoded_data[j++] = encoding_table[(triple >> 0 * 6) & 0x3F];
+    }
+
+    for (int i = 0; i < mod_table[input_length % 3]; i++){
+        encoded_data[*output_length - 1 - i] = '=';
+    }
+    return encoded_data;
+}
+```
+
+In order to encode data, we need to define these **global variables** in the [main.c](https://github.com/IvanGiacomoni/Iot-Individual-Assignments/blob/main/ThirdAssignment/iotlab-St-Lrwan1_code/main.c):
+
+```c
+static char encoding_table[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+                                'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+                                'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+                                'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
+                                'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+                                'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+                                'w', 'x', 'y', 'z', '0', '1', '2', '3',
+                                '4', '5', '6', '7', '8', '9', '+', '/'};
+				
+static int mod_table[] = {0, 2, 1};
 ```
 
 ## Switching mode (auto and manual)
